@@ -140,6 +140,8 @@ var UI = (function() {
         html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">';
         html += '<button onclick="' + backFn + '" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
         html += '<span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + currentZone.icon + ' ' + currentZone.name + '</span>';
+        html += '<button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button>';
+        
         html += '<span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">⭐' + totalStars + '/' + maxStars + '</span></div><div>';
         currentZone.levels.forEach(function(l) {
             var u = isUnlocked(zid, l.num), s = getStars(zid, l.num);
@@ -337,7 +339,7 @@ var UI = (function() {
     function showCountryZones(country, title) {
         var zones = ZONES.filter(function(z) { return z.country === country; });
         var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
-        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + title + '</span></div>';
+       html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + title + '</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>'; 
         html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
         zones.forEach(function(z) {
             html += '<div onclick="UI.showZone(\'' + z.id + '\')" style="height:128px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(135deg, rgba(255,255,255,0.05), transparent);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;">';
