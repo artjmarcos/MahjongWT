@@ -309,7 +309,7 @@ var UI = (function() {
         var cpArgentina = Math.round((getTotalStarsForCountry('argentina') / 120) * 100);
         var cpMexico = Math.round((getTotalStarsForCountry('mexico') / 120) * 100);
         var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;overflow-y:auto;padding-bottom:70px;">';
-        html += '<div style="height:192px;overflow:hidden;position:relative;background:linear-gradient(to bottom, transparent, #0b1512), url(https://drive.google.com/thumbnail?id=1hsx1UaDia9i7oOLdeslGtGLwl0tqUP71&sz=w800) center/cover;">';
+        html += '<div style="height:192px;overflow:hidden;position:relative;background:linear-gradient(to bottom, transparent, #0b1512), url(https://drive.google.com/thumbnail?id=1hsx1UaDia9i7oOLdeslGtGLwl0tqUP71&sz=w800) center/cover no-repeat;">';
         html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">';
         html += '<span style="font-size:3em;">🌎</span>';
         html += '<h1 class="text-glow" style="font-size:1.5em;font-weight:bold;color:#f2ca50;">WORLD TOUR</h1>';
