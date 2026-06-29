@@ -1,0 +1,29 @@
+{
+  "background_color": "#0b1512",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "MahjoDescubre América - Mahjong World Tourng Tour",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "Mahjong Tour",
+  "start_url": "/",
+  "theme_color": "#f2ca50",
+  "icons": [
+    {
+      "src": "https://artjmarcos.github.io/MahjongWT/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "isSquare": true,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 192,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": true
+    }
+  ],
+  "description": "Viaja por América resolviendo puzzles de mahjong con fotos reales de Chile, Argentina y México.",
+  "id": "com.mahjong.tour",
+  "lang": "es"
+}
