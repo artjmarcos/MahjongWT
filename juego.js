@@ -29,12 +29,12 @@ var GameEngine = (function() {
         osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + duration);
     }
     var sound = {
-        select: function() { playTone(600, 0.1); },
-        match: function() { playTone(523, 0.15); setTimeout(function() { playTone(659, 0.15); }, 100); },
-        error: function() { playTone(200, 0.2, 'square'); },
-        victory: function() { [523,659,784,1047].forEach(function(f,i) { setTimeout(function() { playTone(f, 0.3); }, i*150); }); },
-        shuffle: function() { playTone(440, 0.2, 'triangle'); },
-        hint: function() { playTone(660, 0.15); }
+        select: function() { playTone(660, 0.1, 'sine', 0.12); },
+        match: function() { playTone(523, 0.12); setTimeout(function() { playTone(659, 0.12); }, 80); setTimeout(function() { playTone(784, 0.18); }, 160); },
+        error: function() { playTone(180, 0.3, 'square', 0.06); },
+        victory: function() { [523,659,784,1047].forEach(function(f,i) { setTimeout(function() { playTone(f, 0.4, 'sine', 0.3); }, i*200); }); },
+        shuffle: function() { playTone(440, 0.2, 'triangle', 0.12); },
+        hint: function() { playTone(880, 0.15, 'sine', 0.18); }
     };
 
     function isTileFree(tile, activeTiles) {
@@ -62,7 +62,9 @@ var GameEngine = (function() {
             var maxPhotos = (currentLevelConfig.num <= 3) ? Math.min(4, zonePhotos.length) : zonePhotos.length;
             var usedPhotos = zonePhotos.slice().sort(function() { return Math.random() - 0.5; }).slice(0, maxPhotos);
             for (var i = 0; i < Math.min(totalPairs, usedPhotos.length); i++) {
-                pairItems.push({ name: usedPhotos[i].name, url: usedPhotos[i].url, zone: usedPhotos[i].zone, nota: usedPhotos[i].nota, type: 'photo' });
+                var photo = usedPhotos[i];
+                var bigUrl = photo.url.replace('sz=w400', 'sz=w600');
+                pairItems.push({ name: photo.name, url: bigUrl, zone: photo.zone, nota: photo.nota, type: 'photo' });
             }
             var tradIdx = 0;
             while (pairItems.length < totalPairs) {
@@ -95,21 +97,28 @@ var GameEngine = (function() {
                 if (slots[i].pid === slots[j].pid && slots[i].idx !== slots[j].idx) {
                     var a = slots[i], b = slots[j]; sound.match();
                     var idxA = a.idx, idxB = b.idx;
-                    if (idxA > idxB) { tiles.splice(idxA, 1); tiles.splice(idxB, 1); }
-                    else { tiles.splice(idxB, 1); tiles.splice(idxA, 1); }
-                    var removed = [idxA, idxB].sort(function(x, y) { return x - y; });
-                    slots.forEach(function(slot) { if (slot.idx > removed[0]) slot.idx--; if (slot.idx > removed[1]) slot.idx--; });
-                    if (i > j) { slots.splice(i, 1); slots.splice(j, 1); }
-                    else { slots.splice(j, 1); slots.splice(i, 1); }
-                    selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null;
-                    var multiplier = (a.bonus && b.bonus) ? 2 : 1; score += (100 + combo * 50) * multiplier; combo++;
-                    if (timeLeft > 0) { timeLeft += 3; if (timeLeft > 99) timeLeft = 99; }
-                    updateBlocked();
-                    if (onStateChange) onStateChange('match', { a: a, b: b });
-                    if (tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0) {
-                        if (timerInterval) clearInterval(timerInterval);
-                        if (onStateChange) onStateChange('victory', { score: score, combo: combo });
-                    }
+                    // Animar fichas antes de eliminar
+                    var elA = document.querySelectorAll('.vita-tile')[idxA];
+                    var elB = document.querySelectorAll('.vita-tile')[idxB];
+                    if (elA) { elA.style.transform = 'scale(1.3)'; elA.style.opacity = '0'; elA.style.transition = 'all 0.3s ease-out'; }
+                    if (elB) { elB.style.transform = 'scale(1.3)'; elB.style.opacity = '0'; elB.style.transition = 'all 0.3s ease-out'; }
+                    setTimeout(function() {
+                        if (idxA > idxB) { tiles.splice(idxA, 1); tiles.splice(idxB, 1); }
+                        else { tiles.splice(idxB, 1); tiles.splice(idxA, 1); }
+                        var removed = [idxA, idxB].sort(function(x, y) { return x - y; });
+                        slots.forEach(function(slot) { if (slot.idx > removed[0]) slot.idx--; if (slot.idx > removed[1]) slot.idx--; });
+                        if (i > j) { slots.splice(i, 1); slots.splice(j, 1); }
+                        else { slots.splice(j, 1); slots.splice(i, 1); }
+                        selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null;
+                        var multiplier = (a.bonus && b.bonus) ? 2 : 1; score += (100 + combo * 50) * multiplier; combo++;
+                        if (timeLeft > 0) { timeLeft += 3; if (timeLeft > 99) timeLeft = 99; }
+                        updateBlocked();
+                        if (onStateChange) onStateChange('match', { a: a, b: b });
+                        if (tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0) {
+                            if (timerInterval) clearInterval(timerInterval);
+                            if (onStateChange) onStateChange('victory', { score: score, combo: combo });
+                        }
+                    }, 300);
                     return;
                 }
             }
