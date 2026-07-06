@@ -58,7 +58,7 @@ var UI = (function() {
         inner.style.cssText = 'position:relative;width:100%;display:flex;align-items:center;justify-content:center;height:' + nh + 'px;';
         var grid = document.createElement('div');
         grid.style.cssText = 'position:relative;width:' + (COLS * cw) + 'px;height:' + ((maxRow + 1) * ch + maxLayer * 15) + 'px;';
-        vt.forEach(function(t) {
+        el.onclick = function() { GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); };
             var el = document.createElement('div'); el.className = 'vita-tile';
             if (t.bonus) el.classList.add('bonus-tile');
             el.style.left = (t.col * cw + margin) + 'px';
@@ -110,6 +110,8 @@ var UI = (function() {
         overlay.innerHTML = '<img src="' + photo.url + '" class="zoom-image" alt="' + photo.name + '" onerror="this.style.display=\'none\'"><div class="zoom-note"><h3 style="color:#f2ca50;font-size:1.2em;font-weight:bold;margin-bottom:8px;">' + photo.name + '</h3><p style="color:white;">' + (photo.nota || 'Un rincon magico.') + '</p></div><button onclick="this.parentElement.remove()" style="margin-top:16px;padding:8px 24px;border-radius:12px;background:rgba(255,255,255,0.1);color:white;">Cerrar</button>';
         document.body.appendChild(overlay);
         overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+        el.addEventListener('click', function() { GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); });
+el.addEventListener('touchend', function(e) { e.preventDefault(); GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); });
     }
 
     function spawnVictoryParticles() {
