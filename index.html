@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover, maximum-scale=1.0, touch-action=manipulation">
     <title>Descubre América · Mahjong World Tour</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#f2ca50">
@@ -30,18 +30,19 @@
         }
     </script>
     <style>
+        * { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
         body { background-color: #0b1512; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; height: 100dvh; }
         .app-container { width: 100%; max-width: 440px; height: 100dvh; max-height: 900px; position: relative; margin: 0 auto; overflow: hidden; box-shadow: 0 0 60px rgba(0,0,0,0.9); background: #0b1512; }
         @media (min-width: 440px) { .app-container { border-radius: 24px; height: 95dvh; margin-top: 2.5dvh; } }
         @media (display-mode: standalone) { body { padding-top: env(safe-area-inset-top); } }
         .text-glow { text-shadow: 0 0 20px rgba(242, 202, 80, 0.5); }
-        .btn-primary { background: linear-gradient(180deg, #f2ca50 0%, #d4af37 100%); color: #241a00; font-weight: 700; box-shadow: 0 4px 15px rgba(242, 202, 80, 0.3); }
-        .btn-reward { background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%); color: #052e16; font-weight: 700; }
-        .btn-video { background: linear-gradient(180deg, #c084fc 0%, #a855f7 100%); color: #1a0033; font-weight: 700; }
-        .btn-next { background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%); color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(96,165,250,0.3); }
+        .btn-primary { background: linear-gradient(180deg, #f2ca50 0%, #d4af37 100%); color: #241a00; font-weight: 700; box-shadow: 0 4px 15px rgba(242, 202, 80, 0.3); border: none; cursor: pointer; }
+        .btn-reward { background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%); color: #052e16; font-weight: 700; border: none; cursor: pointer; }
+        .btn-video { background: linear-gradient(180deg, #c084fc 0%, #a855f7 100%); color: #1a0033; font-weight: 700; border: none; cursor: pointer; }
+        .btn-next { background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%); color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(96,165,250,0.3); border: none; cursor: pointer; }
         .power-up-btn { background: rgba(242,202,80,0.1); border: 1px solid rgba(242,202,80,0.3); color: #f2ca50; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; cursor: pointer; position: relative; }
         .power-up-badge { position: absolute; top: -4px; right: -4px; background: #e74c3c; color: white; font-size: 0.5em; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .vita-tile { position: absolute; border-radius: 10px; cursor: pointer; background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; transition: transform 0.3s, opacity 0.3s; }
+        .vita-tile { position: absolute; border-radius: 10px; cursor: pointer; background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; transition: transform 0.15s, opacity 0.15s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
         .vita-tile::before { content: ''; position: absolute; inset: 0; border-radius: 10px; padding: 2px; background: linear-gradient(135deg, #f2ca50, #8B6914, #f2ca50, #d4af37); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; z-index: 5; pointer-events: none; opacity: 0.8; }
         .vita-tile .card-name { position: absolute; bottom: 4px; left: 4px; right: 4px; background: rgba(0,0,0,0.85); color: #f2ca50; font-size: 0.4em; text-align: center; padding: 2px 4px; border-radius: 0 0 6px 6px; z-index: 6; font-weight: 700; }
         .vita-tile.blocked { filter: brightness(0.35); cursor: not-allowed; }
@@ -95,14 +96,5 @@
     <script src="juego.js"></script>
     <script src="datos.js"></script>
     <script src="ui.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker registrado:', reg.scope))
-                    .catch(err => console.log('Error al registrar SW:', err));
-            });
-        }
-    </script>
 </body>
 </html>
