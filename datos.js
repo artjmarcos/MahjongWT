@@ -153,19 +153,20 @@ var mexicoSurPhotos = [
     { name:'Tepoztlán', url:'https://drive.google.com/thumbnail?id=1261PjaEpx1x1hWlXKxmNXeI18ai8zwlt&sz=w400', zone:'mexico-sur', nota:'Pueblo Mágico en Morelos.' },
     { name:'Grutas Cacahuamilpa', url:'https://drive.google.com/thumbnail?id=1MkwNsgI2pi1AGB1KfWFgQkvzdV45XLVj&sz=w400', zone:'mexico-sur', nota:'Espectaculares grutas en Guerrero.' },
 ];
-var mexicoCaribePhotos = [
-    { name:'Chichén Itzá', url:'https://drive.google.com/thumbnail?id=1jA5Sxah7QbB0rxzar-lGbSvXWhA-reqb&sz=w400', zone:'mexico-caribe', nota:'Maravilla del mundo moderno.' },
+  var mexicoCaribePhotos = [
+    { name:'Chichén Itzá', url:'https://drive.google.com/thumbnail?id=1jA5Sxah7QbB0rxzar-lGbSvXWhA-reqb&sz=w400', zone:'mexico-caribe', nota:'Maravilla del mundo moderno en Yucatán.' },
     { name:'Tulum', url:'https://drive.google.com/thumbnail?id=12shfaStYT9_agFpZS-ewzD8Jj-tpJaVW&sz=w400', zone:'mexico-caribe', nota:'Ruinas mayas frente al mar Caribe.' },
     { name:'Cenote Ik Kil', url:'https://drive.google.com/thumbnail?id=1L8SBXEY0KStrUCmZAx32S4yOk7AfqtBg&sz=w400', zone:'mexico-caribe', nota:'Cenote sagrado en Yucatán.' },
     { name:'Playa del Carmen', url:'https://drive.google.com/thumbnail?id=1w3OcH6iTq2_oSjTPMPuTqErGFrvVlTQO&sz=w400', zone:'mexico-caribe', nota:'Playas caribeñas en Quintana Roo.' },
-    { name:'Isla Mujeres', url:'https://drive.google.com/thumbnail?id=1A-vnc1A5smvuergSKDB2xnLEz-H9NK_V&sz=w400', zone:'mexico-caribe', nota:'Isla paradisíaca.' },
+    { name:'Isla Mujeres', url:'https://drive.google.com/thumbnail?id=1A-vnc1A5smvuergSKDB2xnLEz-H9NK_V&sz=w400', zone:'mexico-caribe', nota:'Isla paradisíaca en Quintana Roo.' },
     { name:'Cozumel', url:'https://drive.google.com/thumbnail?id=1Dr9EF-zq2fxSe3HEqzRj-xgh3NARdzIq&sz=w400', zone:'mexico-caribe', nota:'Isla caribeña con arrecifes de coral.' },
-    { name:'Bacalar', url:'https://drive.google.com/thumbnail?id=1pKRnbbYunsPVwW9jJVE9VErvWu-Z4zkl&sz=w400', zone:'mexico-caribe', nota:'Laguna de los 7 colores.' },
-    { name:'Uxmal', url:'https://drive.google.com/thumbnail?id=1hAtR0zNioqtQEQgJiGHkmF94lUW3DGBE&sz=w400', zone:'mexico-caribe', nota:'Zona arqueológica maya.' },
+    { name:'Bacalar', url:'https://drive.google.com/thumbnail?id=1pKRnbbYunsPVwW9jJVE9VErvWu-Z4zkl&sz=w400', zone:'mexico-caribe', nota:'Laguna de los 7 colores en Quintana Roo.' },
+    { name:'Uxmal', url:'https://drive.google.com/thumbnail?id=1hAtR0zNioqtQEQgJiGHkmF94lUW3DGBE&sz=w400', zone:'mexico-caribe', nota:'Zona arqueológica maya en Yucatán.' },
     { name:'Mérida', url:'https://drive.google.com/thumbnail?id=1IKaYbeoQRpv73Xrl0cHcGCKPKfNP7X51&sz=w400', zone:'mexico-caribe', nota:'Capital cultural de Yucatán.' },
     { name:'Calakmul', url:'https://drive.google.com/thumbnail?id=1CH7B4Xp--LywDUVrne6hmmg0gIIE1Rr1&sz=w400', zone:'mexico-caribe', nota:'Antigua ciudad maya en Campeche.' },
-    { name:'Campeche', url:'https://drive.google.com/thumbnail?id=1vjpTTM_OuwSmHm95edrkDxaOUAICt0PR&sz=w400', zone:'mexico-caribe', nota:'Ciudad amurallada.' },
-    { name:'Cenote Dos Ojos', url:'https://drive.google.com/thumbnail?id=1FEnFLMCVGyTjnr07me3aFYNlbsKtfLA5&sz=w400', zone:'mexico-caribe', nota:'Cenote famoso para buceo.' },
+    { name:'Campeche', url:'https://drive.google.com/thumbnail?id=1vjpTTM_OuwSmHm95edrkDxaOUAICt0PR&sz=w400', zone:'mexico-caribe', nota:'Ciudad amurallada en Campeche.' },
+    { name:'Cenote Dos Ojos', url:'https://drive.google.com/thumbnail?id=1FEnFLMCVGyTjnr07me3aFYNlbsKtfLA5&sz=w400', zone:'mexico-caribe', nota:'Cenote famoso para buceo en Quintana Roo.' },
+]; },
 ];
 var villarricaPhotos = [
     { name:'Villarrica 1', url:'https://drive.google.com/thumbnail?id=1DtfuiaOzwwNuonJ__siHtNp5bkQrcdvy&sz=w400', nota:'Lago al atardecer.' },
