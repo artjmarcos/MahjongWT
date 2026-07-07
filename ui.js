@@ -58,7 +58,7 @@ var UI = (function() {
         inner.style.cssText = 'position:relative;width:100%;display:flex;align-items:center;justify-content:center;height:' + nh + 'px;';
         var grid = document.createElement('div');
         grid.style.cssText = 'position:relative;width:' + (COLS * cw) + 'px;height:' + ((maxRow + 1) * ch + maxLayer * 15) + 'px;';
-        el.onclick = function() { GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); };
+        vt.forEach(function(t) {
             var el = document.createElement('div'); el.className = 'vita-tile';
             if (t.bonus) el.classList.add('bonus-tile');
             el.style.left = (t.col * cw + margin) + 'px';
@@ -81,7 +81,9 @@ var UI = (function() {
             nm.textContent = t.name || t.symbol; el.appendChild(nm);
             if (t.blocked) el.classList.add('blocked'); else el.classList.add('free');
             if (isSel) el.classList.add('selected-card');
-            el.onclick = function() { GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); };
+            el.style.touchAction = 'manipulation';
+            el.addEventListener('click', function(e) { e.stopPropagation(); GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); });
+            el.addEventListener('touchend', function(e) { e.preventDefault(); e.stopPropagation(); GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); });
             grid.appendChild(el);
         });
         inner.appendChild(grid); c.appendChild(inner);
@@ -110,8 +112,6 @@ var UI = (function() {
         overlay.innerHTML = '<img src="' + photo.url + '" class="zoom-image" alt="' + photo.name + '" onerror="this.style.display=\'none\'"><div class="zoom-note"><h3 style="color:#f2ca50;font-size:1.2em;font-weight:bold;margin-bottom:8px;">' + photo.name + '</h3><p style="color:white;">' + (photo.nota || 'Un rincon magico.') + '</p></div><button onclick="this.parentElement.remove()" style="margin-top:16px;padding:8px 24px;border-radius:12px;background:rgba(255,255,255,0.1);color:white;">Cerrar</button>';
         document.body.appendChild(overlay);
         overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-        el.addEventListener('click', function() { GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); });
-el.addEventListener('touchend', function(e) { e.preventDefault(); GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); });
     }
 
     function spawnVictoryParticles() {
@@ -143,8 +143,7 @@ el.addEventListener('touchend', function(e) { e.preventDefault(); GameEngine.onT
         html += '<button onclick="' + backFn + '" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
         html += '<span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + currentZone.icon + ' ' + currentZone.name + '</span>';
         html += '<button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button>';
-        
-        html += '<span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">⭐' + totalStars + '/' + maxStars + '</span></div><div>';
+        html += '</div><div>';
         currentZone.levels.forEach(function(l) {
             var u = isUnlocked(zid, l.num), s = getStars(zid, l.num);
             var miniKey = zid + '-' + l.num, mini = MINIGAMES[miniKey];
@@ -247,7 +246,38 @@ el.addEventListener('touchend', function(e) { e.preventDefault(); GameEngine.onT
     function closeRewardModal() { document.getElementById('rewardModal').style.display = 'none'; }
     function simulateRewardedVideo() { setTimeout(function() { document.getElementById('rewardModal').style.display = 'none'; if (rewardCallback) rewardCallback(); }, 2000); }
     function showInterstitialAd() { googletag.cmd.push(function() { googletag.display(interstitialSlot); }); }
-    function closeVictory() { document.getElementById('victoryModal').style.display = 'none'; showZone(currentZone.id); }
+
+    function closeVictory() { 
+        document.getElementById('victoryModal').style.display = 'none'; 
+        showZone(currentZone.id); 
+    }
+
+    function nextLevel() {
+        document.getElementById('victoryModal').style.display = 'none';
+        var nextNum = currentLevel.num + 1;
+        var zoneId = currentZone.id;
+        if (nextNum <= 10) {
+            var originalLevel = currentZone.levels.find(function(l) { return l.num === nextNum; });
+            if (originalLevel) {
+                currentLevel = { num: originalLevel.num, pairs: originalLevel.pairs, zoneId: zoneId };
+                document.getElementById('appRoot').innerHTML = 
+                    '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b1512;text-align:center;padding:32px;">' +
+                    '<div style="font-size:3em;margin-bottom:16px;">' + currentZone.icon + '</div>' +
+                    '<h2 style="color:#f2ca50;font-size:1.5em;font-weight:bold;margin-bottom:8px;">Nivel ' + currentLevel.num + '</h2>' +
+                    '<p style="color:rgba(255,255,255,0.5);margin-bottom:16px;">' + currentLevel.pairs + ' pares base</p>' +
+                    '<div style="display:flex;gap:12px;margin-bottom:16px;justify-content:center;">' +
+                    '<button onclick="UI.startGameWithDifficulty(\'facil\')" style="padding:8px 16px;border-radius:12px;background:rgba(74,222,128,0.2);border:1px solid rgba(74,222,128,0.4);color:rgb(74,222,128);font-weight:bold;">🌱 Facil</button>' +
+                    '<button onclick="UI.startGameWithDifficulty(\'normal\')" style="padding:8px 16px;border-radius:12px;background:rgba(242,202,80,0.2);border:1px solid rgba(242,202,80,0.4);color:#f2ca50;font-weight:bold;">⚡ Normal</button>' +
+                    '<button onclick="UI.startGameWithDifficulty(\'dificil\')" style="padding:8px 16px;border-radius:12px;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:rgb(239,68,68);font-weight:bold;">🔥 Dificil</button>' +
+                    '</div>' +
+                    '<button onclick="UI.showZone(\'' + zoneId + '\')" style="color:rgba(255,255,255,0.5);background:none;border:none;font-size:0.9em;cursor:pointer;">← Volver a la zona</button>' +
+                    '</div>';
+            }
+        } else {
+            showZone(zoneId);
+            showMessage('🎉 Zona completada!');
+        }
+    }
 
     function startMemoriceMinigame(zoneId, levelNum) {
         var mini = MINIGAMES[zoneId + '-' + levelNum]; if (!mini || !mini.photos) return;
@@ -341,7 +371,7 @@ el.addEventListener('touchend', function(e) { e.preventDefault(); GameEngine.onT
     function showCountryZones(country, title) {
         var zones = ZONES.filter(function(z) { return z.country === country; });
         var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
-       html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + title + '</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>'; 
+        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + title + '</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
         html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
         zones.forEach(function(z) {
             html += '<div onclick="UI.showZone(\'' + z.id + '\')" style="height:128px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(135deg, rgba(255,255,255,0.05), transparent);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;">';
@@ -353,7 +383,7 @@ el.addEventListener('touchend', function(e) { e.preventDefault(); GameEngine.onT
 
     function showAlbum() {
         var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
-        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🌎 Album de Viajes</span></div>';
+        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🌎 Album de Viajes</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
         var countries = [
             { flag:'🇨🇱', name:'Chile', zones:['norte','centro','sur','austral'] },
             { flag:'🇦🇷', name:'Argentina', zones:['argentina-norte','argentina-centro','argentina-patagonia','argentina-litoral'] },
@@ -380,7 +410,7 @@ el.addEventListener('touchend', function(e) { e.preventDefault(); GameEngine.onT
 
     function showTienda() {
         document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
-            '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🛒 Tienda</span><span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">💰 ' + coins + ' monedas</span></div>' +
+            '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🛒 Tienda</span><span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">💰 ' + coins + ' monedas</span><button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>' +
             '<p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">Compra power-ups para ayudarte.</p>' +
             '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">💡 Pista extra</span></div><button onclick="UI.comprarPowerUp(\'hint\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
             '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">🔀 Mezclar extra</span></div><button onclick="UI.comprarPowerUp(\'shuffle\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
@@ -406,7 +436,8 @@ el.addEventListener('touchend', function(e) { e.preventDefault(); GameEngine.onT
         goBackFromGame: goBackFromGame, useShuffle: useShuffle, useHint: useHint, undoLastSelection: undoLastSelection,
         showTienda: showTienda, showAlbum: showAlbum,
         showRewardedVideo: showRewardedVideo, closeRewardModal: closeRewardModal,
-        simulateRewardedVideo: simulateRewardedVideo, closeVictory: closeVictory,
+        simulateRewardedVideo: simulateRewardedVideo,
+        closeVictory: closeVictory, nextLevel: nextLevel,
         startMemoriceMinigame: startMemoriceMinigame, closeMemorice: closeMemorice,
         skipTutorial: skipTutorial
     });
