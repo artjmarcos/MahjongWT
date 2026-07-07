@@ -89,49 +89,42 @@ var GameEngine = (function() {
         for (var k = 0; k < tilesLayer0; k++) { tiles[idx].col = k % colsBase; tiles[idx].row = Math.floor(k / colsBase); tiles[idx].layer = 0; idx++; }
         for (var m = 0; m < tilesLayer1; m++) { tiles[idx].col = offsetCol + (m % colsLayer1); tiles[idx].row = Math.floor(m / colsLayer1); tiles[idx].layer = 1; idx++; }
         updateBlocked();
+    }
     function checkForMatchInSlots() {
-    if (slots.length < 2) return;
-    for (var i = 0; i < slots.length; i++) {
-        for (var j = i + 1; j < slots.length; j++) {
-            if (slots[i].pid === slots[j].pid && slots[i].idx !== slots[j].idx) {
-                var a = slots[i], b = slots[j];
-                sound.match();
-                var idxA = a.idx, idxB = b.idx;
-                
-                // Guardar referencia ANTES de eliminar
-                var removedA = tiles[idxA];
-                var removedB = tiles[idxB];
-                
-                // Eliminar inmediatamente (sin setTimeout)
-                if (idxA > idxB) { tiles.splice(idxA, 1); tiles.splice(idxB, 1); }
-                else { tiles.splice(idxB, 1); tiles.splice(idxA, 1); }
-                
-                var removed = [idxA, idxB].sort(function(x, y) { return x - y; });
-                slots.forEach(function(slot) { if (slot.idx > removed[0]) slot.idx--; if (slot.idx > removed[1]) slot.idx--; });
-                
-                if (i > j) { slots.splice(i, 1); slots.splice(j, 1); }
-                else { slots.splice(j, 1); slots.splice(i, 1); }
-                
-                selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null;
-                var multiplier = (a.bonus && b.bonus) ? 2 : 1;
-                score += (100 + combo * 50) * multiplier;
-                combo++;
-                
-                if (timeLeft > 0) { timeLeft += 3; if (timeLeft > 99) timeLeft = 99; }
-                updateBlocked();
-                
-                if (onStateChange) onStateChange('match', { a: a, b: b });
-                
-                if (tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0) {
-                    if (timerInterval) clearInterval(timerInterval);
-                    if (onStateChange) onStateChange('victory', { score: score, combo: combo });
+        if (slots.length < 2) return;
+        for (var i = 0; i < slots.length; i++) {
+            for (var j = i + 1; j < slots.length; j++) {
+                if (slots[i].pid === slots[j].pid && slots[i].idx !== slots[j].idx) {
+                    var a = slots[i], b = slots[j];
+                    sound.match();
+                    var idxA = a.idx, idxB = b.idx;
+                    // Eliminar fichas inmediatamente (sin setTimeout)
+                    if (idxA > idxB) { tiles.splice(idxA, 1); tiles.splice(idxB, 1); }
+                    else { tiles.splice(idxB, 1); tiles.splice(idxA, 1); }
+                    var removed = [idxA, idxB].sort(function(x, y) { return x - y; });
+                    slots.forEach(function(slot) {
+                        if (slot.idx > removed[0]) slot.idx--;
+                        if (slot.idx > removed[1]) slot.idx--;
+                    });
+                    if (i > j) { slots.splice(i, 1); slots.splice(j, 1); }
+                    else { slots.splice(j, 1); slots.splice(i, 1); }
+                    selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null;
+                    var multiplier = (a.bonus && b.bonus) ? 2 : 1;
+                    score += (100 + combo * 50) * multiplier;
+                    combo++;
+                    if (timeLeft > 0) { timeLeft += 3; if (timeLeft > 99) timeLeft = 99; }
+                    updateBlocked();
+                    if (onStateChange) onStateChange('match', { a: a, b: b });
+                    if (tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0) {
+                        if (timerInterval) clearInterval(timerInterval);
+                        if (onStateChange) onStateChange('victory', { score: score, combo: combo });
+                    }
+                    return;
                 }
-                return;
             }
         }
+        if (slots.length >= MAX_SLOTS) { sound.error(); if (onStateChange) onStateChange('slotsfull'); }
     }
-    if (slots.length >= MAX_SLOTS) { sound.error(); if (onStateChange) onStateChange('slotsfull'); }
-}
     function startTimer() { if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(function() { timeLeft--; if (onStateChange) onStateChange('timer', { timeLeft: timeLeft }); if (timeLeft <= 0) { clearInterval(timerInterval); if (onStateChange) onStateChange('timeout'); } }, 1000); }
 
     return Object.freeze({
