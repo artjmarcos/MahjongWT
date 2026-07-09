@@ -1,4 +1,4 @@
-var CACHE_NAME = 'mahjong-tour-v2';
+var CACHE_NAME = 'mahjong-tour-v3';
 var urlsToCache = [
     './',
     'index.html',
@@ -34,10 +34,18 @@ self.addEventListener('activate', function(event) {
     self.clients.claim();
 });
 
+// Network-first: siempre intenta traer la version mas reciente.
+// Si no hay conexion, usa la copia guardada en cache como respaldo.
 self.addEventListener('fetch', function(event) {
     event.respondWith(
-        caches.match(event.request).then(function(response) {
-            return response || fetch(event.request);
+        fetch(event.request).then(function(response) {
+            var responseClone = response.clone();
+            caches.open(CACHE_NAME).then(function(cache) {
+                cache.put(event.request, responseClone);
+            });
+            return response;
+        }).catch(function() {
+            return caches.match(event.request);
         })
     );
 });
