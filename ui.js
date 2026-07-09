@@ -71,6 +71,7 @@ sortedVt.forEach(function(t) {
             el.style.top = (t.row * ch + margin + t.layer * 12) + 'px';
             el.style.width = (cw - 4) + 'px'; el.style.height = (ch - 4) + 'px';
             el.style.zIndex = t.layer * 100 + Math.floor(t.row * 2);
+            el.style.zIndex = t.layer * 100 + Math.floor(t.row * 2);
             var td = tiles.indexOf(t);
             var isSel = (GameEngine.getSelectedTileIdx() === td);
             el.setAttribute('data-index', td);
@@ -99,7 +100,7 @@ sortedVt.forEach(function(t) {
                     GameEngine.onTileClick(idx);
                 }
                 if (tutorialActive) advanceTutorial();
-            });
+            });if (t.blocked) { el.style.pointerEvents = 'none'; }
             el.addEventListener('touchend', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
