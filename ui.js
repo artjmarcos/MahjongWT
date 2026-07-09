@@ -65,7 +65,10 @@ var UI = (function() {
             el.style.top = (t.row * ch + margin + t.layer * 12) + 'px';
             el.style.width = (cw - 4) + 'px'; el.style.height = (ch - 4) + 'px';
             el.style.zIndex = t.layer * 100 + Math.floor(t.row * 2);
-            var td = tiles.indexOf(t), isSel = (GameEngine.getSelectedTileIdx() === td);
+            var td = tiles.indexOf(t);
+            var isSel = (GameEngine.getSelectedTileIdx() === td);
+            el.setAttribute('data-index', td);
+            el.setAttribute('data-pid', t.pid);
             if (t.faceDown && !t.revealed) {
                 el.style.background = 'linear-gradient(145deg, #1a3a2a, #0d2518)';
                 el.innerHTML = '<div style="font-size:2em;color:rgba(242,202,80,0.4);">🪭</div>';
@@ -82,8 +85,25 @@ var UI = (function() {
             if (t.blocked) el.classList.add('blocked'); else el.classList.add('free');
             if (isSel) el.classList.add('selected-card');
             el.style.touchAction = 'manipulation';
-            el.addEventListener('click', function(e) { e.stopPropagation(); GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); });
-            el.addEventListener('touchend', function(e) { e.preventDefault(); e.stopPropagation(); GameEngine.onTileClick(td); if (tutorialActive) advanceTutorial(); });
+            el.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var idx = parseInt(this.getAttribute('data-index'));
+                var allTiles = GameEngine.getTiles();
+                if (idx < allTiles.length && allTiles[idx].pid === t.pid) {
+                    GameEngine.onTileClick(idx);
+                }
+                if (tutorialActive) advanceTutorial();
+            });
+            el.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var idx = parseInt(this.getAttribute('data-index'));
+                var allTiles = GameEngine.getTiles();
+                if (idx < allTiles.length && allTiles[idx].pid === t.pid) {
+                    GameEngine.onTileClick(idx);
+                }
+                if (tutorialActive) advanceTutorial();
+            });
             grid.appendChild(el);
         });
         inner.appendChild(grid); c.appendChild(inner);
@@ -352,95 +372,4 @@ var UI = (function() {
         html += countryCard('🇨🇱','Chile',cpChile,'UI.showChileZones()');
         html += countryCard('🇦🇷','Argentina',cpArgentina,'UI.showArgentineZones()');
         html += countryCard('🇲🇽','Mexico',cpMexico,'UI.showMexicanZones()');
-        html += '<div style="border-radius:16px;overflow:hidden;border:1px dashed rgba(255,255,255,0.2);opacity:0.6;background:rgba(255,255,255,0.02);margin-bottom:12px;"><div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;filter:grayscale(1);">🇧🇷</span><div style="flex:1;"><h3 style="color:rgba(255,255,255,0.7);font-weight:bold;font-size:1.1em;">Brasil</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.5);">8 regiones - 80 niveles</p><p style="font-size:0.75em;color:rgba(255,255,255,0.4);">Proximamente</p></div><span style="color:rgba(255,255,255,0.2);font-size:1.5em;">🔜</span></div></div>';
-        html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ALBUM DE VIAJES</button>';
-        html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;">🛒 TIENDA</button>';
-        html += '</div></div>';
-        document.getElementById('appRoot').innerHTML = html;
-    }
-
-    function countryCard(flag, name, progress, onclick) {
-        return '<div onclick="' + onclick + '" style="border-radius:16px;overflow:hidden;border:2px solid rgba(242,202,80,0.3);background:linear-gradient(135deg, rgba(242,202,80,0.1), rgba(11,21,18,0.9));margin-bottom:12px;cursor:pointer;">' +
-            '<div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;">' + flag + '</span><div style="flex:1;"><h3 style="color:white;font-weight:bold;font-size:1.1em;">' + name + '</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.7);">4 regiones - 40 niveles</p><div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden;"><div style="height:100%;background:linear-gradient(to right, #f2ca50, #ff9f43);border-radius:2px;width:' + progress + '%;"></div></div><p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-top:4px;">' + progress + '% completado</p></div><span style="color:rgba(255,255,255,0.3);font-size:1.5em;">→</span></div></div>';
-    }
-
-    function showChileZones() { showCountryZones('chile','🇨🇱 CHILE'); }
-    function showArgentineZones() { showCountryZones('argentina','🇦🇷 ARGENTINA'); }
-    function showMexicanZones() { showCountryZones('mexico','🇲🇽 MEXICO'); }
-
-    function showCountryZones(country, title) {
-        var zones = ZONES.filter(function(z) { return z.country === country; });
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
-        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + title + '</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
-        html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
-        zones.forEach(function(z) {
-            html += '<div onclick="UI.showZone(\'' + z.id + '\')" style="height:128px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(135deg, rgba(255,255,255,0.05), transparent);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;">';
-            html += '<span style="font-size:2em;">' + z.icon + '</span><span style="color:white;font-weight:bold;font-size:0.9em;">' + z.name + '</span></div>';
-        });
-        html += '</div></div>';
-        document.getElementById('appRoot').innerHTML = html;
-    }
-
-    function showAlbum() {
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
-        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🌎 Album de Viajes</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
-        var countries = [
-            { flag:'🇨🇱', name:'Chile', zones:['norte','centro','sur','austral'] },
-            { flag:'🇦🇷', name:'Argentina', zones:['argentina-norte','argentina-centro','argentina-patagonia','argentina-litoral'] },
-            { flag:'🇲🇽', name:'Mexico', zones:['mexico-norte','mexico-centro','mexico-sur','mexico-caribe'] }
-        ];
-        countries.forEach(function(country) {
-            html += '<div style="margin-bottom:16px;"><h3 style="color:white;font-weight:bold;font-size:1.1em;margin-bottom:8px;">' + country.flag + ' ' + country.name + '</h3><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">';
-            country.zones.forEach(function(zid) {
-                var zone = ZONES.find(function(z) { return z.id === zid; });
-                if (!zone) return;
-                zone.photos.forEach(function(photo, idx) {
-                    var stars = getStars(zid, idx + 1), unlocked = stars >= 1;
-                    html += '<div style="aspect-ratio:1;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;overflow:hidden;">';
-                    if (unlocked) html += '<img src="' + photo.url + '" style="width:100%;height:100%;object-fit:cover;" title="' + photo.name + '" onerror="this.style.display=\'none\'">';
-                    else html += '<span style="color:rgba(255,255,255,0.3);font-size:1.5em;">?</span>';
-                    html += '</div>';
-                });
-            });
-            html += '</div></div>';
-        });
-        html += '</div>';
-        document.getElementById('appRoot').innerHTML = html;
-    }
-
-    function showTienda() {
-        document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
-            '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🛒 Tienda</span><span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">💰 ' + coins + ' monedas</span><button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>' +
-            '<p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">Compra power-ups para ayudarte.</p>' +
-            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">💡 Pista extra</span></div><button onclick="UI.comprarPowerUp(\'hint\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
-            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">🔀 Mezclar extra</span></div><button onclick="UI.comprarPowerUp(\'shuffle\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
-            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;"><div><span style="color:white;font-weight:bold;">↩️ Deshacer extra</span></div><button onclick="UI.comprarPowerUp(\'undo\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div></div>';
-    }
-
-    function comprarPowerUp(tipo) { if (coins < 10) { showMessage('Monedas insuficientes'); return; } coins -= 10; localStorage.setItem('coins', coins); GameEngine.addPowerUp(tipo, 1); showTienda(); }
-
-    function showSplash() {
-        document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:black;text-align:center;">' +
-            '<span style="font-size:0.9em;color:rgba(242,202,80,0.8);letter-spacing:0.3em;margin-bottom:16px;">Outfit</span>' +
-            '<h1 class="text-glow" style="font-size:2.5em;font-weight:bold;color:#f2ca50;line-height:1.2;">Descubre<br/>America</h1>' +
-            '<div style="height:48px;width:1px;background:linear-gradient(to bottom, rgba(242,202,80,0.6), transparent);margin:16px auto;"></div>' +
-            '<p style="font-size:0.9em;color:rgba(255,255,255,0.5);letter-spacing:0.3em;">World Tour</p>' +
-            '<p style="font-size:0.75em;color:rgba(242,202,80,0.6);margin-top:32px;">Viaje Meditativo</p></div>';
-        setTimeout(showWorldMain, 4000);
-    }
-
-    return Object.freeze({
-        showSplash: showSplash, showWorldMain: showWorldMain, showChileZones: showChileZones,
-        showArgentineZones: showArgentineZones, showMexicanZones: showMexicanZones,
-        showZone: showZone, selectLevel: selectLevel, startGameWithDifficulty: startGameWithDifficulty,
-        goBackFromGame: goBackFromGame, useShuffle: useShuffle, useHint: useHint, undoLastSelection: undoLastSelection,
-        showTienda: showTienda, showAlbum: showAlbum,
-        showRewardedVideo: showRewardedVideo, closeRewardModal: closeRewardModal,
-        simulateRewardedVideo: simulateRewardedVideo,
-        closeVictory: closeVictory, nextLevel: nextLevel,
-        startMemoriceMinigame: startMemoriceMinigame, closeMemorice: closeMemorice,
-        skipTutorial: skipTutorial
-    });
-})();
-
-UI.showSplash();
+        html += '<div style="border-radius:16px;overflow:hidden;border:1px dashed rgba(255,255,255,0.2);opacity:0.6;background:rgba(255,255,255,0.02);margin-bottom:12px;"><div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;filter:grayscale(1);">🇧🇷</span><div style="flex:1;"><h3 style="color:rgba(255,255,255,0.7);font-weight:bold;font-size:1.1em;">Brasil</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.5);">8 regiones - 80 niveles</p><p style="font-size:0.75em;color:rgba(255,255,255,0.4);">Pro
