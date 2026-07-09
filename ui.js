@@ -58,7 +58,13 @@ var UI = (function() {
         inner.style.cssText = 'position:relative;width:100%;display:flex;align-items:center;justify-content:center;height:' + nh + 'px;';
         var grid = document.createElement('div');
         grid.style.cssText = 'position:relative;width:' + (COLS * cw) + 'px;height:' + ((maxRow + 1) * ch + maxLayer * 15) + 'px;';
-        vt.forEach(function(t) {
+        // Ordenar fichas por zIndex para que las de arriba se dibujen encima
+var sortedVt = vt.slice().sort(function(a, b) {
+    var za = a.layer * 100 + Math.floor(a.row * 2);
+    var zb = b.layer * 100 + Math.floor(b.row * 2);
+    return za - zb;
+});
+sortedVt.forEach(function(t) {
             var el = document.createElement('div'); el.className = 'vita-tile';
             if (t.bonus) el.classList.add('bonus-tile');
             el.style.left = (t.col * cw + margin) + 'px';
