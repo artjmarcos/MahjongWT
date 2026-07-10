@@ -34,7 +34,23 @@ var GameEngine = (function() {
     }
     var sound = {
         select: function() { playTone(660, 0.1, 'sine', 0.12); },
-        match: function() { playTone(523, 0.12); setTimeout(function() { playTone(659, 0.12); }, 80); setTimeout(function() { playTone(784, 0.18); }, 160); },
+        // [FASE 1] Match con pitch ascendente segun combo (1 semitono por match consecutivo).
+        match: function(comboLevel) {
+            var cl = comboLevel || 1;
+            // Multiplicador de frecuencia: 2^(semitonos/12). 1 semitono por combo.
+            var mult = Math.pow(2, Math.min(cl - 1, 12) / 12);
+            playTone(523 * mult, 0.12);
+            setTimeout(function() { playTone(659 * mult, 0.12); }, 80);
+            setTimeout(function() { playTone(784 * mult, 0.18); }, 160);
+        },
+        // [FASE 1] Match bonus: acorde dorado mas brillante.
+        matchBonus: function(comboLevel) {
+            var cl = comboLevel || 1;
+            var mult = Math.pow(2, Math.min(cl - 1, 12) / 12);
+            [659, 880, 1047, 1319].forEach(function(f, i) {
+                setTimeout(function() { playTone(f * mult, 0.18, 'triangle', 0.16); }, i * 70);
+            });
+        },
         error: function() { playTone(180, 0.3, 'square', 0.06); },
         victory: function() { [523,659,784,1047].forEach(function(f,i) { setTimeout(function() { playTone(f, 0.4, 'sine', 0.3); }, i*200); }); },
         shuffle: function() { playTone(440, 0.2, 'triangle', 0.12); },
@@ -164,13 +180,26 @@ var GameEngine = (function() {
                     else { slots.splice(j, 1); slots.splice(i, 1); }
                     selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null;
                     var multiplier = (a.bonus && b.bonus) ? 2 : 1;
-                    score += (100 + combo * 50) * multiplier;
+                    var pointsGained = (100 + combo * 50) * multiplier;
+                    score += pointsGained;
+                    var comboBefore = combo;
                     combo++;
                     if (timeLeft > 0) { timeLeft += 3; if (timeLeft > 99) timeLeft = 99; }
                     updateBlocked();
+                    // [FASE 1] Sonido segun si es bonus o no, con pitch ascendente por combo.
+                    if (a.bonus && b.bonus) sound.matchBonus(comboBefore);
+                    else sound.match(comboBefore);
                     // [FIX BUG #3] Calcular si fue match final y pasarlo al UI.
                     var isFinalMatch = tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0;
-                    if (onStateChange) onStateChange('match', { a: a, b: b, isFinalMatch: isFinalMatch });
+                    // [FASE 1] Pasar al UI combo, puntos, posiciones de slots y flag bonus para efectos visuales.
+                    if (onStateChange) onStateChange('match', {
+                        a: a, b: b,
+                        isFinalMatch: isFinalMatch,
+                        combo: comboBefore,
+                        points: pointsGained,
+                        isBonus: !!(a.bonus && b.bonus),
+                        slotAPos: i, slotBPos: j
+                    });
                     if (isFinalMatch) {
                         if (timerInterval) clearInterval(timerInterval);
                         sound.victory();
@@ -180,8 +209,8 @@ var GameEngine = (function() {
                 }
             }
         }
-        // [FIX BUG #6] Mensaje mas claro cuando slots estan llenos.
-        if (slots.length >= MAX_SLOTS) { sound.error(); if (onStateChange) onStateChange('slotsfull'); }
+        // [FIX BUG #6] Mensaje mas claro cuando slots estan llenos. Resetea combo.
+        if (slots.length >= MAX_SLOTS) { sound.error(); combo = 1; if (onStateChange) onStateChange('slotsfull'); }
     }
     function startTimer() { if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(function() { timeLeft--; if (onStateChange) onStateChange('timer', { timeLeft: timeLeft }); if (timeLeft <= 0) { clearInterval(timerInterval); if (onStateChange) onStateChange('timeout'); } }, 1000); }
 
@@ -285,9 +314,10 @@ var GameEngine = (function() {
             if (onStateChange) onStateChange('boardChanged'); return true;
         },
         // [FIX BUG #2] useShuffle ahora reinicia inSlot, mezcla orden y re-layout sin superposiciones.
+        // [FASE 1] Resetea combo al hacer shuffle.
         useShuffle: function() {
             if (shuffleUses <= 0) return false;
-            shuffleUses--; sound.shuffle();
+            shuffleUses--; sound.shuffle(); combo = 1;
             // 1. Resetear inSlot de TODAS las fichas (incluidas las que estaban en slots).
             tiles.forEach(function(t) { t.inSlot = false; t.matched = false; });
             slots = []; selectedTileIdx = null;
@@ -326,9 +356,11 @@ var GameEngine = (function() {
             if (onStateChange) onStateChange('hint', { name: hint.name, idxA: hint.a, idxB: hint.b });
             return true;
         },
-        undoLastSelection: function() { if (slots.length === 0) return false; sound.select(); var last = slots.pop(); if (tiles[last.idx]) tiles[last.idx].inSlot = false; selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null; updateBlocked(); if (onStateChange) onStateChange('boardChanged'); return true; },
+        // [FASE 1] undoLastSelection resetea combo (rompe la racha).
+        undoLastSelection: function() { if (slots.length === 0) return false; sound.select(); combo = 1; var last = slots.pop(); if (tiles[last.idx]) tiles[last.idx].inSlot = false; selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null; updateBlocked(); if (onStateChange) onStateChange('boardChanged'); return true; },
         setOnStateChange: function(callback) { onStateChange = callback; },
         isGameOver: function() { return tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0; },
+        getCombo: function() { return combo; },
         stopTimer: function() { if (timerInterval) clearInterval(timerInterval); },
         // [FEATURE #1] Expuesto para que la UI pueda verificar y mostrar aviso.
         isBoardStuck: function() { return isBoardStuck(); },

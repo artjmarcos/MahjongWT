@@ -13,6 +13,12 @@ var UI = (function() {
     var hintIdxA = null, hintIdxB = null, hintTimer = null;
     // [FEATURE #1] Bandera para mostrar aviso de auto-shuffle solo una vez por evento.
     var autoShuffleNoticeTimer = null;
+    // [FASE 1] Haptic feedback toggle (default ON, persistente).
+    var hapticEnabled = localStorage.getItem('hapticEnabled') !== '0';
+    // [FASE 1] Combo display element (se crea al iniciar juego).
+    var comboDisplay = null, comboHideTimer = null;
+    // [FASE 1] Screen shake element (el boardContainer).
+    var shakeTimer = null;
 
     function getStars(z, n) { return parseInt(localStorage.getItem('zone_' + z + '_level_' + n) || '0'); }
     function setStars(z, n, s) { localStorage.setItem('zone_' + z + '_level_' + n, s); }
@@ -27,6 +33,26 @@ var UI = (function() {
     GameEngine.setOnStateChange(function(event, data) {
         if (event === 'boardChanged') renderBoard();
         else if (event === 'match') {
+            // [FASE 1] Efectos visuales y hapticos del match.
+            // Calcular posicion del centro del tablero para particulas y puntos.
+            var bc = document.getElementById('boardContainer');
+            var rect = bc ? bc.getBoundingClientRect() : { left: window.innerWidth/2, top: window.innerHeight/2, width: 0, height: 0 };
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+            var combo = data.combo || 1;
+            // 1. Combo display flotante (solo si combo >= 2).
+            showComboDisplay(combo, data.isBonus);
+            // 2. Particulas de match.
+            spawnMatchParticles(cx, cy, combo, data.isBonus);
+            // 3. Texto flotante de puntos.
+            spawnFloatingPoints(data.points, cx, cy - 30, data.isBonus);
+            // 4. Screen shake en combos x3+ o bonus.
+            if (combo >= 3 || data.isBonus) screenShake(data.isBonus ? 6 : combo);
+            // 5. Haptic: corto en match normal, patron especial en bonus, fuerte en combo x4+.
+            if (data.isBonus) haptic([30, 40, 30, 40, 60]);
+            else if (combo >= 4) haptic([40, 30, 40]);
+            else if (combo >= 2) haptic(30);
+            else haptic(15);
             // [FIX BUG #3] No mostrar zoom si este match completo el tablero (la victoria va a mostrar el modal).
             if (!data.isFinalMatch && data.a.url && data.b.url && data.a.zone === currentZone.id) {
                 var photo = currentZone.photos.find(function(p) { return p.url === data.a.url; }) || data.a;
@@ -72,7 +98,105 @@ var UI = (function() {
         }
     });
 
-    // [FEATURE #3] Resalta visualmente la pareja sugerida por el hint durante ~3 segundos.
+    // [FASE 1] Haptic feedback: vibracion del dispositivo. Respeta toggle del usuario.
+    function haptic(pattern) {
+        if (!hapticEnabled) return;
+        if (navigator.vibrate) {
+            try { navigator.vibrate(pattern); } catch (e) {}
+        }
+    }
+    function setHaptic(enabled) {
+        hapticEnabled = !!enabled;
+        localStorage.setItem('hapticEnabled', hapticEnabled ? '1' : '0');
+        var btn = document.getElementById('hapticToggleBtn');
+        if (btn) {
+            btn.textContent = hapticEnabled ? '📳' : '📴';
+            btn.style.opacity = hapticEnabled ? '1' : '0.5';
+        }
+        if (hapticEnabled) haptic(20);
+    }
+    function toggleHaptic() { setHaptic(!hapticEnabled); }
+
+    // [FASE 1] Muestra el combo flotante sobre el tablero.
+    function showComboDisplay(combo, isBonus) {
+        if (!comboDisplay) {
+            comboDisplay = document.createElement('div');
+            comboDisplay.id = 'comboDisplay';
+            comboDisplay.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:200;pointer-events:none;font-weight:bold;text-align:center;opacity:0;';
+            var bc = document.getElementById('boardContainer');
+            if (bc) bc.appendChild(comboDisplay);
+            else { comboDisplay.style.position = 'fixed'; document.body.appendChild(comboDisplay); }
+        }
+        if (combo < 2) { hideComboDisplay(); return; }
+        var colors = ['#f2ca50', '#ff9f43', '#ff6b6b', '#ff4757'];
+        var colorIdx = Math.min(combo - 2, colors.length - 1);
+        var color = colors[colorIdx];
+        var size = 1.5 + Math.min(combo - 1, 6) * 0.2;
+        var bonusTxt = isBonus ? ' ✨BONUS✨ ' : '';
+        comboDisplay.innerHTML = '<div style="font-size:' + size + 'em;color:' + color + ';text-shadow:0 0 20px ' + color + ',0 2px 4px rgba(0,0,0,0.8);">' + bonusTxt + 'COMBO x' + combo + '</div>';
+        comboDisplay.style.animation = 'none';
+        // Forzar reflow para reiniciar la animacion.
+        void comboDisplay.offsetWidth;
+        comboDisplay.style.animation = 'comboPop 0.9s ease-out forwards';
+        if (comboHideTimer) clearTimeout(comboHideTimer);
+        comboHideTimer = setTimeout(hideComboDisplay, 1000);
+    }
+    function hideComboDisplay() {
+        if (comboDisplay) comboDisplay.style.opacity = '0';
+        if (comboHideTimer) { clearTimeout(comboHideTimer); comboHideTimer = null; }
+    }
+
+    // [FASE 1] Screen shake del boardContainer para combos x3+.
+    function screenShake(intensity) {
+        var bc = document.getElementById('boardContainer');
+        if (!bc) return;
+        if (shakeTimer) clearTimeout(shakeTimer);
+        var i = Math.min(intensity || 4, 10);
+        bc.style.animation = 'none';
+        void bc.offsetWidth;
+        bc.style.animation = 'shake' + i + ' 0.35s ease-in-out';
+        shakeTimer = setTimeout(function() { bc.style.animation = ''; }, 400);
+    }
+
+    // [FASE 1] Texto flotante de puntos (+150) que sube desde la posicion del match.
+    function spawnFloatingPoints(points, x, y, isBonus) {
+        var el = document.createElement('div');
+        el.className = 'floating-points' + (isBonus ? ' bonus' : '');
+        el.textContent = (isBonus ? '✨ ' : '+') + points;
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        document.body.appendChild(el);
+        setTimeout(function() { if (el.parentNode) el.remove(); }, 1200);
+    }
+
+    // [FASE 1] Particulas de match mejoradas, color segun combo.
+    function spawnMatchParticles(x, y, combo, isBonus) {
+        var colors = ['#f2ca50', '#ffd700', '#ff9f43', '#ff6b6b'];
+        var baseColor = isBonus ? '#ffd700' : colors[Math.min(combo - 1, colors.length - 1)];
+        var count = isBonus ? 20 : Math.min(8 + combo * 2, 18);
+        for (var i = 0; i < count; i++) {
+            (function(idx) {
+                setTimeout(function() {
+                    var p = document.createElement('div');
+                    p.className = 'particle';
+                    p.style.position = 'fixed';
+                    p.style.zIndex = '250';
+                    p.style.left = x + 'px';
+                    p.style.top = y + 'px';
+                    p.style.width = '6px'; p.style.height = '6px';
+                    p.style.borderRadius = '50%';
+                    p.style.background = baseColor;
+                    p.style.boxShadow = '0 0 8px ' + baseColor;
+                    var angle = (idx / count) * Math.PI * 2;
+                    var dist = 60 + Math.random() * 80;
+                    p.style.setProperty('--tx', (Math.cos(angle) * dist) + 'px');
+                    p.style.setProperty('--ty', (Math.sin(angle) * dist) + 'px');
+                    document.body.appendChild(p);
+                    setTimeout(function() { if (p.parentNode) p.remove(); }, 900);
+                }, idx * 15);
+            })(i);
+        }
+    }
     function showHintHighlight(idxA, idxB, name) {
         hintIdxA = idxA; hintIdxB = idxB;
         showMessage('💡 Busca: ' + name);
@@ -287,6 +411,7 @@ var UI = (function() {
             html += '<button onclick="UI.useHint()" class="power-up-btn">💡<span class="power-up-badge" id="hintBadge">' + pu.hintUses + '</span></button>';
             html += '<button onclick="UI.useShuffle()" class="power-up-btn">🔀<span class="power-up-badge" id="shuffleBadge">' + pu.shuffleUses + '</span></button>';
             html += '<button onclick="UI.undoLastSelection()" class="power-up-btn">↩️<span class="power-up-badge" id="undoBadge">' + pu.undoUses + '</span></button>';
+            html += '<button onclick="UI.toggleHaptic()" class="power-up-btn" id="hapticToggleBtn" title="Vibracion: ' + (hapticEnabled ? 'ON' : 'OFF') + '" style="font-size:0.9em;opacity:' + (hapticEnabled ? '1' : '0.5') + ';">' + (hapticEnabled ? '📳' : '📴') + '</button>';
             html += '</div>';
         }
         html += '<div style="text-align:center;margin-top:8px;height:16px;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
@@ -549,7 +674,8 @@ var UI = (function() {
         simulateRewardedVideo: simulateRewardedVideo,
         closeVictory: closeVictory, nextLevel: nextLevel,
         startMemoriceMinigame: startMemoriceMinigame, closeMemorice: closeMemorice,
-        skipTutorial: skipTutorial
+        skipTutorial: skipTutorial,
+        toggleHaptic: toggleHaptic
     });
 })();
 
