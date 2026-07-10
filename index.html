@@ -44,11 +44,12 @@
         .btn-next { background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%); color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(96,165,250,0.3); border: none; cursor: pointer; }
         .power-up-btn { background: rgba(242,202,80,0.1); border: 1px solid rgba(242,202,80,0.3); color: #f2ca50; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; cursor: pointer; position: relative; }
         .power-up-badge { position: absolute; top: -4px; right: -4px; background: #e74c3c; color: white; font-size: 0.5em; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .vita-tile { position: absolute; border-radius: 10px; cursor: pointer; background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; transition: transform 0.15s, opacity 0.15s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        .vita-tile { position: absolute; border-radius: 10px; cursor: pointer; background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; transition: transform 0.15s, opacity 0.15s; touch-action: manipulation; -webkit-tap-highlight-color: transparent; animation: tileAppear 0.5s ease-out backwards; }
+        @keyframes tileAppear { 0% { opacity: 0; transform: translateY(-30px) scale(0.8); } 60% { opacity: 1; transform: translateY(4px) scale(1.05); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
         .vita-tile::before { content: ''; position: absolute; inset: 0; border-radius: 10px; padding: 2px; background: linear-gradient(135deg, #f2ca50, #8B6914, #f2ca50, #d4af37); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; z-index: 5; pointer-events: none; opacity: 0.8; }
         .vita-tile .card-name { position: absolute; bottom: 4px; left: 4px; right: 4px; background: rgba(0,0,0,0.85); color: #f2ca50; font-size: 0.4em; text-align: center; padding: 2px 4px; border-radius: 0 0 6px 6px; z-index: 6; font-weight: 700; }
         .vita-tile.blocked { filter: brightness(0.35); cursor: not-allowed; }
-        .vita-tile.free { filter: brightness(1.05); box-shadow: 0 8px 25px rgba(0,0,0,0.7), 0 0 20px rgba(242,202,80,0.3); animation: cardFloat 4s ease-in-out infinite; z-index: 10; }
+        .vita-tile.free { filter: brightness(1.05); box-shadow: 0 8px 25px rgba(0,0,0,0.7), 0 0 20px rgba(242,202,80,0.3); animation: tileAppear 0.5s ease-out backwards, cardFloat 4s ease-in-out 0.5s infinite; z-index: 10; }
         @keyframes cardFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
         .vita-tile.selected-card { animation: selectedGlow 0.6s ease-in-out infinite !important; filter: brightness(1.4) !important; box-shadow: 0 0 40px rgba(242,202,80,0.9) !important; border: 2px solid #f2ca50 !important; z-index: 50 !important; transform: scale(1.06) !important; }
         @keyframes selectedGlow { 0%,100%{box-shadow:0 0 40px rgba(242,202,80,0.9)} 50%{box-shadow:0 0 60px rgba(242,202,80,1)} }
@@ -312,6 +313,8 @@
             <h2 class="text-glow" style="color:#f2ca50;font-size:1.5em;font-weight:bold;">¡Nivel Completado!</h2>
             <p style="color:white;" id="victoryName"></p>
             <div style="font-size:2em;margin:16px 0;" id="starsDisplay"></div>
+            <!-- [FASE 5] Boton doble recompensa (rewarded video) -->
+            <button id="dobleRecompensaBtn" onclick="UI.dobleRecompensaVictoria()" class="btn-reward" style="width:100%;padding:10px;border-radius:12px;font-size:0.95em;margin-bottom:8px;">🎬 Doble recompensa (+<span id="dobleRecompensaStars">1</span> 🪙)</button>
             <button onclick="UI.nextLevel()" class="btn-next" style="width:100%;padding:12px;border-radius:12px;font-size:1.1em;margin-bottom:8px;">SIGUIENTE NIVEL ▶</button>
             <button onclick="UI.closeVictory()" class="btn-primary" style="width:100%;padding:12px;border-radius:12px;font-size:1.1em;">VOLVER</button>
         </div>
@@ -328,6 +331,7 @@
     <script src="datos.js"></script>
     <script src="misiones.js"></script>
     <script src="logros.js"></script>
+    <script src="musica.js"></script>
     <script src="ui.js"></script>
     <script>
         if ("serviceWorker" in navigator) {

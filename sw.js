@@ -1,4 +1,4 @@
-var CACHE_NAME = 'mahjong-tour-v6';
+var CACHE_NAME = 'mahjong-tour-v7';
 var urlsToCache = [
     './',
     'index.html',
@@ -6,6 +6,7 @@ var urlsToCache = [
     'datos.js',
     'misiones.js',
     'logros.js',
+    'musica.js',
     'ui.js',
     'manifest.json',
     'icon-192.png',

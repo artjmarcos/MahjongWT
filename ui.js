@@ -3,9 +3,11 @@ var UI = (function() {
     var currentZone = null, currentLevel = null, coins = parseInt(localStorage.getItem('coins') || '0');
     var tutorialActive = false, tutorialStep = 0, tutorialZoneId = null;
     var rewardCallback = null, adCount = 0;
-    var AD_EVERY = 5;
+    var AD_EVERY = 3;  // [FASE 5] Interstitial cada 3 niveles (era 5).
     // [FASE 2] Tracking de eventos para misiones.
     var gameStats = { usedPowerUps: false, usedUndo: false, currentDifficulty: 'normal' };
+    // [FASE 5] Stars ganadas en la ultima victoria (para el boton de doble recompensa).
+    var lastVictoryStars = 0;
     var memoricePhotos = [], memoriceCards = [], memoriceFlipped = [], memoriceMatched = 0, memoriceLocked = false;
     // [FIX BUG #7] Flag para evitar doble disparo click+touchend.
     var lastTapTime = 0;
@@ -87,6 +89,13 @@ var UI = (function() {
             var stars = data.score >= 2000 ? 3 : data.score >= 1000 ? 2 : 1;
             setStars(currentZone.id, currentLevel.num, stars);
             addCoins(stars);
+            // [FASE 5] Guardar stars para el boton de doble recompensa.
+            lastVictoryStars = stars;
+            var drStars = document.getElementById('dobleRecompensaStars');
+            if (drStars) drStars.textContent = stars;
+            // Mostrar/ocultar el boton segun si ya se reclamo.
+            var drBtn = document.getElementById('dobleRecompensaBtn');
+            if (drBtn) { drBtn.style.display = ''; drBtn.disabled = false; drBtn.style.opacity = '1'; }
             document.getElementById('victoryIcon').textContent = '🏆';
             document.getElementById('victoryName').textContent = currentZone.name + ' Nivel ' + currentLevel.num;
             document.getElementById('starsDisplay').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
@@ -163,6 +172,32 @@ var UI = (function() {
         if (hapticEnabled) haptic(20);
     }
     function toggleHaptic() { setHaptic(!hapticEnabled); }
+
+    // [FASE 5] Toggle de musica ambiental.
+    function toggleMusica() {
+        var on = Musica.toggle();
+        var btn = document.getElementById('musicaToggleBtn');
+        if (btn) {
+            btn.textContent = on ? '🔊' : '🔇';
+            btn.style.opacity = on ? '1' : '0.5';
+            btn.title = 'Musica: ' + (on ? 'ON' : 'OFF');
+        }
+        if (on) {
+            // Reanudar con la pista correspondiente a la pantalla actual.
+            var paisActual = inferirPaisPantallaActual();
+            Musica.play(paisActual);
+            haptic(20);
+        } else {
+            Musica.stop();
+            haptic(15);
+        }
+    }
+
+    // [FASE 5] Detecta que pais corresponde a la pantalla actual para elegir la musica.
+    function inferirPaisPantallaActual() {
+        if (currentZone && currentZone.country) return currentZone.country;
+        return 'menu';
+    }
 
     // [FASE 1] Muestra el combo flotante sobre el tablero.
     function showComboDisplay(combo, isBonus) {
@@ -282,13 +317,15 @@ var UI = (function() {
         inner.style.cssText = 'position:relative;width:100%;display:flex;align-items:center;justify-content:center;height:' + nh + 'px;';
         var grid = document.createElement('div');
         grid.style.cssText = 'position:relative;width:' + (COLS * cw) + 'px;height:' + ((maxRow + 1) * ch + maxLayer * 15) + 'px;';
-        vt.forEach(function(t) {
+        vt.forEach(function(t, vidx) {
             var el = document.createElement('div'); el.className = 'vita-tile';
             if (t.bonus) el.classList.add('bonus-tile');
             el.style.left = (t.col * cw + margin) + 'px';
             el.style.top = (t.row * ch + margin + t.layer * 12) + 'px';
             el.style.width = (cw - 4) + 'px'; el.style.height = (ch - 4) + 'px';
             el.style.zIndex = t.layer * 100 + Math.floor(t.row * 2);
+            // [FASE 5] Stagger: cada ficha cae con un pequeno delay (max 0.6s total).
+            el.style.animationDelay = Math.min(vidx * 0.02, 0.5) + 's';
             var td = tiles.indexOf(t);
             var isSel = (GameEngine.getSelectedTileIdx() === td);
             el.setAttribute('data-index', td);
@@ -385,6 +422,8 @@ var UI = (function() {
 
     function showZone(zid) {
         currentZone = ZONES.find(function(z) { return z.id === zid; });
+        // [FASE 5] Cambiar musica segun el pais de la zona.
+        if (currentZone && currentZone.country) Musica.play(currentZone.country);
         var totalStars = currentZone.levels.reduce(function(s, l) { return s + getStars(zid, l.num); }, 0);
         var maxStars = currentZone.levels.length * 3;
         var backFn = currentZone.country === 'argentina' ? 'UI.showArgentineZones()' : currentZone.country === 'mexico' ? 'UI.showMexicanZones()' : 'UI.showChileZones()';
@@ -457,11 +496,12 @@ var UI = (function() {
         html += '</div>';
         html += '<div style="flex:1;background:rgba(0,0,0,0.2);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;min-height:300px;" id="boardContainer"></div>';
         if (!tutorialActive) {
-            html += '<div style="display:flex;justify-content:center;gap:16px;margin-top:12px;">';
+            html += '<div style="display:flex;justify-content:center;gap:12px;margin-top:12px;">';
             html += '<button onclick="UI.useHint()" class="power-up-btn">💡<span class="power-up-badge" id="hintBadge">' + pu.hintUses + '</span></button>';
             html += '<button onclick="UI.useShuffle()" class="power-up-btn">🔀<span class="power-up-badge" id="shuffleBadge">' + pu.shuffleUses + '</span></button>';
             html += '<button onclick="UI.undoLastSelection()" class="power-up-btn">↩️<span class="power-up-badge" id="undoBadge">' + pu.undoUses + '</span></button>';
             html += '<button onclick="UI.toggleHaptic()" class="power-up-btn" id="hapticToggleBtn" title="Vibracion: ' + (hapticEnabled ? 'ON' : 'OFF') + '" style="font-size:0.9em;opacity:' + (hapticEnabled ? '1' : '0.5') + ';">' + (hapticEnabled ? '📳' : '📴') + '</button>';
+            html += '<button onclick="UI.toggleMusica()" class="power-up-btn" id="musicaToggleBtn" title="Musica: ' + (Musica.isEnabled() ? 'ON' : 'OFF') + '" style="font-size:0.9em;opacity:' + (Musica.isEnabled() ? '1' : '0.5') + ';">' + (Musica.isEnabled() ? '🔊' : '🔇') + '</button>';
             html += '</div>';
         }
         html += '<div style="text-align:center;margin-top:8px;height:16px;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
@@ -470,7 +510,24 @@ var UI = (function() {
         if (tutorialActive) showTutorialOverlay();
     }
 
-    function goBackFromGame() { GameEngine.stopTimer(); showZone(currentZone.id); }
+    function goBackFromGame() { GameEngine.stopTimer(); Musica.play(currentZone ? currentZone.country : 'menu'); showZone(currentZone.id); }
+
+    // [FASE 5] Doble recompensa: ver rewarded video para duplicar las monedas ganadas en la victoria.
+    function dobleRecompensaVictoria() {
+        showRewardedVideo(function() {
+            // Callback tras "ver el video": duplicar las stars ganadas.
+            var extra = lastVictoryStars;  // misma cantidad que ya se dio
+            addCoins(extra);
+            showMessage('🎬 +' + extra + ' monedas extra!');
+            // Tracking de misiones/logros.
+            Misiones.registrarEvento('coinsEarned', extra);
+            Logros.incrementStat('totalMatches', 0);  // solo para evaluar logros pendientes
+            // Deshabilitar el boton para no reclamar 2 veces.
+            var drBtn = document.getElementById('dobleRecompensaBtn');
+            if (drBtn) { drBtn.disabled = true; drBtn.style.opacity = '0.4'; drBtn.textContent = '✓ Recompensa reclamada'; }
+            haptic([30, 50, 30]);
+        }, 'Duplica tus monedas viendo un video');
+    }
     function useShuffle() { gameStats.usedPowerUps = true; GameEngine.useShuffle(); updatePowerBadges(); }
     function useHint() { gameStats.usedPowerUps = true; GameEngine.useHint(); updatePowerBadges(); }
     function undoLastSelection() { gameStats.usedPowerUps = true; gameStats.usedUndo = true; GameEngine.undoLastSelection(); updatePowerBadges(); }
@@ -762,6 +819,8 @@ var UI = (function() {
     function closeMemorice() { document.getElementById('memoriceModal').style.display = 'none'; }
 
     function showWorldMain() {
+        // [FASE 5] Musica ambiental del menu.
+        Musica.play('menu');
         var ts = ZONES.reduce(function(s, z) { return s + z.levels.reduce(function(ss, l) { return ss + getStars(z.id, l.num); }, 0); }, 0);
         var cpChile = Math.round((getTotalStarsForCountry('chile') / 120) * 100);
         var cpArgentina = Math.round((getTotalStarsForCountry('argentina') / 120) * 100);
@@ -1149,6 +1208,8 @@ var UI = (function() {
         answerTrivia: answerTrivia, nextTriviaQuestion: nextTriviaQuestion,
         skipTutorial: skipTutorial,
         toggleHaptic: toggleHaptic,
+        toggleMusica: toggleMusica,
+        dobleRecompensaVictoria: dobleRecompensaVictoria,
         reclamarMisiones: reclamarMisiones,
         reclamarBonusStreak: reclamarBonusStreak
     });
