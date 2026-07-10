@@ -225,7 +225,121 @@ var ZONES = [
     { id:'mexico-caribe', name:'MX CARIBE', icon:'🌴', country:'mexico', photos:mexicoCaribePhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
 ];
 
+// ========== TRIVIA CULTURAL (FASE 3) ==========
+// 5 preguntas por zona, basadas en los lugares de las fotos.
+var TRIVIA = {
+    'norte': [
+        { q: '¿Cuál es el desierto más seco del mundo?', opts: ['Sahara', 'Atacama', 'Gobi', 'Kalahari'], correct: 1, exp: 'El Desierto de Atacama no registra lluvias en algunos puntos por décadas.' },
+        { q: '¿En qué cordillera están los géiseres del Tatio?', opts: ['Los Andes', 'La Costa', 'Alpes', 'Himalaya'], correct: 0, exp: 'A 4.300m en los Andes, el Tatio es uno de los campos geotérmicos más altos del mundo.' },
+        { q: '¿Qué animales rosados habitan el Salar de Atacama?', opts: ['Pelícanos', 'Gaviotas', 'Flamencos', 'Cisnes'], correct: 2, exp: 'Los flamencos andinos se alimentan de microorganismos salinos.' },
+        { q: '¿A qué se debe el fenómeno del Desierto Florido?', opts: ['A nieblas', 'A lluvias ocasionales', 'Al viento', 'Al sol'], correct: 1, exp: 'Lluvias inusuales despiertan semillas dormidas por décadas.' },
+        { q: '¿Qué color tienen las Piedras Rojas del altiplano?', opts: ['Verde', 'Rojo óxido', 'Azul', 'Blanco'], correct: 1, exp: 'El hierro oxidado tiñe las formaciones a 4.000m de altura.' }
+    ],
+    'centro': [
+        { q: '¿Cuál es el edificio más alto de Sudamérica?', opts: ['Costanera Center', 'Torre Titanium', 'Bicentenario', 'Edificio CTC'], correct: 0, exp: 'Con 300m, el Costanera Center domina el skyline de Santiago.' },
+        { q: '¿En qué ciudad está el Castillo Wulff?', opts: ['Santiago', 'Viña del Mar', 'Valparaíso', 'Concón'], correct: 1, exp: 'Castillo Wulff es un ícono costero de Viña del Mar.' },
+        { q: '¿Qué cordillera separa Chile de Argentina?', opts: ['Costa', 'Los Andes', 'Alpes', 'Pirineos'], correct: 1, exp: 'Los Andes son la cordillera más larga del mundo fuera de Asia.' },
+        { q: '¿Qué parque santiaguino tiene una Virgen en su cima?', opts: ['Santa Lucía', 'San Cristóbal', 'Manquehue', 'Cantillana'], correct: 1, exp: 'El Cerro San Cristóbal corona con la Virgen de la Inmaculada Concepción.' },
+        { q: '¿En qué región está el Embalse El Yeso?', opts: ['Valparaíso', 'Metropolitana', "O'Higgins", 'Maule'], correct: 1, exp: 'En el Cajón del Maipo, provee agua potable a Santiago.' }
+    ],
+    'sur': [
+        { q: '¿En qué isla están los famosos palafitos?', opts: ['Pascua', 'Chiloé', 'Juan Fernández', 'Tierra del Fuego'], correct: 1, exp: 'Castro, en Chiloé, es famosa por sus casas sobre el agua.' },
+        { q: '¿Qué volcán está junto al Lago Llanquihue?', opts: ['Osorno', 'Villarrica', 'Lonquimay', 'Calbuco'], correct: 0, exp: 'El Osorno es uno de los volcanes más fotografiados de Chile.' },
+        { q: '¿En qué región está la Selva Valdiviana?', opts: ['Biobío', 'Araucanía', 'Los Ríos', 'Los Lagos'], correct: 2, exp: 'Bosque templado lluvioso, uno de los más biodiversos del planeta.' },
+        { q: '¿Cuál es el río que cruza Valdivia?', opts: ['Tolten', 'Calle Calle', 'Bío Bío', 'Maipo'], correct: 1, exp: 'El Calle Calle es uno de los ríos navegables más importantes del sur.' },
+        { q: '¿Qué volcán está activo cerca de Pucón?', opts: ['Osorno', 'Lonquimay', 'Villarrica', 'Llaima'], correct: 2, exp: 'El Villarrica es uno de los volcanes más activos de Chile.' }
+    ],
+    'austral': [
+        { q: '¿Cuál es el parque nacional más famoso de Chile?', opts: ['Torres del Paine', 'Vicente Pérez Rosales', 'Conguillío', 'Lauca'], correct: 0, exp: 'Torres del Paine es Patrimonio de la Biosfera desde 1978.' },
+        { q: '¿Qué animal forma colonias en Isla Magdalena?', opts: ['Lobos marinos', 'Pingüinos', 'Cormoranes', 'Gaviotas'], correct: 1, exp: 'Más de 120.000 pingüinos de Magallanes anidan allí.' },
+        { q: '¿Cómo se llama el glaciar famoso del Paine?', opts: ['Perito Moreno', 'Grey', 'Pío XI', 'San Rafael'], correct: 1, exp: 'El Glaciar Grey alimenta el lago del mismo nombre con témpanos azules.' },
+        { q: '¿Cuál es el cabo más austral de Chile?', opts: ['Hornos', 'Froward', 'Pilares', 'Forward'], correct: 0, exp: 'Cabo de Hornos marca la confluencia de los océanos Pacífico y Atlántico.' },
+        { q: '¿En qué ciudad termina el Canal Beagle?', opts: ['Punta Arenas', 'Puerto Williams', 'Ushuaia', 'Río Grande'], correct: 1, exp: 'Puerto Williams es la población más austral del mundo.' }
+    ],
+    'argentina-norte': [
+        { q: '¿En qué provincia está la Quebrada de Humahuaca?', opts: ['Salta', 'Jujuy', 'Catamarca', 'Tucumán'], correct: 1, exp: 'La Quebrada es Patrimonio de la Humanidad por la UNESCO.' },
+        { q: '¿En qué pueblo está el Cerro de los Siete Colores?', opts: ['Tilcara', 'Purmamarca', 'Humahuaca', 'Iruya'], correct: 1, exp: 'Purmamarca es famosa por sus cerros sedimentarios multicolores.' },
+        { q: '¿En qué provincia está Cafayate, famosa por sus vinos?', opts: ['Salta', 'Jujuy', 'Catamarca', 'La Rioja'], correct: 0, exp: 'Cafayate es reconocida por el vino Torrontés.' },
+        { q: '¿Cuál es el salar más grande de Argentina?', opts: ['Arizaro', 'Salinas Grandes', 'Hombre Muerto', 'Olaroz'], correct: 1, exp: 'Salinas Grandes se extiende entre Jujuy y Salta a 3.450m.' },
+        { q: '¿Qué civilización construyó el Pucará de Tilcara?', opts: ['Incas', 'Omaguacas', 'Diaguitas', 'Mapuches'], correct: 1, exp: 'Los omaguacas fortificaron Tilcara hace más de 900 años.' }
+    ],
+    'argentina-centro': [
+        { q: '¿En qué año se inauguró el Obelisco de Buenos Aires?', opts: ['1912', '1936', '1950', '1978'], correct: 1, exp: 'Se construyó en 31 días para conmemorar el 4º centenario de la ciudad.' },
+        { q: '¿En qué barrio porteño nació el tango?', opts: ['Recoleta', 'La Boca', 'Palermo', 'San Telmo'], correct: 1, exp: 'La Boca es cuna del tango y del legendario Caminito.' },
+        { q: '¿Cuál es el teatro de ópera más famoso de Argentina?', opts: ['Colón', 'Argentino', 'San Martín', 'Cervantes'], correct: 0, exp: 'El Teatro Colón es uno de los tres mejores del mundo en acústica.' },
+        { q: '¿En qué provincia está el Cerro de la Gloria?', opts: ['Mendoza', 'San Juan', 'Neuquén', 'Río Negro'], correct: 0, exp: 'En Mendoza, conmemora al Ejército de los Andes de San Martín.' },
+        { q: '¿Qué variedad de vino es emblemática de Mendoza?', opts: ['Cabernet', 'Malbec', 'Merlot', 'Syrah'], correct: 1, exp: 'Mendoza produce el 70% del vino argentino, mayormente Malbec.' }
+    ],
+    'argentina-patagonia': [
+        { q: '¿Cuál es la ciudad más austral del mundo?', opts: ['Punta Arenas', 'Ushuaia', 'Puerto Williams', 'Río Grande'], correct: 1, exp: 'Ushuaia se autodenomina "Fin del Mundo".' },
+        { q: '¿En qué provincia está el glaciar Perito Moreno?', opts: ['Chubut', 'Río Negro', 'Santa Cruz', 'Tierra del Fuego'], correct: 2, exp: 'En el Parque Nacional Los Glaciares, Santa Cruz.' },
+        { q: '¿Qué animales se avistan en Puerto Madryn?', opts: ['Pingüinos', 'Ballenas', 'Lobos marinos', 'Elefantes marinos'], correct: 1, exp: 'La ballena franca austral llega a Península Valdés cada invierno.' },
+        { q: '¿Dónde están las pinturas rupestres de más de 9.000 años?', opts: ['Cueva de las Manos', 'Cueva Pintada', 'Cueva del Milodón', 'Los Toldos'], correct: 0, exp: 'Cueva de las Manos es Patrimonio de la Humanidad.' },
+        { q: '¿Cuál es el lago más grande de Argentina?', opts: ['Lago Puelo', 'Lago Argentino', 'Nahuel Huapi', 'Viedma'], correct: 1, exp: 'El Lago Argentino tiene 1.415 km², en Santa Cruz.' }
+    ],
+    'argentina-litoral': [
+        { q: '¿En qué provincia están las Cataratas del Iguazú?', opts: ['Corrientes', 'Misiones', 'Entre Ríos', 'Formosa'], correct: 1, exp: 'Misiones alberga una de las Nueve Maravillas Naturales del Mundo.' },
+        { q: '¿Cuántas cataratas conforman el conjunto del Iguazú?', opts: ['100', '180', '275', '400'], correct: 2, exp: 'Aproximadamente 275 saltos se reparten en 2.7 km.' },
+        { q: '¿En qué provincia está el Parque El Palmar?', opts: ['Entre Ríos', 'Corrientes', 'Santa Fe', 'Misiones'], correct: 0, exp: 'Protege la mayor extensión de palmeras yatay del país.' },
+        { q: '¿Cómo se llaman los humedales famosos de Corrientes?', opts: ['Pantanos', 'Esteros del Iberá', 'Llanos', 'Marismas'], correct: 1, exp: 'Iberá es el segundo humedal más grande de Sudamérica.' },
+        { q: '¿Qué ciudad tiene el Monumento a la Bandera?', opts: ['Buenos Aires', 'Rosario', 'Córdoba', 'Santa Fe'], correct: 1, exp: 'En Rosario, donde Manuel Belgrano izó por primera vez la bandera.' }
+    ],
+    'mexico-norte': [
+        { q: '¿En qué estado está el Cañón del Cobre?', opts: ['Sonora', 'Chihuahua', 'Coahuila', 'Durango'], correct: 1, exp: 'En la Sierra Tarahumara, es más grande y profundo que el Gran Cañón.' },
+        { q: '¿Cuál es la cascada más alta de México?', opts: ['Agua Azul', 'Basaseachi', 'Piedra Volada', 'Tamul'], correct: 1, exp: 'Basaseachi cae 246m en la Sierra Madre Occidental.' },
+        { q: '¿Qué pueblo mágico está en la Sierra Tarahumara?', opts: ['Creel', 'Real de Catorce', 'Batopilas', 'Casas Grandes'], correct: 0, exp: 'Creel es la puerta de entrada a la cultura rarámuri.' },
+        { q: '¿Cuál es la isla más grande de México?', opts: ['Cozumel', 'Isla Mujeres', 'Isla Tiburón', 'Isla Ángel de la Guarda'], correct: 2, exp: 'Isla Tiburón, en Sonora, tiene 1.208 km².' },
+        { q: '¿En qué estado está la Zona del Silencio?', opts: ['Chihuahua', 'Coahuila', 'Durango', 'Sonora'], correct: 2, exp: 'En el Bolsón de Mapimí, Durango, famosa por anécdotas paranormales.' }
+    ],
+    'mexico-centro': [
+        { q: '¿Cómo se llama la plaza principal de la CDMX?', opts: ['Plaza Mayor', 'Zócalo', 'Plaza de Armas', 'Plaza de la Constitución'], correct: 3, exp: 'Oficialmente Plaza de la Constitución, popularmente "el Zócalo".' },
+        { q: '¿Qué civilización construyó Teotihuacán?', opts: ['Mayas', 'Aztecas', 'Teotihuacanos', 'Toltecas'], correct: 2, exp: 'Teotihuacán floreció antes que los aztecas, quienes la encontraron abandonada.' },
+        { q: '¿Cuál es el santuario católico más visitado de México?', opts: ['Socorro', 'Basílica de Guadalupe', 'San Juan de los Lagos', 'Los Remedios'], correct: 1, exp: 'La Basílica de Guadalupe recibe 20 millones de peregrinos al año.' },
+        { q: '¿Qué pueblo mágico es famoso por su plata?', opts: ['Taxco', 'San Miguel', 'Bernal', 'Tepoztlán'], correct: 0, exp: 'Taxco, en Guerrero, es la capital mundial de la platería.' },
+        { q: '¿En qué estado está la Peña de Bernal?', opts: ['Guanajuato', 'Hidalgo', 'Querétaro', 'San Luis Potosí'], correct: 2, exp: 'En Querétaro, es el tercer monolito más grande del mundo.' }
+    ],
+    'mexico-sur': [
+        { q: '¿Qué civilización construyó Monte Albán?', opts: ['Mayas', 'Aztecas', 'Zapotecas', 'Mixtecas'], correct: 2, exp: 'Monte Albán fue la capital zapoteca durante 1.300 años.' },
+        { q: '¿En qué estado está el Cañón del Sumidero?', opts: ['Oaxaca', 'Chiapas', 'Veracruz', 'Guerrero'], correct: 1, exp: 'En Chiapas, con paredes de hasta 1.000m de altura.' },
+        { q: '¿Cómo se llama la zona arqueológica maya famosa de Chiapas?', opts: ['Palenque', 'Yaxchilán', 'Bonampak', 'Toniná'], correct: 0, exp: 'Palenque destaca por el Templo de las Inscripciones.' },
+        { q: '¿Cuál es el árbol más ancho del mundo?', opts: ['Baobab', 'Árbol del Tule', 'Secuoya', 'Cedro'], correct: 1, exp: 'El Árbol del Tule en Oaxaca tiene 14m de diámetro.' },
+        { q: '¿Qué volcán activo está cerca de Puebla?', opts: ['Iztaccíhuatl', 'Popocatépetl', 'La Malinche', 'Pico de Orizaba'], correct: 1, exp: 'El "Popo" es uno de los volcanes más activos de México.' }
+    ],
+    'mexico-caribe': [
+        { q: '¿Qué maravilla del mundo moderno está en Yucatán?', opts: ['Tulum', 'Chichén Itzá', 'Uxmal', 'Palenque'], correct: 1, exp: 'Chichén Itzá fue elegida en 2007 como una de las Nueve Maravillas.' },
+        { q: '¿Cómo se llaman los pozos sagrados mayas?', opts: ['Aguadas', 'Cenotes', 'Pozos', 'Reservorios'], correct: 1, exp: 'Los cenotes son dolinas cársticas conectadas a ríos subterráneos.' },
+        { q: '¿En qué estado están las ruinas de Tulum frente al mar?', opts: ['Yucatán', 'Campeche', 'Quintana Roo', 'Tabasco'], correct: 2, exp: 'Tulum es la única ciudad maya amurallada junto al Caribe.' },
+        { q: '¿Cuál es la "laguna de los 7 colores"?', opts: ['Bacalar', 'Nicolás', 'Chichen', 'Kaan'], correct: 0, exp: 'Bacalar, en Quintana Roo, es un paraíso turquesa.' },
+        { q: '¿Qué ciudad amurallada está en Campeche?', opts: ['Mérida', 'Campeche', 'Villahermosa', 'Ciudad del Carmen'], correct: 1, exp: 'Campeche fue fortificada contra piratas en el siglo XVII.' }
+    ]
+};
+
+// ========== MINIJUEGOS (FASE 3): 2 por zona = 24 en total ==========
 var MINIGAMES = {
-    'centro-3': { name:'Memorice de Valparaíso', type:'memorice', icon:'🎨', photos: valparaisoPhotos },
-    'sur-5': { name:'Memorice de Villarrica', type:'memorice', icon:'🌋', photos: villarricaPhotos },
+    // Nivel 4: Trivia cultural (1er minijuego, accesible temprano)
+    // Nivel 7: Memorice (2do minijuego, mid-game)
+    'norte-4': { name:'Trivia Norte', type:'trivia', icon:'🧠', zone:'norte' },
+    'norte-7': { name:'Memorice Norte', type:'memorice', icon:'🎨', photos: nortePhotos },
+    'centro-4': { name:'Trivia Centro', type:'trivia', icon:'🧠', zone:'centro' },
+    'centro-7': { name:'Memorice Centro', type:'memorice', icon:'🎨', photos: centroPhotos },
+    'sur-4': { name:'Trivia Sur', type:'trivia', icon:'🧠', zone:'sur' },
+    'sur-7': { name:'Memorice Sur', type:'memorice', icon:'🎨', photos: surPhotos },
+    'austral-4': { name:'Trivia Austral', type:'trivia', icon:'🧠', zone:'austral' },
+    'austral-7': { name:'Memorice Austral', type:'memorice', icon:'🎨', photos: patagoniaPhotos },
+    'argentina-norte-4': { name:'Trivia Arg Norte', type:'trivia', icon:'🧠', zone:'argentina-norte' },
+    'argentina-norte-7': { name:'Memorice Arg Norte', type:'memorice', icon:'🎨', photos: argentinaNortePhotos },
+    'argentina-centro-4': { name:'Trivia Arg Centro', type:'trivia', icon:'🧠', zone:'argentina-centro' },
+    'argentina-centro-7': { name:'Memorice Arg Centro', type:'memorice', icon:'🎨', photos: argentinaCentroPhotos },
+    'argentina-patagonia-4': { name:'Trivia Arg Patagonia', type:'trivia', icon:'🧠', zone:'argentina-patagonia' },
+    'argentina-patagonia-7': { name:'Memorice Arg Patagonia', type:'memorice', icon:'🎨', photos: argentinaPatagoniaPhotos },
+    'argentina-litoral-4': { name:'Trivia Arg Litoral', type:'trivia', icon:'🧠', zone:'argentina-litoral' },
+    'argentina-litoral-7': { name:'Memorice Arg Litoral', type:'memorice', icon:'🎨', photos: argentinaLitoralPhotos },
+    'mexico-norte-4': { name:'Trivia MX Norte', type:'trivia', icon:'🧠', zone:'mexico-norte' },
+    'mexico-norte-7': { name:'Memorice MX Norte', type:'memorice', icon:'🎨', photos: mexicoNortePhotos },
+    'mexico-centro-4': { name:'Trivia MX Centro', type:'trivia', icon:'🧠', zone:'mexico-centro' },
+    'mexico-centro-7': { name:'Memorice MX Centro', type:'memorice', icon:'🎨', photos: mexicoCentroPhotos },
+    'mexico-sur-4': { name:'Trivia MX Sur', type:'trivia', icon:'🧠', zone:'mexico-sur' },
+    'mexico-sur-7': { name:'Memorice MX Sur', type:'memorice', icon:'🎨', photos: mexicoSurPhotos },
+    'mexico-caribe-4': { name:'Trivia MX Caribe', type:'trivia', icon:'🧠', zone:'mexico-caribe' },
+    'mexico-caribe-7': { name:'Memorice MX Caribe', type:'memorice', icon:'🎨', photos: mexicoCaribePhotos }
 };

@@ -381,7 +381,8 @@ var UI = (function() {
             if (mini) {
                 html += 'background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);">';
                 html += '<div><span style="color:white;font-weight:bold;">' + mini.icon + ' ' + mini.name + '</span><p style="font-size:0.75em;color:rgba(168,85,247,0.8);">Minijuego especial</p></div>';
-                html += '<button onclick="event.stopPropagation();UI.showRewardedVideo(function(){UI.startMemoriceMinigame(\'' + zid + '\',' + l.num + ');})" class="btn-video" style="padding:8px 16px;border-radius:12px;font-size:0.85em;">🎮 Jugar</button>';
+                // [FASE 3] Dispatcher de minijuego segun tipo.
+                html += '<button onclick="event.stopPropagation();UI.showRewardedVideo(function(){UI.startMinigame(\'' + zid + '\',' + l.num + ');})" class="btn-video" style="padding:8px 16px;border-radius:12px;font-size:0.85em;">🎮 Jugar</button>';
             } else if (u) {
                 html += 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);" onclick="UI.selectLevel(' + l.num + ')">';
                 html += '<div><span style="color:white;font-weight:bold;">Nivel ' + l.num + '</span><p style="font-size:0.75em;color:rgba(255,255,255,0.5);">' + l.pairs + ' pares</p></div>';
@@ -542,6 +543,126 @@ var UI = (function() {
             showMessage('🎉 Zona completada!');
         }
     }
+
+    // [FASE 3] Dispatcher de minijuegos segun tipo.
+    function startMinigame(zoneId, levelNum) {
+        var mini = MINIGAMES[zoneId + '-' + levelNum];
+        if (!mini) return;
+        if (mini.type === 'trivia') startTriviaMinigame(zoneId, levelNum);
+        else if (mini.type === 'memorice') startMemoriceMinigame(zoneId, levelNum);
+    }
+
+    // [FASE 3] Minijuego de Trivia Cultural.
+    var triviaState = { questions: [], currentIdx: 0, correctCount: 0, locked: false };
+    function startTriviaMinigame(zoneId, levelNum) {
+        var mini = MINIGAMES[zoneId + '-' + levelNum];
+        if (!mini || mini.type !== 'trivia') return;
+        var allQuestions = (TRIVIA[mini.zone] || []).slice();
+        // Mezclar preguntas y tomar 5.
+        for (var i = allQuestions.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = allQuestions[i]; allQuestions[i] = allQuestions[j]; allQuestions[j] = tmp;
+        }
+        triviaState = { questions: allQuestions.slice(0, 5), currentIdx: 0, correctCount: 0, locked: false };
+        if (!document.getElementById('triviaModal')) {
+            var modal = document.createElement('div'); modal.id = 'triviaModal';
+            modal.className = 'memorice-modal';  // reutiliza estilos
+            modal.innerHTML = '<div style="max-width:360px;width:100%;background:linear-gradient(145deg,rgba(23,34,30,0.95),rgba(11,21,18,0.95));border-radius:16px;border:1px solid rgba(168,85,247,0.4);padding:20px;">' +
+                '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">' +
+                '<span style="color:#c084fc;font-weight:bold;font-size:1em;" id="triviaTitle">Trivia</span>' +
+                '<button onclick="UI.closeTrivia()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">✕</button></div>' +
+                '<div id="triviaProgress" style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:12px;"></div>' +
+                '<div id="triviaContent"></div></div>';
+            document.body.appendChild(modal);
+        }
+        document.getElementById('triviaModal').style.display = 'flex';
+        document.getElementById('triviaTitle').textContent = mini.icon + ' ' + mini.name;
+        renderTriviaQuestion();
+    }
+
+    function renderTriviaQuestion() {
+        var content = document.getElementById('triviaContent');
+        if (!content) return;
+        if (triviaState.currentIdx >= triviaState.questions.length) {
+            // Resultado final.
+            var ok = triviaState.correctCount;
+            var total = triviaState.questions.length;
+            var passed = ok >= 3;
+            var msg = passed ? '🎉 ¡Excelente!' : '😅 ¡Sigue practicando!';
+            var reward = passed ? 10 : 0;
+            content.innerHTML = '<div style="text-align:center;padding:16px 0;">' +
+                '<div style="font-size:3em;margin-bottom:8px;">' + (passed ? '🏆' : '📚') + '</div>' +
+                '<h3 style="color:' + (passed ? '#4ade80' : '#f2ca50') + ';font-size:1.3em;margin-bottom:8px;">' + msg + '</h3>' +
+                '<p style="color:white;font-size:1.5em;font-weight:bold;margin-bottom:8px;">' + ok + '/' + total + ' correctas</p>' +
+                (reward > 0 ? '<p style="color:#4ade80;margin-bottom:16px;">+' + reward + ' 🪙</p>' : '<p style="color:rgba(255,255,255,0.5);margin-bottom:16px;">Sin recompensa</p>') +
+                '<button onclick="UI.closeTrivia()" class="btn-primary" style="padding:10px 24px;border-radius:12px;">Cerrar</button>' +
+                '</div>';
+            if (passed && reward > 0) {
+                addCoins(reward);
+                // [FASE 2] Tracking de misiones.
+                var triviaCompletadas = Misiones.registrarEvento('minigameComplete', 1);
+                triviaCompletadas = triviaCompletadas.concat(Misiones.registrarEvento('coinsEarned', reward));
+                mostrarMisionesCompletadas(triviaCompletadas);
+                Misiones.registrarActividad();
+            }
+            triviaState.locked = true;
+            return;
+        }
+        var q = triviaState.questions[triviaState.currentIdx];
+        var prog = document.getElementById('triviaProgress');
+        if (prog) prog.textContent = 'Pregunta ' + (triviaState.currentIdx + 1) + ' de ' + triviaState.questions.length + '  ·  Aciertos: ' + triviaState.correctCount;
+        var html = '<div style="margin-bottom:16px;">';
+        html += '<p style="color:white;font-size:1em;font-weight:bold;margin-bottom:16px;line-height:1.4;">' + q.q + '</p>';
+        html += '<div id="triviaOptions" style="display:flex;flex-direction:column;gap:8px;">';
+        q.opts.forEach(function(opt, idx) {
+            html += '<button onclick="UI.answerTrivia(' + idx + ')" style="padding:12px 16px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:white;text-align:left;cursor:pointer;font-size:0.9em;transition:all 0.2s;" onmouseover="this.style.background=\'rgba(168,85,247,0.2)\'" onmouseout="this.style.background=\'rgba(255,255,255,0.05)\'">' + opt + '</button>';
+        });
+        html += '</div></div>';
+        html += '<div id="triviaFeedback" style="min-height:60px;"></div>';
+        content.innerHTML = html;
+    }
+
+    function answerTrivia(idx) {
+        if (triviaState.locked) return;
+        var q = triviaState.questions[triviaState.currentIdx];
+        var isCorrect = (idx === q.correct);
+        if (isCorrect) triviaState.correctCount++;
+        // Bloquear opciones y colorear.
+        var optsContainer = document.getElementById('triviaOptions');
+        if (optsContainer) {
+            var btns = optsContainer.querySelectorAll('button');
+            btns.forEach(function(btn, i) {
+                btn.disabled = true;
+                btn.style.cursor = 'default';
+                btn.onmouseover = null; btn.onmouseout = null;
+                if (i === q.correct) {
+                    btn.style.background = 'rgba(74,222,128,0.25)';
+                    btn.style.borderColor = '#4ade80';
+                    btn.style.color = '#4ade80';
+                } else if (i === idx && !isCorrect) {
+                    btn.style.background = 'rgba(239,68,68,0.25)';
+                    btn.style.borderColor = '#ef4444';
+                    btn.style.color = '#ef4444';
+                } else {
+                    btn.style.opacity = '0.4';
+                }
+            });
+        }
+        // Feedback con explicacion.
+        var fb = document.getElementById('triviaFeedback');
+        if (fb) {
+            fb.innerHTML = '<div style="padding:12px;background:' + (isCorrect ? 'rgba(74,222,128,0.1)' : 'rgba(239,68,68,0.1)') + ';border-radius:10px;border-left:3px solid ' + (isCorrect ? '#4ade80' : '#ef4444') + ';">' +
+                '<p style="color:' + (isCorrect ? '#4ade80' : '#ef4444') + ';font-weight:bold;font-size:0.9em;margin-bottom:6px;">' + (isCorrect ? '✓ Correcto!' : '✗ Incorrecto') + '</p>' +
+                '<p style="color:rgba(255,255,255,0.85);font-size:0.85em;line-height:1.4;">' + q.exp + '</p>' +
+                '<button onclick="UI.nextTriviaQuestion()" class="btn-primary" style="margin-top:10px;padding:8px 20px;border-radius:10px;font-size:0.85em;">' + (triviaState.currentIdx + 1 < triviaState.questions.length ? 'Siguiente →' : 'Ver resultado') + '</button>' +
+                '</div>';
+        }
+    }
+    function nextTriviaQuestion() {
+        triviaState.currentIdx++;
+        renderTriviaQuestion();
+    }
+    function closeTrivia() { var m = document.getElementById('triviaModal'); if (m) m.style.display = 'none'; }
 
     function startMemoriceMinigame(zoneId, levelNum) {
         var mini = MINIGAMES[zoneId + '-' + levelNum]; if (!mini || !mini.photos) return;
@@ -773,6 +894,9 @@ var UI = (function() {
         simulateRewardedVideo: simulateRewardedVideo,
         closeVictory: closeVictory, nextLevel: nextLevel,
         startMemoriceMinigame: startMemoriceMinigame, closeMemorice: closeMemorice,
+        startMinigame: startMinigame,
+        startTriviaMinigame: startTriviaMinigame, closeTrivia: closeTrivia,
+        answerTrivia: answerTrivia, nextTriviaQuestion: nextTriviaQuestion,
         skipTutorial: skipTutorial,
         toggleHaptic: toggleHaptic,
         reclamarMisiones: reclamarMisiones,
