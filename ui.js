@@ -54,8 +54,10 @@ var UI = (function() {
             else if (combo >= 2) haptic(30);
             else haptic(15);
             // [FIX BUG #3] No mostrar zoom si este match completo el tablero (la victoria va a mostrar el modal).
+            // [FIX NOTAS] Buscar la foto original por nombre+zone (la URL cambia por sz=w400 vs sz=w600).
+            // Si no se encuentra, usar data.a que ahora SI incluye nota.
             if (!data.isFinalMatch && data.a.url && data.b.url && data.a.zone === currentZone.id) {
-                var photo = currentZone.photos.find(function(p) { return p.url === data.a.url; }) || data.a;
+                var photo = currentZone.photos.find(function(p) { return p.name === data.a.name && p.zone === data.a.zone; }) || data.a;
                 showZoomAndNote(photo);
             }
             updateSlotsUI();

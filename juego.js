@@ -307,7 +307,7 @@ var GameEngine = (function() {
             if (slots.length >= MAX_SLOTS) return false;
             if (t.faceDown && !t.revealed) t.revealed = true;
             sound.select(); t.inSlot = true;
-            slots.push({ name: t.name, url: t.url, zone: t.zone, symbol: t.symbol, type: t.type, pid: t.pid, idx: index, bonus: t.bonus });
+            slots.push({ name: t.name, url: t.url, zone: t.zone, nota: t.nota, symbol: t.symbol, type: t.type, pid: t.pid, idx: index, bonus: t.bonus });
             selectedTileIdx = index; updateBlocked(); checkForMatchInSlots();
             // [FEATURE #1] Tras cada click, verificar si el tablero quedo insoluble y auto-shuffle.
             autoUnstickIfNeeded();
