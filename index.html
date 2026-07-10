@@ -11,6 +11,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mahjong Tour">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <!-- [FIX BUG #4] SDK de Google Publisher Tag (GPT) - antes nunca se cargaba -->
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script>
@@ -70,12 +72,20 @@
         .memorice-card.flipped .card-back { display: none; }
         .tutorial-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); z-index: 300; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
         .tutorial-message { background: rgba(23,34,30,0.95); border: 2px solid #f2ca50; border-radius: 16px; padding: 20px; max-width: 280px; text-align: center; color: white; pointer-events: auto; }
+        /* [FIX BUG #9] Estilos para fichas bonus (x2 puntos) */
+        .vita-tile.bonus-tile::after { content: '✨'; position: absolute; top: 2px; right: 4px; font-size: 0.8em; z-index: 7; pointer-events: none; }
+        /* Transicion suave para el mensaje de estado */
+        #message { transition: opacity 0.3s ease; }
+        /* [FEATURE #3] Resalte visual para la pareja sugerida por el hint */
+        .vita-tile.hint-highlight { animation: hintPulse 0.8s ease-in-out infinite !important; box-shadow: 0 0 40px rgba(74,222,128,0.95), 0 0 20px rgba(74,222,128,0.7) !important; border: 2px solid #4ade80 !important; z-index: 60 !important; transform: scale(1.05) !important; filter: brightness(1.3) !important; }
+        @keyframes hintPulse { 0%,100% { box-shadow: 0 0 40px rgba(74,222,128,0.95), 0 0 20px rgba(74,222,128,0.7); } 50% { box-shadow: 0 0 60px rgba(74,222,128,1), 0 0 30px rgba(74,222,128,0.9); } }
     </style>
 </head>
 <body>
     <div class="app-container" id="appRoot"></div>
     <div id="ad-banner" style="display:none;"></div>
-    <div id="victoryModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:200;justify-content:center;align-items:center;">
+    <!-- [FIX BUG #3] z-index subido a 500 para que el modal de victoria SIEMPRE quede encima del zoom-overlay (400) -->
+    <div id="victoryModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:500;justify-content:center;align-items:center;">
         <div style="background:linear-gradient(145deg,rgba(23,34,30,0.9),rgba(11,21,18,0.95));padding:24px;border-radius:24px;text-align:center;border:1px solid rgba(242,202,80,0.3);max-width:320px;">
             <div style="font-size:4em;" id="victoryIcon">🏆</div>
             <h2 class="text-glow" style="color:#f2ca50;font-size:1.5em;font-weight:bold;">¡Nivel Completado!</h2>

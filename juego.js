@@ -5,9 +5,13 @@ var bannerSlot, rewardedSlot, interstitialSlot;
 googletag.cmd.push(function() {
     googletag.pubads().enableSingleRequest();
     googletag.enableServices();
-    bannerSlot = googletag.defineSlot(ADMOB_CONFIG.banner, [[320, 50], [300, 50]], 'ad-banner').addService(googletag.pubads());
-    rewardedSlot = googletag.defineOutOfPageSlot(ADMOB_CONFIG.rewarded).addService(googletag.pubads());
-    interstitialSlot = googletag.defineOutOfPageSlot(ADMOB_CONFIG.interstitial).addService(googletag.pubads());
+    bannerSlot = googletag.defineSlot(ADMOB_CONFIG.banner, [[320, 50], [300, 50]], 'ad-banner');
+    if (bannerSlot) bannerSlot.addService(googletag.pubads());
+    rewardedSlot = googletag.defineOutOfPageSlot(ADMOB_CONFIG.rewarded);
+    if (rewardedSlot) rewardedSlot.addService(googletag.pubads());
+    interstitialSlot = googletag.defineOutOfPageSlot(ADMOB_CONFIG.interstitial);
+    if (interstitialSlot) interstitialSlot.addService(googletag.pubads());
+    if (bannerSlot) googletag.display('ad-banner');
 });
 
 // ========== NUCLEO PROTEGIDO (GameEngine) ==========
@@ -37,8 +41,11 @@ var GameEngine = (function() {
         hint: function() { playTone(880, 0.15, 'sine', 0.18); }
     };
 
+    // [FIX BUG #10] Solo considera "encima" a una ficha en la MISMA col/row (capa superior).
     function isTileFree(tile, activeTiles) {
-        var above = activeTiles.find(function(t) { return t.layer === tile.layer + 1 && Math.abs(t.col - tile.col) <= 1 && Math.abs(t.row - tile.row) <= 1; });
+        var above = activeTiles.find(function(t) {
+            return t.layer === tile.layer + 1 && t.col === tile.col && t.row === tile.row;
+        });
         if (above) return false;
         var left = activeTiles.find(function(t) { return t.layer === tile.layer && t.row === tile.row && t.col === tile.col - 1; });
         var right = activeTiles.find(function(t) { return t.layer === tile.layer && t.row === tile.row && t.col === tile.col + 1; });
@@ -82,14 +89,53 @@ var GameEngine = (function() {
             if (allPairsOk && tiles.length % 2 === 0) break;
             attempts++;
         }
-        for (var i = tiles.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var temp = tiles[i]; tiles[i] = tiles[j]; tiles[j] = temp; }
-        var totalTiles = tiles.length, colsBase = 6, rowsBase = Math.ceil(totalTiles * 0.7 / colsBase);
-        var tilesLayer0 = Math.min(totalTiles, colsBase * rowsBase), tilesLayer1 = totalTiles - tilesLayer0, colsLayer1 = 4, offsetCol = Math.floor((colsBase - colsLayer1) / 2);
-        var idx = 0;
-        for (var k = 0; k < tilesLayer0; k++) { tiles[idx].col = k % colsBase; tiles[idx].row = Math.floor(k / colsBase); tiles[idx].layer = 0; idx++; }
-        for (var m = 0; m < tilesLayer1; m++) { tiles[idx].col = offsetCol + (m % colsLayer1); tiles[idx].row = Math.floor(m / colsLayer1); tiles[idx].layer = 1; idx++; }
+        layoutTiles(tiles);
+        updateBlocked();
+        // [FEATURE #2] Asegurar que el tablero inicial tenga al menos una pareja jugable.
+        ensureSolvable();
+    }
+
+    // [FEATURE #2] Re-layout hasta que exista al menos una pareja jugable. Si tras 30 intentos
+    // no se logra, fuerza posiciones especificas para garantizar jugabilidad.
+    function ensureSolvable() {
+        var tries = 0;
+        while (!hasAnyPlayablePair() && tries < 30) {
+            for (var i = tiles.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var tmp = tiles[i]; tiles[i] = tiles[j]; tiles[j] = tmp;
+            }
+            layoutTiles(tiles);
+            updateBlocked();
+            tries++;
+        }
+        // Ultimo recurso: si aun no hay pareja libre, colocar la primera pareja en posiciones libres.
+        if (!hasAnyPlayablePair()) forceFirstPairFree();
+    }
+
+    // [FEATURE #2] Forzar que al menos una pareja quede en posiciones libres (capa 0, fila 0).
+    function forceFirstPairFree() {
+        var firstPair = tiles.filter(function(t) { return !t.matched; });
+        if (firstPair.length < 2) return;
+        var pid0 = firstPair[0].pid;
+        var pairIdxs = [];
+        tiles.forEach(function(t, i) { if (t.pid === pid0 && !t.matched) pairIdxs.push(i); });
+        if (pairIdxs.length < 2) return;
+        // Mover las dos fichas de la primera pareja a col=0 y col=5 (extremos), fila 0, capa 0
+        tiles[pairIdxs[0]].col = 0; tiles[pairIdxs[0]].row = 0; tiles[pairIdxs[0]].layer = 0;
+        tiles[pairIdxs[1]].col = 5; tiles[pairIdxs[1]].row = 0; tiles[pairIdxs[1]].layer = 0;
         updateBlocked();
     }
+
+    // [FIX BUG #11] Layout separado en funcion para reutilizar en useShuffle.
+    function layoutTiles(tileArr) {
+        var totalTiles = tileArr.length, colsBase = 6, rowsBase = Math.ceil(totalTiles * 0.7 / colsBase);
+        var tilesLayer0 = Math.min(totalTiles, colsBase * rowsBase), tilesLayer1 = totalTiles - tilesLayer0, colsLayer1 = 4, offsetCol = Math.floor((colsBase - colsLayer1) / 2);
+        var idx = 0;
+        for (var k = 0; k < tilesLayer0; k++) { tileArr[idx].col = k % colsBase; tileArr[idx].row = Math.floor(k / colsBase); tileArr[idx].layer = 0; idx++; }
+        for (var m = 0; m < tilesLayer1; m++) { tileArr[idx].col = offsetCol + (m % colsLayer1); tileArr[idx].row = Math.floor(m / colsLayer1); tileArr[idx].layer = 1; idx++; }
+    }
+
+    // [FIX BUG #1] Calculo correcto del shift del slot.idx tras eliminar 2 fichas.
     function checkForMatchInSlots() {
         if (slots.length < 2) return;
         for (var i = 0; i < slots.length; i++) {
@@ -98,13 +144,21 @@ var GameEngine = (function() {
                     var a = slots[i], b = slots[j];
                     sound.match();
                     var idxA = a.idx, idxB = b.idx;
-                    // Eliminar fichas inmediatamente (sin setTimeout)
+                    // Marcar fichas como matched antes de splicear [FIX BUG #8]
+                    tiles[idxA].matched = true;
+                    tiles[idxB].matched = true;
+                    // Splice mayor primero (evita corrimiento prematuro)
                     if (idxA > idxB) { tiles.splice(idxA, 1); tiles.splice(idxB, 1); }
                     else { tiles.splice(idxB, 1); tiles.splice(idxA, 1); }
                     var removed = [idxA, idxB].sort(function(x, y) { return x - y; });
+                    // [FIX BUG #1] Computar shift contra el idx ORIGINAL, no el ya decrementado.
                     slots.forEach(function(slot) {
-                        if (slot.idx > removed[0]) slot.idx--;
-                        if (slot.idx > removed[1]) slot.idx--;
+                        if (slot === a || slot === b) return;
+                        var orig = slot.idx;
+                        var shift = 0;
+                        if (orig > removed[0]) shift++;
+                        if (orig > removed[1]) shift++;
+                        slot.idx = orig - shift;
                     });
                     if (i > j) { slots.splice(i, 1); slots.splice(j, 1); }
                     else { slots.splice(j, 1); slots.splice(i, 1); }
@@ -114,18 +168,93 @@ var GameEngine = (function() {
                     combo++;
                     if (timeLeft > 0) { timeLeft += 3; if (timeLeft > 99) timeLeft = 99; }
                     updateBlocked();
-                    if (onStateChange) onStateChange('match', { a: a, b: b });
-                    if (tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0) {
+                    // [FIX BUG #3] Calcular si fue match final y pasarlo al UI.
+                    var isFinalMatch = tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0;
+                    if (onStateChange) onStateChange('match', { a: a, b: b, isFinalMatch: isFinalMatch });
+                    if (isFinalMatch) {
                         if (timerInterval) clearInterval(timerInterval);
+                        sound.victory();
                         if (onStateChange) onStateChange('victory', { score: score, combo: combo });
                     }
                     return;
                 }
             }
         }
+        // [FIX BUG #6] Mensaje mas claro cuando slots estan llenos.
         if (slots.length >= MAX_SLOTS) { sound.error(); if (onStateChange) onStateChange('slotsfull'); }
     }
     function startTimer() { if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(function() { timeLeft--; if (onStateChange) onStateChange('timer', { timeLeft: timeLeft }); if (timeLeft <= 0) { clearInterval(timerInterval); if (onStateChange) onStateChange('timeout'); } }, 1000); }
+
+    // [FIX BUG #11] Verifica que al menos una pareja de fichas libres exista.
+    function hasAnyPlayablePair() {
+        var free = tiles.filter(function(t) { return !t.matched && !t.inSlot && !t.blocked; });
+        for (var i = 0; i < free.length; i++) {
+            for (var j = i + 1; j < free.length; j++) {
+                if (free[i].pid === free[j].pid) return true;
+            }
+        }
+        return false;
+    }
+
+    // [FEATURE #1] Verifica si el tablero esta insoluble: ninguna pareja libre jugable
+    // Y los slots estan llenos sin posible match. Solo en ese caso se considera atascado.
+    function isBoardStuck() {
+        // Si no hay fichas activas, no esta atascado (esta completo).
+        var active = tiles.filter(function(t) { return !t.matched && !t.inSlot; });
+        if (active.length === 0) return false;
+        // Si hay pareja libre jugable, no esta atascado.
+        if (hasAnyPlayablePair()) return false;
+        // Si hay pareja entre los slots actuales, no esta atascado (el usuario puede completar el match).
+        for (var i = 0; i < slots.length; i++) {
+            for (var j = i + 1; j < slots.length; j++) {
+                if (slots[i].pid === slots[j].pid) return false;
+            }
+        }
+        // Si los slots no estan llenos (< MAX_SLOTS), el usuario aun puede agregar otra ficha.
+        // No consideramos esto atascado, porque el usuario puede explorar.
+        if (slots.length < MAX_SLOTS) return false;
+        // Si llegamos aqui: no hay pareja libre, no hay pareja en slots, y slots estan llenos.
+        return true;
+    }
+
+    // [FEATURE #1] Auto-shuffle gratuito cuando el tablero esta insoluble.
+    // No consume use de shuffle del usuario. Retorna true si hizo auto-shuffle.
+    function autoUnstickIfNeeded() {
+        if (!isBoardStuck()) return false;
+        // Resetear slots tambien (fichas en slots no hacen pareja).
+        tiles.forEach(function(t) { t.inSlot = false; });
+        slots = []; selectedTileIdx = null;
+        var tries = 0;
+        do {
+            for (var i = tiles.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var tmp = tiles[i]; tiles[i] = tiles[j]; tiles[j] = tmp;
+            }
+            layoutTiles(tiles);
+            updateBlocked();
+            tries++;
+        } while (!hasAnyPlayablePair() && tries < 30);
+        if (!hasAnyPlayablePair()) forceFirstPairFree();
+        sound.shuffle();
+        if (onStateChange) onStateChange('autoshuffle');
+        return true;
+    }
+
+    // [FEATURE #3] Busca y retorna los indices de la primera pareja libre jugable.
+    function findHintPair() {
+        var free = [];
+        tiles.forEach(function(t, i) {
+            if (!t.matched && !t.inSlot && !t.blocked) free.push(i);
+        });
+        for (var i = 0; i < free.length; i++) {
+            for (var j = i + 1; j < free.length; j++) {
+                if (tiles[free[i]].pid === tiles[free[j]].pid) {
+                    return { a: free[i], b: free[j], name: tiles[free[i]].name };
+                }
+            }
+        }
+        return null;
+    }
 
     return Object.freeze({
         init: function(config, zonePhotos, traditionalTilesList) {
@@ -151,13 +280,61 @@ var GameEngine = (function() {
             sound.select(); t.inSlot = true;
             slots.push({ name: t.name, url: t.url, zone: t.zone, symbol: t.symbol, type: t.type, pid: t.pid, idx: index, bonus: t.bonus });
             selectedTileIdx = index; updateBlocked(); checkForMatchInSlots();
+            // [FEATURE #1] Tras cada click, verificar si el tablero quedo insoluble y auto-shuffle.
+            autoUnstickIfNeeded();
             if (onStateChange) onStateChange('boardChanged'); return true;
         },
-        useShuffle: function() { if (shuffleUses <= 0) return false; shuffleUses--; sound.shuffle(); tiles.forEach(function(t) { t.col = Math.floor(Math.random() * 6); t.row = Math.floor(Math.random() * Math.ceil(tiles.length / 6)); }); slots = []; selectedTileIdx = null; updateBlocked(); if (onStateChange) onStateChange('boardChanged'); return true; },
-        useHint: function() { if (hintUses <= 0) return false; hintUses--; sound.hint(); var f = tiles.filter(function(t) { return !t.matched && !t.inSlot; }); for (var i = 0; i < f.length; i++) { for (var j = i + 1; j < f.length; j++) { if (f[i].pid === f[j].pid) { if (onStateChange) onStateChange('hint', { name: f[i].name }); return true; } } } if (onStateChange) onStateChange('hint', { name: 'Mezcla' }); return true; },
-        undoLastSelection: function() { if (slots.length === 0) return false; sound.select(); var last = slots.pop(); tiles[last.idx].inSlot = false; selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null; updateBlocked(); if (onStateChange) onStateChange('boardChanged'); return true; },
+        // [FIX BUG #2] useShuffle ahora reinicia inSlot, mezcla orden y re-layout sin superposiciones.
+        useShuffle: function() {
+            if (shuffleUses <= 0) return false;
+            shuffleUses--; sound.shuffle();
+            // 1. Resetear inSlot de TODAS las fichas (incluidas las que estaban en slots).
+            tiles.forEach(function(t) { t.inSlot = false; t.matched = false; });
+            slots = []; selectedTileIdx = null;
+            // 2. Fisher-Yates shuffle del orden de fichas.
+            for (var i = tiles.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = tiles[i]; tiles[i] = tiles[j]; tiles[j] = temp;
+            }
+            // 3. Reasignar posiciones con la misma logica de createTiles.
+            layoutTiles(tiles);
+            updateBlocked();
+            // 4. Reintentar hasta 20 veces hasta que haya al menos una pareja jugable.
+            var tries = 0;
+            while (!hasAnyPlayablePair() && tries < 20) {
+                for (var i2 = tiles.length - 1; i2 > 0; i2--) {
+                    var j2 = Math.floor(Math.random() * (i2 + 1));
+                    var temp2 = tiles[i2]; tiles[i2] = tiles[j2]; tiles[j2] = temp2;
+                }
+                layoutTiles(tiles);
+                updateBlocked();
+                tries++;
+            }
+            if (onStateChange) onStateChange('boardChanged'); return true;
+        },
+        // [FEATURE #3] useHint ahora emite los indices de la pareja sugerida para resalte visual.
+        useHint: function() {
+            if (hintUses <= 0) return false;
+            var hint = findHintPair();
+            if (!hint) {
+                // No hay pareja libre: disparar auto-shuffle gratuito.
+                autoUnstickIfNeeded();
+                if (onStateChange) onStateChange('hint', { name: 'Tablero mezclado', noPair: true });
+                return true;
+            }
+            hintUses--; sound.hint();
+            if (onStateChange) onStateChange('hint', { name: hint.name, idxA: hint.a, idxB: hint.b });
+            return true;
+        },
+        undoLastSelection: function() { if (slots.length === 0) return false; sound.select(); var last = slots.pop(); if (tiles[last.idx]) tiles[last.idx].inSlot = false; selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null; updateBlocked(); if (onStateChange) onStateChange('boardChanged'); return true; },
         setOnStateChange: function(callback) { onStateChange = callback; },
         isGameOver: function() { return tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0; },
-        stopTimer: function() { if (timerInterval) clearInterval(timerInterval); }
+        stopTimer: function() { if (timerInterval) clearInterval(timerInterval); },
+        // [FEATURE #1] Expuesto para que la UI pueda verificar y mostrar aviso.
+        isBoardStuck: function() { return isBoardStuck(); },
+        // [FEATURE #3] Expuesto para que la UI pueda pedir pareja hint sin consumir uso.
+        findHintPair: function() { return findHintPair(); },
+        // [FEATURE #1] Auto-shuffle publico (por si la UI quiere dispararlo manualmente).
+        autoUnstick: function() { return autoUnstickIfNeeded(); }
     });
 })();

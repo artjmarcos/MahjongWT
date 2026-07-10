@@ -5,6 +5,14 @@ var UI = (function() {
     var rewardCallback = null, adCount = 0;
     var AD_EVERY = 5;
     var memoricePhotos = [], memoriceCards = [], memoriceFlipped = [], memoriceMatched = 0, memoriceLocked = false;
+    // [FIX BUG #7] Flag para evitar doble disparo click+touchend.
+    var lastTapTime = 0;
+    // [FIX BUG #3] Bandera para no mostrar zoom si el match es el final.
+    var pendingVictory = false;
+    // [FEATURE #3] Indices de pareja hint actual para resalte visual.
+    var hintIdxA = null, hintIdxB = null, hintTimer = null;
+    // [FEATURE #1] Bandera para mostrar aviso de auto-shuffle solo una vez por evento.
+    var autoShuffleNoticeTimer = null;
 
     function getStars(z, n) { return parseInt(localStorage.getItem('zone_' + z + '_level_' + n) || '0'); }
     function setStars(z, n, s) { localStorage.setItem('zone_' + z + '_level_' + n, s); }
@@ -19,13 +27,14 @@ var UI = (function() {
     GameEngine.setOnStateChange(function(event, data) {
         if (event === 'boardChanged') renderBoard();
         else if (event === 'match') {
-            if (data.a.url && data.b.url && data.a.zone === currentZone.id) {
+            // [FIX BUG #3] No mostrar zoom si este match completo el tablero (la victoria va a mostrar el modal).
+            if (!data.isFinalMatch && data.a.url && data.b.url && data.a.zone === currentZone.id) {
                 var photo = currentZone.photos.find(function(p) { return p.url === data.a.url; }) || data.a;
                 showZoomAndNote(photo);
             }
             updateSlotsUI();
         }
-        else if (event === 'slotsfull') showMessage('Sin coincidencias');
+        else if (event === 'slotsfull') showMessage('Slots llenos: usa ↩️ Deshacer o 🔀 Mezclar');  // [FIX BUG #6]
         else if (event === 'timer') { var el = document.getElementById('timerDisplay'); if (el) el.textContent = data.timeLeft + 's'; }
         else if (event === 'timeout') { showMessage('Tiempo agotado'); setTimeout(function() { showZone(currentZone.id); }, 1500); }
         else if (event === 'victory') {
@@ -35,13 +44,57 @@ var UI = (function() {
             document.getElementById('victoryIcon').textContent = '🏆';
             document.getElementById('victoryName').textContent = currentZone.name + ' Nivel ' + currentLevel.num;
             document.getElementById('starsDisplay').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
-            document.getElementById('victoryModal').style.display = 'flex';
+            // [FIX BUG #3] Forzar z-index alto para asegurar visibilidad encima de cualquier overlay residual.
+            var vm = document.getElementById('victoryModal');
+            vm.style.zIndex = '500';
+            vm.style.display = 'flex';
             spawnVictoryParticles();
             adCount++;
             if (adCount >= AD_EVERY) { adCount = 0; showInterstitialAd(); }
         }
-        else if (event === 'hint') showMessage('Busca: ' + data.name);
+        else if (event === 'hint') {
+            // [FEATURE #3] Si el hint trae indices, resaltar visualmente la pareja.
+            if (data && typeof data.idxA === 'number' && typeof data.idxB === 'number') {
+                showHintHighlight(data.idxA, data.idxB, data.name);
+            } else if (data && data.noPair) {
+                // [FEATURE #1] Si no habia pareja libre, se hizo auto-shuffle.
+                showMessage('🔀 Tablero mezclado automaticamente');
+            } else {
+                showMessage('Busca: ' + (data ? data.name : ''));
+            }
+        }
+        else if (event === 'autoshuffle') {
+            // [FEATURE #1] Tablero estaba insoluble y se mezclo automaticamente (sin costo).
+            renderBoard();
+            if (autoShuffleNoticeTimer) clearTimeout(autoShuffleNoticeTimer);
+            showMessage('🔀 Sin movimientos · tablero mezclado');
+            autoShuffleNoticeTimer = setTimeout(function() {}, 2000);
+        }
     });
+
+    // [FEATURE #3] Resalta visualmente la pareja sugerida por el hint durante ~3 segundos.
+    function showHintHighlight(idxA, idxB, name) {
+        hintIdxA = idxA; hintIdxB = idxB;
+        showMessage('💡 Busca: ' + name);
+        // Aplicar clase de resalte a las fichas visibles correspondientes.
+        var tiles = GameEngine.getTiles();
+        var els = document.querySelectorAll('.vita-tile');
+        els.forEach(function(el) {
+            var di = parseInt(el.getAttribute('data-index'));
+            if (di === idxA || di === idxB) {
+                el.classList.add('hint-highlight');
+            }
+        });
+        // Auto-quitar el resalte tras 3.5 segundos o al siguiente click.
+        if (hintTimer) clearTimeout(hintTimer);
+        hintTimer = setTimeout(clearHintHighlight, 3500);
+    }
+    function clearHintHighlight() {
+        hintIdxA = null; hintIdxB = null;
+        var els = document.querySelectorAll('.vita-tile.hint-highlight');
+        els.forEach(function(el) { el.classList.remove('hint-highlight'); });
+        if (hintTimer) { clearTimeout(hintTimer); hintTimer = null; }
+    }
 
     function renderBoard() {
         var c = document.getElementById('boardContainer');
@@ -85,30 +138,36 @@ var UI = (function() {
             if (t.blocked) el.classList.add('blocked'); else el.classList.add('free');
             if (isSel) el.classList.add('selected-card');
             el.style.touchAction = 'manipulation';
-            el.addEventListener('click', function(e) {
-                e.stopPropagation();
-                var idx = parseInt(this.getAttribute('data-index'));
+            // [FIX BUG #7] Handler unificado con deduplicacion click+touchend.
+            function handleTileTap(e) {
+                if (e) { e.preventDefault(); e.stopPropagation(); }
+                var now = Date.now();
+                if (now - lastTapTime < 300) return;
+                lastTapTime = now;
+                // [FEATURE #3] Al hacer click en cualquier ficha, limpiar resalte de hint.
+                clearHintHighlight();
+                var idx = parseInt(el.getAttribute('data-index'));
                 var allTiles = GameEngine.getTiles();
-                if (idx < allTiles.length && allTiles[idx].pid === t.pid) {
+                if (idx >= 0 && idx < allTiles.length && allTiles[idx] === t) {
                     GameEngine.onTileClick(idx);
                 }
                 if (tutorialActive) advanceTutorial();
-            });
-            el.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var idx = parseInt(this.getAttribute('data-index'));
-                var allTiles = GameEngine.getTiles();
-                if (idx < allTiles.length && allTiles[idx].pid === t.pid) {
-                    GameEngine.onTileClick(idx);
-                }
-                if (tutorialActive) advanceTutorial();
-            });
+            }
+            el.addEventListener('click', handleTileTap);
+            el.addEventListener('touchend', handleTileTap);
             grid.appendChild(el);
         });
         inner.appendChild(grid); c.appendChild(inner);
         updateSlotsUI();
         document.getElementById('pairsLeft').textContent = (vt.length / 2) + ' pares';
+        // [FEATURE #3] Re-aplicar resalte de hint si seguia activo tras el re-render.
+        if (hintIdxA !== null || hintIdxB !== null) {
+            var els2 = document.querySelectorAll('.vita-tile');
+            els2.forEach(function(el2) {
+                var di2 = parseInt(el2.getAttribute('data-index'));
+                if (di2 === hintIdxA || di2 === hintIdxB) el2.classList.add('hint-highlight');
+            });
+        }
     }
 
     function updateSlotsUI() {
@@ -125,7 +184,7 @@ var UI = (function() {
         }
     }
 
-    function showMessage(msg) { var el = document.getElementById('message'); if (el) { el.textContent = msg; el.style.opacity = '1'; setTimeout(function() { el.style.opacity = '0'; }, 1500); } }
+    function showMessage(msg) { var el = document.getElementById('message'); if (el) { el.textContent = msg; el.style.opacity = '1'; setTimeout(function() { el.style.opacity = '0'; }, 1800); } }
 
     function showZoomAndNote(photo) {
         var overlay = document.createElement('div'); overlay.className = 'zoom-overlay';
@@ -145,7 +204,7 @@ var UI = (function() {
                     p.style.setProperty('--tx', ((Math.random()-0.5)*200) + 'px');
                     p.style.setProperty('--ty', ((Math.random()-0.5)*200-50) + 'px');
                     p.style.color = colors[Math.floor(Math.random()*colors.length)];
-                    p.style.position = 'fixed'; p.style.zIndex = '300';
+                    p.style.position = 'fixed'; p.style.zIndex = '600';
                     document.body.appendChild(p);
                     setTimeout(function() { p.remove(); }, 1000);
                 }, idx * 30);
@@ -230,7 +289,7 @@ var UI = (function() {
             html += '<button onclick="UI.undoLastSelection()" class="power-up-btn">↩️<span class="power-up-badge" id="undoBadge">' + pu.undoUses + '</span></button>';
             html += '</div>';
         }
-        html += '<div style="text-align:center;margin-top:8px;height:16px;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);"></span></div></div>';
+        html += '<div style="text-align:center;margin-top:8px;height:16px;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
         document.getElementById('appRoot').innerHTML = html;
         renderBoard();
         if (tutorialActive) showTutorialOverlay();
@@ -240,7 +299,7 @@ var UI = (function() {
     function useShuffle() { GameEngine.useShuffle(); updatePowerBadges(); }
     function useHint() { GameEngine.useHint(); updatePowerBadges(); }
     function undoLastSelection() { GameEngine.undoLastSelection(); updatePowerBadges(); }
-    function updatePowerBadges() { var pu = GameEngine.getPowerUps(); document.getElementById('hintBadge').textContent = pu.hintUses; document.getElementById('shuffleBadge').textContent = pu.shuffleUses; document.getElementById('undoBadge').textContent = pu.undoUses; }
+    function updatePowerBadges() { var pu = GameEngine.getPowerUps(); var hb = document.getElementById('hintBadge'); var sb = document.getElementById('shuffleBadge'); var ub = document.getElementById('undoBadge'); if (hb) hb.textContent = pu.hintUses; if (sb) sb.textContent = pu.shuffleUses; if (ub) ub.textContent = pu.undoUses; }
 
     function shouldStartTutorial() { return localStorage.getItem('tutorialCompleted') !== '1'; }
     function startTutorial(zoneId) {
@@ -250,26 +309,57 @@ var UI = (function() {
         currentLevel = { num: 1, pairs: 4, zoneId: zoneId };
         startGame({ num: 1, pairs: 4, zoneId: zoneId, difficulty: 'facil', hintUses: 99, shuffleUses: 99, undoUses: 99 });
     }
+    // [FIX BUG #12] Tutorial ahora muestra mensajes distintos en cada paso.
+    var TUTORIAL_MESSAGES = [
+        'Bienvenido!<br><br>Toca una ficha y luego su pareja identica para eliminarlas.',
+        'Las fichas brillantes estan libres.<br><br>Las oscuras estan bloqueadas.',
+        'Las parejas van a los slots inferiores.<br><br>Si no coinciden, usa ↩️ para deshacer.',
+        'Bonus: las fichas con ✨ dan x2 puntos!',
+        'Usa 💡 si necesitas ayuda para encontrar una pareja.',
+        'Casi listo! Completa todos los pares para ganar el nivel.'
+    ];
     function showTutorialOverlay() {
         var board = document.getElementById('boardContainer'); if (!board) return;
         var prev = document.querySelector('.tutorial-overlay'); if (prev) prev.remove();
         var overlay = document.createElement('div'); overlay.className = 'tutorial-overlay';
         var msg = document.createElement('div'); msg.className = 'tutorial-message';
-        msg.innerHTML = '<p style="font-size:0.9em;">Bienvenido!<br><br>Toca una ficha y luego su pareja identica para eliminarlas.</p><button onclick="UI.skipTutorial()" style="margin-top:12px;padding:8px 16px;background:rgba(242,202,80,0.2);color:#f2ca50;border:none;border-radius:8px;font-weight:bold;">Entendido</button>';
+        msg.id = 'tutorialMessage';
+        var stepMsg = TUTORIAL_MESSAGES[Math.min(tutorialStep, TUTORIAL_MESSAGES.length - 1)];
+        msg.innerHTML = '<p style="font-size:0.9em;">' + stepMsg + '</p><p style="font-size:0.7em;color:rgba(255,255,255,0.4);margin-top:8px;">Paso ' + (tutorialStep + 1) + '/' + TUTORIAL_MESSAGES.length + '</p><button onclick="UI.skipTutorial()" style="margin-top:12px;padding:8px 16px;background:rgba(242,202,80,0.2);color:#f2ca50;border:none;border-radius:8px;font-weight:bold;">Entendido</button>';
         overlay.appendChild(msg); board.appendChild(overlay);
     }
-    function advanceTutorial() { if (!tutorialActive) return; if (tutorialStep < 5) { tutorialStep++; } else { completeTutorial(); } }
+    function advanceTutorial() {
+        if (!tutorialActive) return;
+        tutorialStep++;
+        if (tutorialStep >= TUTORIAL_MESSAGES.length) { completeTutorial(); }
+        else {
+            // Actualizar el mensaje sin re-crear el overlay.
+            var msgEl = document.getElementById('tutorialMessage');
+            if (msgEl) {
+                var stepMsg = TUTORIAL_MESSAGES[tutorialStep];
+                msgEl.innerHTML = '<p style="font-size:0.9em;">' + stepMsg + '</p><p style="font-size:0.7em;color:rgba(255,255,255,0.4);margin-top:8px;">Paso ' + (tutorialStep + 1) + '/' + TUTORIAL_MESSAGES.length + '</p><button onclick="UI.skipTutorial()" style="margin-top:12px;padding:8px 16px;background:rgba(242,202,80,0.2);color:#f2ca50;border:none;border-radius:8px;font-weight:bold;">Entendido</button>';
+            } else {
+                showTutorialOverlay();
+            }
+        }
+    }
     function skipTutorial() { completeTutorial(); }
     function completeTutorial() { tutorialActive = false; localStorage.setItem('tutorialCompleted', '1'); showZone(tutorialZoneId || 'norte'); showMessage('Tutorial completado!'); }
 
     function showRewardedVideo(cb, msg) { rewardCallback = cb; document.getElementById('rewardText').textContent = msg || 'Mira el video'; document.getElementById('rewardModal').style.display = 'flex'; }
     function closeRewardModal() { document.getElementById('rewardModal').style.display = 'none'; }
     function simulateRewardedVideo() { setTimeout(function() { document.getElementById('rewardModal').style.display = 'none'; if (rewardCallback) rewardCallback(); }, 2000); }
-    function showInterstitialAd() { googletag.cmd.push(function() { googletag.display(interstitialSlot); }); }
+    // [FIX BUG #5] Validacion defensiva antes de llamar a googletag.display.
+    function showInterstitialAd() {
+        if (typeof googletag === 'undefined' || !interstitialSlot) return;
+        googletag.cmd.push(function() {
+            try { if (interstitialSlot) googletag.display(interstitialSlot); } catch (e) { console.warn('Ad display failed:', e); }
+        });
+    }
 
-    function closeVictory() { 
-        document.getElementById('victoryModal').style.display = 'none'; 
-        showZone(currentZone.id); 
+    function closeVictory() {
+        document.getElementById('victoryModal').style.display = 'none';
+        showZone(currentZone.id);
     }
 
     function nextLevel() {
@@ -280,7 +370,7 @@ var UI = (function() {
             var originalLevel = currentZone.levels.find(function(l) { return l.num === nextNum; });
             if (originalLevel) {
                 currentLevel = { num: originalLevel.num, pairs: originalLevel.pairs, zoneId: zoneId };
-                document.getElementById('appRoot').innerHTML = 
+                document.getElementById('appRoot').innerHTML =
                     '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b1512;text-align:center;padding:32px;">' +
                     '<div style="font-size:3em;margin-bottom:16px;">' + currentZone.icon + '</div>' +
                     '<h2 style="color:#f2ca50;font-size:1.5em;font-weight:bold;margin-bottom:8px;">Nivel ' + currentLevel.num + '</h2>' +
