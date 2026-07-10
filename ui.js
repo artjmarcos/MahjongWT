@@ -987,11 +987,8 @@ var UI = (function() {
         // y termina en la Patagonia chilena (abajo). La parada en Chile es mas larga para destacarlo.
         var svgMap = '' +
             '<svg viewBox="0 0 300 440" style="width:280px;height:auto;max-width:80vw;filter:drop-shadow(0 0 20px rgba(242,202,80,0.2));">' +
-                // Silueta estilizada de America
                 '<path d="M 80 30 Q 100 20 130 35 Q 160 25 180 45 Q 200 60 195 90 Q 210 110 200 140 Q 215 170 200 200 Q 210 230 195 260 Q 200 290 180 320 Q 170 360 150 400 Q 130 420 110 410 Q 90 390 85 360 Q 70 330 80 300 Q 65 270 75 240 Q 60 210 70 180 Q 55 150 70 120 Q 60 90 75 60 Q 70 40 80 30 Z" ' +
                     'fill="none" stroke="rgba(242,202,80,0.15)" stroke-width="1.5" stroke-dasharray="2 4"/>' +
-                // Curva de viaje: Mexico (130,55) -> Argentina (175,210) -> Chile centro (95,260) -> Patagonia chilena (130,400)
-                // El segmento hacia Chile es mas largo para que el avion "descienda" por el pais.
                 '<path id="flightPath" d="M 130 55 Q 175 130 175 210 Q 140 240 95 260 Q 100 330 130 400" ' +
                     'fill="none" stroke="url(#trailGrad)" stroke-width="2.5" stroke-linecap="round" ' +
                     'stroke-dasharray="700" stroke-dashoffset="700" class="splash-trail"/>' +
@@ -1006,32 +1003,26 @@ var UI = (function() {
                         '<stop offset="0%" stop-color="#f2ca50" stop-opacity="1"/>' +
                         '<stop offset="100%" stop-color="#f2ca50" stop-opacity="0"/>' +
                     '</radialGradient>' +
-                    // Glow especial para Chile (mas intenso y con tono rojo-blanco-azul sutil).
                     '<radialGradient id="chileGlow">' +
                         '<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>' +
                         '<stop offset="40%" stop-color="#f2ca50" stop-opacity="0.95"/>' +
                         '<stop offset="100%" stop-color="#f2ca50" stop-opacity="0"/>' +
                     '</radialGradient>' +
                 '</defs>' +
-                // Punto Mexico (130, 55) - se enciende a los 0.3s
                 '<circle cx="130" cy="55" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:0.3s;"/>' +
                 '<circle cx="130" cy="55" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:0.3s;"/>' +
                 '<text x="130" y="42" class="splash-label" style="animation-delay:0.5s;" text-anchor="middle">Mexico</text>' +
-                // Punto Argentina (175, 210) - se enciende a los 1.4s
                 '<circle cx="175" cy="210" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:1.4s;"/>' +
                 '<circle cx="175" cy="210" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:1.4s;"/>' +
                 '<text x="195" y="214" class="splash-label" style="animation-delay:1.6s;" text-anchor="start">Argentina</text>' +
-                // Punto CHILE destacado (95, 260) - se enciende a los 2.4s, mas grande y con halo especial
                 '<circle cx="95" cy="260" r="7" fill="url(#chileGlow)" class="splash-city-chile-pulse" style="animation-delay:2.4s;"/>' +
                 '<circle cx="95" cy="260" r="6" fill="#ffffff" class="splash-city-chile" style="animation-delay:2.4s;"/>' +
                 '<circle cx="95" cy="260" r="14" fill="url(#chileGlow)" class="splash-city-chile-aura" style="animation-delay:2.4s;"/>' +
                 '<text x="95" y="285" class="splash-label-chile" style="animation-delay:2.7s;" text-anchor="middle">CHILE</text>' +
                 '<text x="95" y="300" class="splash-label-sub" style="animation-delay:2.9s;" text-anchor="middle">Cuna del proyecto</text>' +
-                // Punto Patagonia chilena (130, 400) - se enciende a los 4.0s
                 '<circle cx="130" cy="400" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:4.0s;"/>' +
                 '<circle cx="130" cy="400" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:4.0s;"/>' +
                 '<text x="130" y="420" class="splash-label" style="animation-delay:4.2s;" text-anchor="middle">Patagonia</text>' +
-                // Avion dorado que recorre el path
                 '<g class="splash-plane">' +
                     '<g transform="translate(-8,-8)">' +
                         '<path d="M 8 0 L 14 6 L 14 10 L 9 8 L 7 14 L 5 14 L 6 8 L 1 10 L 1 7 L 6 4 Z" ' +
@@ -1041,7 +1032,6 @@ var UI = (function() {
             '</svg>';
         splash.innerHTML += '<div style="position:relative;z-index:2;">' + svgMap + '</div>';
 
-        // Texto
         splash.innerHTML += '<div style="position:relative;z-index:2;margin-top:20px;">' +
             '<span class="splash-text-outfit" style="display:block;font-size:0.85em;color:rgba(242,202,80,0.7);letter-spacing:0.35em;margin-bottom:8px;">OUTFIT</span>' +
             '<h1 class="splash-title text-glow" style="font-size:2.6em;font-weight:700;color:#f2ca50;line-height:1.1;letter-spacing:0.02em;">Descubre<br>America</h1>' +
@@ -1051,14 +1041,8 @@ var UI = (function() {
             '<p class="splash-made" style="font-size:0.65em;color:rgba(242,202,80,0.45);margin-top:10px;letter-spacing:0.1em;">Hecho con cariño desde Chile 🇨🇱</p>' +
             '</div>';
 
-        // Indicador de progreso
-        splash.innerHTML += '<div class="splash-progress" style="position:absolute;bottom:32px;left:50%;transform:translateX(-50%);width:120px;height:2px;background:rgba(255,255,255,0.1);border-radius:1px;overflow:hidden;z-index:2;">' +
-            '<div class="splash-progress-bar" style="height:100%;background:linear-gradient(to right,#f2ca50,#ff9f43);width:0;border-radius:1px;"></div>' +
-            '</div>';
-
         document.body.appendChild(splash);
 
-        // Animar el avion a lo largo del path. Duracion 4.5s para que la parada en Chile se note.
         var plane = splash.querySelector('.splash-plane');
         var pathEl = splash.querySelector('#flightPath');
         if (plane && pathEl) {
@@ -1067,9 +1051,6 @@ var UI = (function() {
             animateMotion.setAttribute('fill', 'freeze');
             animateMotion.setAttribute('rotate', 'auto');
             animateMotion.setAttribute('begin', '0.3s');
-            // keyTimes y keyPoints para ralentizar el paso por Chile (alrededor del 50-65% del path).
-            // El path tiene 4 puntos: Mexico(0%), Argentina(33%), Chile(55%), Patagonia(100%).
-            // Para que Chile se vea mas tiempo, hacemos que el 33%-55% sea mas lento.
             animateMotion.setAttribute('keyPoints', '0;0.33;0.55;0.55;1');
             animateMotion.setAttribute('keyTimes', '0;0.3;0.5;0.65;1');
             animateMotion.setAttribute('calcMode', 'spline');
@@ -1080,24 +1061,76 @@ var UI = (function() {
             plane.appendChild(animateMotion);
         }
 
-        // Animar la barra de progreso.
-        var pbar = splash.querySelector('.splash-progress-bar');
-        if (pbar) {
-            requestAnimationFrame(function() {
-                pbar.style.transition = 'width 5s ease-in-out';
-                pbar.style.width = '100%';
-            });
-        }
-
-        // Fade out y transicion al menu.
+        // [FASE 5] Al terminar el splash del avion, mostrar segunda pantalla con frase inspiradora rotativa.
         setTimeout(function() {
+            splash.style.transition = 'opacity 0.5s ease';
+            splash.style.opacity = '0';
+            setTimeout(function() {
+                if (splash.parentNode) splash.parentNode.removeChild(splash);
+                showSplashFrase();
+            }, 500);
+        }, 5400);
+    }
+
+    // [FASE 5] Segunda pantalla splash: frase inspiradora grande rotativa (estilo hashtag).
+    var SPLASH_FRASES = [
+        '#Viaja por América y conviértete en Maestro Mahjong',
+        '#Descubre los rincones más mágicos del continente',
+        '#Cada ficha cuenta una historia milenaria',
+        '#Conecta con la cultura de tres países',
+        '#Donde la calma se vuelve juego',
+        '#Mahjong: un viaje, mil destinos',
+        '#Tu aventura comienza en Chile 🇨🇱',
+        '#Relaja tu mente, despierta tu espíritu viajero'
+    ];
+    function showSplashFrase() {
+        var splash = document.createElement('div');
+        splash.id = 'splashFrase';
+        splash.style.cssText = 'position:fixed;inset:0;background:radial-gradient(ellipse at center, #0d2018 0%, #050a08 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:32px;';
+
+        // Estrellas de fondo suaves
+        var starsHTML = '';
+        for (var i = 0; i < 25; i++) {
+            var sx = Math.random() * 100;
+            var sy = Math.random() * 100;
+            var sd = 1 + Math.random() * 2;
+            var sdelay = Math.random() * 2;
+            starsHTML += '<div class="splash-star" style="left:' + sx + '%;top:' + sy + '%;width:' + sd + 'px;height:' + sd + 'px;animation-delay:' + sdelay + 's;animation-duration:4s;"></div>';
+        }
+        splash.innerHTML = '<div style="position:absolute;inset:0;pointer-events:none;">' + starsHTML + '</div>';
+
+        // Elegir frase aleatoria
+        var frase = SPLASH_FRASES[Math.floor(Math.random() * SPLASH_FRASES.length)];
+
+        // Linea decorativa superior
+        splash.innerHTML += '<div class="splash-frase-line-top"></div>';
+
+        // Frase principal en grande
+        splash.innerHTML += '<h1 class="splash-frase-text text-glow" style="font-size:1.7em;font-weight:700;color:#f2ca50;line-height:1.3;letter-spacing:0.01em;max-width:340px;position:relative;z-index:2;font-family:Outfit,sans-serif;">' + frase + '</h1>';
+
+        // Linea decorativa inferior
+        splash.innerHTML += '<div class="splash-frase-line-bot"></div>';
+
+        // Pequeno indicador "Desliza para comenzar"
+        splash.innerHTML += '<div class="splash-frase-tap" style="position:absolute;bottom:48px;left:50%;transform:translateX(-50%);color:rgba(242,202,80,0.5);font-size:0.7em;letter-spacing:0.2em;text-transform:uppercase;z-index:2;">Toca para comenzar</div>';
+
+        document.body.appendChild(splash);
+
+        // Auto-transicion despues de 3.5s, o si el usuario toca la pantalla antes.
+        var transicionada = false;
+        function transicionar() {
+            if (transicionada) return;
+            transicionada = true;
             splash.style.transition = 'opacity 0.6s ease';
             splash.style.opacity = '0';
             setTimeout(function() {
                 if (splash.parentNode) splash.parentNode.removeChild(splash);
                 showWorldMain();
             }, 600);
-        }, 5400);
+        }
+        splash.addEventListener('click', transicionar);
+        splash.addEventListener('touchend', function(e) { e.preventDefault(); transicionar(); });
+        setTimeout(transicionar, 3500);
     }
 
     return Object.freeze({
