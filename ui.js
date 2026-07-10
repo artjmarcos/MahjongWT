@@ -4,6 +4,8 @@ var UI = (function() {
     var tutorialActive = false, tutorialStep = 0, tutorialZoneId = null;
     var rewardCallback = null, adCount = 0;
     var AD_EVERY = 5;
+    // [FASE 2] Tracking de eventos para misiones.
+    var gameStats = { usedPowerUps: false, usedUndo: false, currentDifficulty: 'normal' };
     var memoricePhotos = [], memoriceCards = [], memoriceFlipped = [], memoriceMatched = 0, memoriceLocked = false;
     // [FIX BUG #7] Flag para evitar doble disparo click+touchend.
     var lastTapTime = 0;
@@ -53,6 +55,16 @@ var UI = (function() {
             else if (combo >= 4) haptic([40, 30, 40]);
             else if (combo >= 2) haptic(30);
             else haptic(15);
+            // [FASE 2] Tracking de eventos para misiones.
+            var completadas = [];
+            completadas = completadas.concat(Misiones.registrarEvento('matchCount', 1));
+            if (data.isBonus) completadas = completadas.concat(Misiones.registrarEvento('bonusMatch', 1));
+            if (combo >= 3) completadas = completadas.concat(Misiones.registrarEvento('comboX3', 1));
+            if (combo >= 4) completadas = completadas.concat(Misiones.registrarEvento('comboX4', 1));
+            // Monedas ganadas por match: estimar (100 + combo*50) * (bonus ? 2 : 1).
+            var coinsFromMatch = (100 + combo * 50) * (data.isBonus ? 2 : 1);
+            completadas = completadas.concat(Misiones.registrarEvento('coinsEarned', coinsFromMatch));
+            mostrarMisionesCompletadas(completadas);
             // [FIX BUG #3] No mostrar zoom si este match completo el tablero (la victoria va a mostrar el modal).
             // [FIX NOTAS] Buscar la foto original por nombre+zone (la URL cambia por sz=w400 vs sz=w600).
             // Si no se encuentra, usar data.a que ahora SI incluye nota.
@@ -79,6 +91,19 @@ var UI = (function() {
             spawnVictoryParticles();
             adCount++;
             if (adCount >= AD_EVERY) { adCount = 0; showInterstitialAd(); }
+            // [FASE 2] Tracking de eventos para misiones - levelComplete y variantes.
+            var lvlCompletadas = [];
+            lvlCompletadas = lvlCompletadas.concat(Misiones.registrarEvento('levelComplete', 1));
+            if (!gameStats.usedPowerUps) lvlCompletadas = lvlCompletadas.concat(Misiones.registrarEvento('levelNoPowerups', 1));
+            if (!gameStats.usedUndo) lvlCompletadas = lvlCompletadas.concat(Misiones.registrarEvento('levelNoUndo', 1));
+            if (gameStats.currentDifficulty === 'dificil') lvlCompletadas = lvlCompletadas.concat(Misiones.registrarEvento('levelHard', 1));
+            // Monedas ganadas por victoria (stars).
+            lvlCompletadas = lvlCompletadas.concat(Misiones.registrarEvento('coinsEarned', stars));
+            mostrarMisionesCompletadas(lvlCompletadas);
+            // [FASE 2] Registrar actividad para el streak diario.
+            Misiones.registrarActividad();
+            // [FASE 2] Verificar bonus de streak pendientes (lo muestra al cerrar el modal de victoria).
+            setTimeout(verificarBonusStreakPendiente, 500);
         }
         else if (event === 'hint') {
             // [FEATURE #3] Si el hint trae indices, resaltar visualmente la pareja.
@@ -392,6 +417,8 @@ var UI = (function() {
         if (difficulty === 'facil') { pairs = Math.max(4, pairs - 2); hintUses = 5; shuffleUses = 5; undoUses = 5; }
         else if (difficulty === 'dificil') { pairs = pairs + 2; hintUses = 1; shuffleUses = 1; undoUses = 1; }
         tutorialActive = false;
+        // [FASE 2] Resetear stats de tracking para el nuevo nivel.
+        gameStats = { usedPowerUps: false, usedUndo: false, currentDifficulty: difficulty };
         startGame({ num: currentLevel.num, pairs: pairs, zoneId: currentLevel.zoneId, difficulty: difficulty, hintUses: hintUses, shuffleUses: shuffleUses, undoUses: undoUses });
     }
 
@@ -423,9 +450,9 @@ var UI = (function() {
     }
 
     function goBackFromGame() { GameEngine.stopTimer(); showZone(currentZone.id); }
-    function useShuffle() { GameEngine.useShuffle(); updatePowerBadges(); }
-    function useHint() { GameEngine.useHint(); updatePowerBadges(); }
-    function undoLastSelection() { GameEngine.undoLastSelection(); updatePowerBadges(); }
+    function useShuffle() { gameStats.usedPowerUps = true; GameEngine.useShuffle(); updatePowerBadges(); }
+    function useHint() { gameStats.usedPowerUps = true; GameEngine.useHint(); updatePowerBadges(); }
+    function undoLastSelection() { gameStats.usedPowerUps = true; gameStats.usedUndo = true; GameEngine.undoLastSelection(); updatePowerBadges(); }
     function updatePowerBadges() { var pu = GameEngine.getPowerUps(); var hb = document.getElementById('hintBadge'); var sb = document.getElementById('shuffleBadge'); var ub = document.getElementById('undoBadge'); if (hb) hb.textContent = pu.hintUses; if (sb) sb.textContent = pu.shuffleUses; if (ub) ub.textContent = pu.undoUses; }
 
     function shouldStartTutorial() { return localStorage.getItem('tutorialCompleted') !== '1'; }
@@ -566,7 +593,16 @@ var UI = (function() {
                 memoriceMatched++; memoriceFlipped = []; memoriceLocked = false;
                 renderMemoriceBoard();
                 if (memoriceMatched === 6) {
-                    setTimeout(function() { addCoins(10); document.getElementById('memoriceModal').style.display = 'none'; showMessage('Memorice completado! +10 monedas'); }, 500);
+                    setTimeout(function() {
+                        addCoins(10);
+                        document.getElementById('memoriceModal').style.display = 'none';
+                        showMessage('Memorice completado! +10 monedas');
+                        // [FASE 2] Tracking de misiones: minigameComplete + coinsEarned.
+                        var mgCompletadas = Misiones.registrarEvento('minigameComplete', 1);
+                        mgCompletadas = mgCompletadas.concat(Misiones.registrarEvento('coinsEarned', 10));
+                        mostrarMisionesCompletadas(mgCompletadas);
+                        Misiones.registrarActividad();
+                    }, 500);
                 }
             } else { setTimeout(function() { memoriceFlipped = []; memoriceLocked = false; renderMemoriceBoard(); }, 800); }
         }
@@ -586,6 +622,8 @@ var UI = (function() {
         html += '<h1 class="text-glow" style="font-size:1.5em;font-weight:bold;color:#f2ca50;">WORLD TOUR</h1>';
         html += '<div style="background:rgba(242,202,80,0.1);padding:4px 12px;border-radius:16px;margin-top:8px;"><span style="color:#f2ca50;font-size:0.9em;font-weight:bold;">⭐ ' + ts + ' estrellas</span></div>';
         html += '</div></div><div style="padding:16px;">';
+        // [FASE 2] Panel de misiones diarias + streak.
+        html += Misiones.renderPanel();
         html += countryCard('🇨🇱','Chile',cpChile,'UI.showChileZones()');
         html += countryCard('🇦🇷','Argentina',cpArgentina,'UI.showArgentineZones()');
         html += countryCard('🇲🇽','Mexico',cpMexico,'UI.showMexicanZones()');
@@ -656,6 +694,65 @@ var UI = (function() {
 
     function comprarPowerUp(tipo) { if (coins < 10) { showMessage('Monedas insuficientes'); return; } coins -= 10; localStorage.setItem('coins', coins); GameEngine.addPowerUp(tipo, 1); showTienda(); }
 
+    // [FASE 2] Muestra un toast por cada mision completada.
+    function mostrarMisionesCompletadas(completadas) {
+        if (!completadas || completadas.length === 0) return;
+        completadas.forEach(function(m, idx) {
+            setTimeout(function() {
+                spawnFloatingMissionToast(m.icono + ' ¡Misión completada!', '+10 🪙');
+            }, idx * 600);
+        });
+    }
+    function spawnFloatingMissionToast(text, sub) {
+        var el = document.createElement('div');
+        el.className = 'mission-toast';
+        el.innerHTML = '<div style="font-size:0.95em;font-weight:bold;">' + text + '</div><div style="font-size:0.8em;color:#4ade80;margin-top:2px;">' + sub + '</div>';
+        document.body.appendChild(el);
+        setTimeout(function() { if (el.parentNode) el.remove(); }, 2800);
+    }
+
+    // [FASE 2] Reclama todas las recompensas pendientes.
+    function reclamarMisiones() {
+        var r = Misiones.reclamarPendientes();
+        if (r.total > 0) {
+            addCoins(r.total);
+            showMessage('🎁 +' + r.total + ' monedas' + (r.bonus > 0 ? ' (incl. bonus x3!)' : ''));
+            // Refrescar el panel visualmente.
+            showWorldMain();
+        } else {
+            showMessage('No hay recompensas pendientes');
+        }
+    }
+
+    // [FASE 2] Verifica si hay bonus de streak pendientes y los muestra.
+    function verificarBonusStreakPendiente() {
+        var bonus = Misiones.verificarBonusStreak();
+        if (!bonus) return;
+        // Mostrar modal de bonus.
+        var modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;';
+        modal.innerHTML = '<div style="background:linear-gradient(145deg,rgba(23,34,30,0.95),rgba(11,21,18,0.95));padding:32px;border-radius:24px;text-align:center;border:2px solid #ff9f43;max-width:320px;">' +
+            '<div style="font-size:4em;">🔥</div>' +
+            '<h2 style="color:#ff9f43;font-size:1.4em;font-weight:bold;margin:8px 0;">¡Racha de ' + bonus.dias + ' días!</h2>' +
+            '<p style="color:white;margin-bottom:16px;">' + bonus.msg + '</p>' +
+            '<button onclick="UI.reclamarBonusStreak(' + bonus.dias + ',this)" class="btn-reward" style="width:100%;padding:12px;border-radius:12px;font-size:1.1em;">Reclamar</button>' +
+            '</div>';
+        document.body.appendChild(modal);
+    }
+    function reclamarBonusStreak(dias, btn) {
+        var bonus = Misiones.reclamarBonus(dias);
+        if (bonus) {
+            addCoins(bonus.monedas);
+            // Cerrar el modal (subir al abuelo: el overlay).
+            var modal = btn ? btn.closest('div[style*="z-index:600"]') : null;
+            // Mas simple: buscar el overlay que contiene el boton.
+            var overlay = btn;
+            while (overlay && overlay.tagName !== 'BODY' && overlay.style.position !== 'fixed') overlay = overlay.parentNode;
+            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            showMessage('+' + bonus.monedas + ' monedas 🔥');
+        }
+    }
+
     function showSplash() {
         document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:black;text-align:center;">' +
             '<span style="font-size:0.9em;color:rgba(242,202,80,0.8);letter-spacing:0.3em;margin-bottom:16px;">Outfit</span>' +
@@ -677,7 +774,9 @@ var UI = (function() {
         closeVictory: closeVictory, nextLevel: nextLevel,
         startMemoriceMinigame: startMemoriceMinigame, closeMemorice: closeMemorice,
         skipTutorial: skipTutorial,
-        toggleHaptic: toggleHaptic
+        toggleHaptic: toggleHaptic,
+        reclamarMisiones: reclamarMisiones,
+        reclamarBonusStreak: reclamarBonusStreak
     });
 })();
 

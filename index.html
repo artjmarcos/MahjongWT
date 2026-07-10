@@ -124,6 +124,23 @@
 
         /* [FASE 1] Bonus tile: glow dorado extra */
         .vita-tile.bonus-tile { box-shadow: 0 0 12px rgba(255,215,0,0.4) !important; }
+
+        /* [FASE 2] Toast de mision completada */
+        .mission-toast {
+            position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
+            z-index: 650; pointer-events: none;
+            background: linear-gradient(145deg, rgba(23,34,30,0.95), rgba(11,21,18,0.95));
+            border: 1px solid #4ade80; border-radius: 12px; padding: 12px 20px;
+            color: white; text-align: center;
+            box-shadow: 0 8px 32px rgba(74,222,128,0.3);
+            animation: toastSlide 2.8s ease-out forwards;
+        }
+        @keyframes toastSlide {
+            0%   { opacity: 0; transform: translate(-50%, -30px) scale(0.9); }
+            10%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            85%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -20px) scale(0.95); }
+        }
     </style>
 </head>
 <body>
@@ -150,6 +167,7 @@
     </div>
     <script src="juego.js"></script>
     <script src="datos.js"></script>
+    <script src="misiones.js"></script>
     <script src="ui.js"></script>
     <script>
         if ("serviceWorker" in navigator) {
