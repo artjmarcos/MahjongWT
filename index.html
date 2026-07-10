@@ -141,6 +141,117 @@
             85%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
             100% { opacity: 0; transform: translate(-50%, -20px) scale(0.95); }
         }
+
+        /* [FASE 4] Splash animado */
+        .splash-star {
+            position: absolute; background: #f2ca50; border-radius: 50%;
+            opacity: 0; animation: starTwinkle 3s ease-in-out infinite;
+        }
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50%      { opacity: 0.8; transform: scale(1); }
+        }
+
+        /* Estela del avion: se dibuja progresivamente */
+        .splash-trail {
+            animation: drawTrail 3.2s ease-in-out 0.3s forwards;
+        }
+        @keyframes drawTrail {
+            from { stroke-dashoffset: 600; }
+            to   { stroke-dashoffset: 0; }
+        }
+
+        /* Puntos de ciudades: aparecen cuando el avion pasa */
+        .splash-city {
+            opacity: 0; transform-origin: center;
+            animation: cityAppear 0.6s ease-out forwards;
+        }
+        @keyframes cityAppear {
+            0%   { opacity: 0; transform: scale(0); }
+            60%  { opacity: 1; transform: scale(1.4); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .splash-city-pulse {
+            opacity: 0; transform-origin: center;
+            animation: cityPulse 2s ease-in-out infinite;
+        }
+        @keyframes cityPulse {
+            0%   { opacity: 0; transform: scale(0.8); }
+            50%  { opacity: 0.6; transform: scale(1.5); }
+            100% { opacity: 0; transform: scale(2); }
+        }
+
+        /* [FASE 4] Chile destacado: punto mas grande, blanco, con aura intensa */
+        .splash-city-chile {
+            opacity: 0; transform-origin: center;
+            animation: chileAppear 0.8s ease-out forwards;
+            filter: drop-shadow(0 0 4px #ffffff);
+        }
+        @keyframes chileAppear {
+            0%   { opacity: 0; transform: scale(0); }
+            50%  { opacity: 1; transform: scale(2); }
+            70%  { transform: scale(1.6); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .splash-city-chile-pulse {
+            opacity: 0; transform-origin: center;
+            animation: chilePulse 1.4s ease-in-out infinite;
+        }
+        @keyframes chilePulse {
+            0%   { opacity: 0; transform: scale(1); }
+            50%  { opacity: 1; transform: scale(1.8); }
+            100% { opacity: 0; transform: scale(2.6); }
+        }
+        .splash-city-chile-aura {
+            opacity: 0; transform-origin: center;
+            animation: chileAura 2s ease-in-out infinite;
+        }
+        @keyframes chileAura {
+            0%   { opacity: 0; transform: scale(0.8); }
+            50%  { opacity: 0.7; transform: scale(1.3); }
+            100% { opacity: 0; transform: scale(1.8); }
+        }
+
+        /* Etiquetas de paises */
+        .splash-label {
+            fill: rgba(242,202,80,0.85); font-size: 9px; font-family: 'Outfit', sans-serif;
+            font-weight: 600; letter-spacing: 0.5px;
+            opacity: 0; animation: splashFadeIn 0.6s ease-out forwards;
+        }
+        /* Etiqueta CHILE mas grande y destacada */
+        .splash-label-chile {
+            fill: #ffffff; font-size: 12px; font-family: 'Outfit', sans-serif;
+            font-weight: 700; letter-spacing: 2px;
+            opacity: 0; animation: chileLabelIn 0.8s ease-out forwards;
+            filter: drop-shadow(0 0 4px rgba(242,202,80,1));
+        }
+        @keyframes chileLabelIn {
+            0%   { opacity: 0; transform: translateY(-6px) scale(0.8); }
+            60%  { opacity: 1; transform: translateY(0) scale(1.15); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .splash-label-sub {
+            fill: rgba(242,202,80,0.7); font-size: 7px; font-family: 'Outfit', sans-serif;
+            font-weight: 400; font-style: italic; letter-spacing: 0.3px;
+            opacity: 0; animation: splashFadeIn 0.6s ease-out forwards;
+        }
+
+        /* Texto del splash: fade-in escalonado */
+        .splash-text-outfit { opacity: 0; animation: splashFadeIn 0.8s ease-out 0.5s forwards; }
+        .splash-title { opacity: 0; animation: splashTitleIn 1s ease-out 0.9s forwards; }
+        .splash-divider {
+            width: 0; height: 1px; margin: 14px auto;
+            background: linear-gradient(to bottom, rgba(242,202,80,0.6), transparent);
+            animation: dividerGrow 0.8s ease-out 1.4s forwards;
+        }
+        @keyframes dividerGrow { to { width: 60px; height: 40px; } }
+        .splash-subtitle { opacity: 0; animation: splashFadeIn 0.8s ease-out 1.6s forwards; }
+        .splash-tagline { opacity: 0; animation: splashFadeIn 0.8s ease-out 2.2s forwards; }
+        @keyframes splashFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes splashTitleIn {
+            0%   { opacity: 0; transform: translateY(12px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
     </style>
 </head>
 <body>

@@ -874,14 +874,138 @@ var UI = (function() {
         }
     }
 
+    // [FASE 4] Splash animado: avion recorre America destacando Chile (cuna del proyecto).
     function showSplash() {
-        document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:black;text-align:center;">' +
-            '<span style="font-size:0.9em;color:rgba(242,202,80,0.8);letter-spacing:0.3em;margin-bottom:16px;">Outfit</span>' +
-            '<h1 class="text-glow" style="font-size:2.5em;font-weight:bold;color:#f2ca50;line-height:1.2;">Descubre<br/>America</h1>' +
-            '<div style="height:48px;width:1px;background:linear-gradient(to bottom, rgba(242,202,80,0.6), transparent);margin:16px auto;"></div>' +
-            '<p style="font-size:0.9em;color:rgba(255,255,255,0.5);letter-spacing:0.3em;">World Tour</p>' +
-            '<p style="font-size:0.75em;color:rgba(242,202,80,0.6);margin-top:32px;">Viaje Meditativo</p></div>';
-        setTimeout(showWorldMain, 4000);
+        var splash = document.createElement('div');
+        splash.id = 'splashAnimado';
+        splash.style.cssText = 'position:fixed;inset:0;background:radial-gradient(ellipse at center, #0d2018 0%, #050a08 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;';
+
+        // Estrellas de fondo (zen)
+        var starsHTML = '';
+        for (var i = 0; i < 35; i++) {
+            var sx = Math.random() * 100;
+            var sy = Math.random() * 100;
+            var sd = 1 + Math.random() * 2;
+            var sdelay = Math.random() * 3;
+            starsHTML += '<div class="splash-star" style="left:' + sx + '%;top:' + sy + '%;width:' + sd + 'px;height:' + sd + 'px;animation-delay:' + sdelay + 's;"></div>';
+        }
+        splash.innerHTML = '<div style="position:absolute;inset:0;pointer-events:none;">' + starsHTML + '</div>';
+
+        // Mapa SVG: avion parte en Mexico (arriba), va a Argentina (este), baja a Chile centro,
+        // y termina en la Patagonia chilena (abajo). La parada en Chile es mas larga para destacarlo.
+        var svgMap = '' +
+            '<svg viewBox="0 0 300 440" style="width:280px;height:auto;max-width:80vw;filter:drop-shadow(0 0 20px rgba(242,202,80,0.2));">' +
+                // Silueta estilizada de America
+                '<path d="M 80 30 Q 100 20 130 35 Q 160 25 180 45 Q 200 60 195 90 Q 210 110 200 140 Q 215 170 200 200 Q 210 230 195 260 Q 200 290 180 320 Q 170 360 150 400 Q 130 420 110 410 Q 90 390 85 360 Q 70 330 80 300 Q 65 270 75 240 Q 60 210 70 180 Q 55 150 70 120 Q 60 90 75 60 Q 70 40 80 30 Z" ' +
+                    'fill="none" stroke="rgba(242,202,80,0.15)" stroke-width="1.5" stroke-dasharray="2 4"/>' +
+                // Curva de viaje: Mexico (130,55) -> Argentina (175,210) -> Chile centro (95,260) -> Patagonia chilena (130,400)
+                // El segmento hacia Chile es mas largo para que el avion "descienda" por el pais.
+                '<path id="flightPath" d="M 130 55 Q 175 130 175 210 Q 140 240 95 260 Q 100 330 130 400" ' +
+                    'fill="none" stroke="url(#trailGrad)" stroke-width="2.5" stroke-linecap="round" ' +
+                    'stroke-dasharray="700" stroke-dashoffset="700" class="splash-trail"/>' +
+                '<defs>' +
+                    '<linearGradient id="trailGrad" x1="0%" y1="0%" x2="0%" y2="100%">' +
+                        '<stop offset="0%" stop-color="#f2ca50" stop-opacity="0.15"/>' +
+                        '<stop offset="40%" stop-color="#f2ca50" stop-opacity="0.7"/>' +
+                        '<stop offset="70%" stop-color="#ff9f43" stop-opacity="0.9"/>' +
+                        '<stop offset="100%" stop-color="#ff6b6b" stop-opacity="1"/>' +
+                    '</linearGradient>' +
+                    '<radialGradient id="cityGlow">' +
+                        '<stop offset="0%" stop-color="#f2ca50" stop-opacity="1"/>' +
+                        '<stop offset="100%" stop-color="#f2ca50" stop-opacity="0"/>' +
+                    '</radialGradient>' +
+                    // Glow especial para Chile (mas intenso y con tono rojo-blanco-azul sutil).
+                    '<radialGradient id="chileGlow">' +
+                        '<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>' +
+                        '<stop offset="40%" stop-color="#f2ca50" stop-opacity="0.95"/>' +
+                        '<stop offset="100%" stop-color="#f2ca50" stop-opacity="0"/>' +
+                    '</radialGradient>' +
+                '</defs>' +
+                // Punto Mexico (130, 55) - se enciende a los 0.3s
+                '<circle cx="130" cy="55" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:0.3s;"/>' +
+                '<circle cx="130" cy="55" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:0.3s;"/>' +
+                '<text x="130" y="42" class="splash-label" style="animation-delay:0.5s;" text-anchor="middle">Mexico</text>' +
+                // Punto Argentina (175, 210) - se enciende a los 1.4s
+                '<circle cx="175" cy="210" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:1.4s;"/>' +
+                '<circle cx="175" cy="210" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:1.4s;"/>' +
+                '<text x="195" y="214" class="splash-label" style="animation-delay:1.6s;" text-anchor="start">Argentina</text>' +
+                // Punto CHILE destacado (95, 260) - se enciende a los 2.4s, mas grande y con halo especial
+                '<circle cx="95" cy="260" r="7" fill="url(#chileGlow)" class="splash-city-chile-pulse" style="animation-delay:2.4s;"/>' +
+                '<circle cx="95" cy="260" r="6" fill="#ffffff" class="splash-city-chile" style="animation-delay:2.4s;"/>' +
+                '<circle cx="95" cy="260" r="14" fill="url(#chileGlow)" class="splash-city-chile-aura" style="animation-delay:2.4s;"/>' +
+                '<text x="95" y="285" class="splash-label-chile" style="animation-delay:2.7s;" text-anchor="middle">CHILE</text>' +
+                '<text x="95" y="300" class="splash-label-sub" style="animation-delay:2.9s;" text-anchor="middle">Cuna del proyecto</text>' +
+                // Punto Patagonia chilena (130, 400) - se enciende a los 4.0s
+                '<circle cx="130" cy="400" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:4.0s;"/>' +
+                '<circle cx="130" cy="400" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:4.0s;"/>' +
+                '<text x="130" y="420" class="splash-label" style="animation-delay:4.2s;" text-anchor="middle">Patagonia</text>' +
+                // Avion dorado que recorre el path
+                '<g class="splash-plane">' +
+                    '<g transform="translate(-8,-8)">' +
+                        '<path d="M 8 0 L 14 6 L 14 10 L 9 8 L 7 14 L 5 14 L 6 8 L 1 10 L 1 7 L 6 4 Z" ' +
+                            'fill="#f2ca50" stroke="#d4af37" stroke-width="0.4"/>' +
+                    '</g>' +
+                '</g>' +
+            '</svg>';
+        splash.innerHTML += '<div style="position:relative;z-index:2;">' + svgMap + '</div>';
+
+        // Texto
+        splash.innerHTML += '<div style="position:relative;z-index:2;margin-top:20px;">' +
+            '<span class="splash-text-outfit" style="display:block;font-size:0.85em;color:rgba(242,202,80,0.7);letter-spacing:0.35em;margin-bottom:8px;">OUTFIT</span>' +
+            '<h1 class="splash-title text-glow" style="font-size:2.6em;font-weight:700;color:#f2ca50;line-height:1.1;letter-spacing:0.02em;">Descubre<br>America</h1>' +
+            '<div class="splash-divider"></div>' +
+            '<p class="splash-subtitle" style="font-size:0.9em;color:rgba(255,255,255,0.55);letter-spacing:0.4em;font-weight:300;">WORLD TOUR</p>' +
+            '<p class="splash-tagline" style="font-size:0.7em;color:rgba(242,202,80,0.5);margin-top:18px;letter-spacing:0.15em;">Viaje Meditativo</p>' +
+            '<p class="splash-made" style="font-size:0.65em;color:rgba(242,202,80,0.45);margin-top:10px;letter-spacing:0.1em;">Hecho con cariño desde Chile 🇨🇱</p>' +
+            '</div>';
+
+        // Indicador de progreso
+        splash.innerHTML += '<div class="splash-progress" style="position:absolute;bottom:32px;left:50%;transform:translateX(-50%);width:120px;height:2px;background:rgba(255,255,255,0.1);border-radius:1px;overflow:hidden;z-index:2;">' +
+            '<div class="splash-progress-bar" style="height:100%;background:linear-gradient(to right,#f2ca50,#ff9f43);width:0;border-radius:1px;"></div>' +
+            '</div>';
+
+        document.body.appendChild(splash);
+
+        // Animar el avion a lo largo del path. Duracion 4.5s para que la parada en Chile se note.
+        var plane = splash.querySelector('.splash-plane');
+        var pathEl = splash.querySelector('#flightPath');
+        if (plane && pathEl) {
+            var animateMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+            animateMotion.setAttribute('dur', '4.5s');
+            animateMotion.setAttribute('fill', 'freeze');
+            animateMotion.setAttribute('rotate', 'auto');
+            animateMotion.setAttribute('begin', '0.3s');
+            // keyTimes y keyPoints para ralentizar el paso por Chile (alrededor del 50-65% del path).
+            // El path tiene 4 puntos: Mexico(0%), Argentina(33%), Chile(55%), Patagonia(100%).
+            // Para que Chile se vea mas tiempo, hacemos que el 33%-55% sea mas lento.
+            animateMotion.setAttribute('keyPoints', '0;0.33;0.55;0.55;1');
+            animateMotion.setAttribute('keyTimes', '0;0.3;0.5;0.65;1');
+            animateMotion.setAttribute('calcMode', 'spline');
+            animateMotion.setAttribute('keySplines', '0.4 0 0.6 1; 0.4 0 0.6 1; 0 0 1 1; 0.4 0 0.6 1');
+            var mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
+            mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#flightPath');
+            animateMotion.appendChild(mpath);
+            plane.appendChild(animateMotion);
+        }
+
+        // Animar la barra de progreso.
+        var pbar = splash.querySelector('.splash-progress-bar');
+        if (pbar) {
+            requestAnimationFrame(function() {
+                pbar.style.transition = 'width 5s ease-in-out';
+                pbar.style.width = '100%';
+            });
+        }
+
+        // Fade out y transicion al menu.
+        setTimeout(function() {
+            splash.style.transition = 'opacity 0.6s ease';
+            splash.style.opacity = '0';
+            setTimeout(function() {
+                if (splash.parentNode) splash.parentNode.removeChild(splash);
+                showWorldMain();
+            }, 600);
+        }, 5400);
     }
 
     return Object.freeze({
