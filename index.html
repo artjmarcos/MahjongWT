@@ -142,6 +142,24 @@
             100% { opacity: 0; transform: translate(-50%, -20px) scale(0.95); }
         }
 
+        /* [FASE 4] Toast de logro desbloqueado (mas grande y dorado) */
+        .achievement-toast {
+            position: fixed; top: 25%; left: 50%; transform: translateX(-50%);
+            z-index: 660; pointer-events: none;
+            background: linear-gradient(145deg, rgba(40,30,5,0.97), rgba(20,15,2,0.97));
+            border: 1px solid #f2ca50; border-radius: 14px; padding: 14px 22px;
+            color: white;
+            box-shadow: 0 8px 40px rgba(242,202,80,0.4), 0 0 0 1px rgba(242,202,80,0.2);
+            animation: achievementSlide 3.5s ease-out forwards;
+        }
+        @keyframes achievementSlide {
+            0%   { opacity: 0; transform: translate(-50%, -40px) scale(0.7); }
+            8%   { opacity: 1; transform: translate(-50%, 0) scale(1.1); }
+            12%  { transform: translate(-50%, 0) scale(1); }
+            88%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -30px) scale(0.95); }
+        }
+
         /* [FASE 4] Splash animado */
         .splash-star {
             position: absolute; background: #f2ca50; border-radius: 50%;
@@ -279,6 +297,7 @@
     <script src="juego.js"></script>
     <script src="datos.js"></script>
     <script src="misiones.js"></script>
+    <script src="logros.js"></script>
     <script src="ui.js"></script>
     <script>
         if ("serviceWorker" in navigator) {

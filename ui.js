@@ -65,6 +65,12 @@ var UI = (function() {
             var coinsFromMatch = (100 + combo * 50) * (data.isBonus ? 2 : 1);
             completadas = completadas.concat(Misiones.registrarEvento('coinsEarned', coinsFromMatch));
             mostrarMisionesCompletadas(completadas);
+            // [FASE 4] Tracking de logros.
+            var logrosDesbloq = [];
+            logrosDesbloq = logrosDesbloq.concat(Logros.incrementStat('totalMatches', 1));
+            logrosDesbloq = logrosDesbloq.concat(Logros.setMaxStat('maxCombo', combo));
+            if (data.isBonus) logrosDesbloq = logrosDesbloq.concat(Logros.registrarEvento('bonusMatch'));
+            mostrarLogrosDesbloqueados(logrosDesbloq);
             // [FIX BUG #3] No mostrar zoom si este match completo el tablero (la victoria va a mostrar el modal).
             // [FIX NOTAS] Buscar la foto original por nombre+zone (la URL cambia por sz=w400 vs sz=w600).
             // Si no se encuentra, usar data.a que ahora SI incluye nota.
@@ -100,8 +106,22 @@ var UI = (function() {
             // Monedas ganadas por victoria (stars).
             lvlCompletadas = lvlCompletadas.concat(Misiones.registrarEvento('coinsEarned', stars));
             mostrarMisionesCompletadas(lvlCompletadas);
+            // [FASE 4] Tracking de logros: levelComplete, 3 estrellas, etc.
+            var lvlLogros = [];
+            lvlLogros = lvlLogros.concat(Logros.registrarEvento('levelComplete'));
+            if (stars === 3) lvlLogros = lvlLogros.concat(Logros.incrementStat('levels3Stars', 1));
+            // Dificil sin power-ups.
+            if (gameStats.currentDifficulty === 'dificil' && !gameStats.usedPowerUps) {
+                lvlLogros = lvlLogros.concat(Logros.registrarEvento('levelHardNoPowerups'));
+            }
+            // Actualizar stats de estrellas por pais y total.
+            lvlLogros = lvlLogros.concat(actualizarStatsEstrellas());
+            mostrarLogrosDesbloqueados(lvlLogros);
             // [FASE 2] Registrar actividad para el streak diario.
             Misiones.registrarActividad();
+            // [FASE 4] Actualizar stat de maxStreak para logros.
+            var sActual = Misiones.obtenerStreak();
+            Logros.setMaxStat('maxStreak', sActual.count);
             // [FASE 2] Verificar bonus de streak pendientes (lo muestra al cerrar el modal de victoria).
             setTimeout(verificarBonusStreakPendiente, 500);
         }
@@ -604,6 +624,11 @@ var UI = (function() {
                 triviaCompletadas = triviaCompletadas.concat(Misiones.registrarEvento('coinsEarned', reward));
                 mostrarMisionesCompletadas(triviaCompletadas);
                 Misiones.registrarActividad();
+                // [FASE 4] Tracking de logros: minigameComplete, maxTriviaScore.
+                var trLogros = [];
+                trLogros = trLogros.concat(Logros.registrarEvento('minigameComplete'));
+                trLogros = trLogros.concat(Logros.setMaxStat('maxTriviaScore', ok));
+                mostrarLogrosDesbloqueados(trLogros);
             }
             triviaState.locked = true;
             return;
@@ -723,6 +748,11 @@ var UI = (function() {
                         mgCompletadas = mgCompletadas.concat(Misiones.registrarEvento('coinsEarned', 10));
                         mostrarMisionesCompletadas(mgCompletadas);
                         Misiones.registrarActividad();
+                        // [FASE 4] Tracking de logros: minigameComplete, memoricePerfect.
+                        var mgLogros = [];
+                        mgLogros = mgLogros.concat(Logros.registrarEvento('minigameComplete'));
+                        mgLogros = mgLogros.concat(Logros.registrarEvento('memoricePerfect'));
+                        mostrarLogrosDesbloqueados(mgLogros);
                     }, 500);
                 }
             } else { setTimeout(function() { memoriceFlipped = []; memoriceLocked = false; renderMemoriceBoard(); }, 800); }
@@ -750,6 +780,12 @@ var UI = (function() {
         html += countryCard('🇲🇽','Mexico',cpMexico,'UI.showMexicanZones()');
         html += '<div style="border-radius:16px;overflow:hidden;border:1px dashed rgba(255,255,255,0.2);opacity:0.6;background:rgba(255,255,255,0.02);margin-bottom:12px;"><div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;filter:grayscale(1);">🇧🇷</span><div style="flex:1;"><h3 style="color:rgba(255,255,255,0.7);font-weight:bold;font-size:1.1em;">Brasil</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.5);">8 regiones - 80 niveles</p><p style="font-size:0.75em;color:rgba(255,255,255,0.4);">Proximamente</p></div><span style="color:rgba(255,255,255,0.2);font-size:1.5em;">🔜</span></div></div>';
         html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ALBUM DE VIAJES</button>';
+        // [FASE 4] Boton de logros con contador.
+        var logrosResumen = Logros.obtenerResumen();
+        html += '<button onclick="UI.showLogros()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(242,202,80,0.15),rgba(255,159,67,0.1));border:1px solid rgba(242,202,80,0.3);color:#f2ca50;font-weight:bold;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">' +
+            '<span>🏆 LOGROS</span>' +
+            '<span style="font-size:0.8em;color:rgba(242,202,80,0.7);">' + logrosResumen.desbloqueados + '/' + logrosResumen.total + '</span>' +
+            '</button>';
         html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;">🛒 TIENDA</button>';
         html += '</div></div>';
         document.getElementById('appRoot').innerHTML = html;
@@ -830,6 +866,62 @@ var UI = (function() {
         el.innerHTML = '<div style="font-size:0.95em;font-weight:bold;">' + text + '</div><div style="font-size:0.8em;color:#4ade80;margin-top:2px;">' + sub + '</div>';
         document.body.appendChild(el);
         setTimeout(function() { if (el.parentNode) el.remove(); }, 2800);
+    }
+
+    // [FASE 4] Calcula las estrellas totales por pais y actualiza los stats de logros.
+    function actualizarStatsEstrellas() {
+        var desbloqueados = [];
+        var chileTotal = 0, argTotal = 0, mxTotal = 0, grandTotal = 0;
+        ZONES.forEach(function(z) {
+            var zoneTotal = 0;
+            z.levels.forEach(function(l) {
+                var s = getStars(z.id, l.num);
+                zoneTotal += s;
+                grandTotal += s;
+            });
+            if (z.country === 'chile') chileTotal += zoneTotal;
+            else if (z.country === 'argentina') argTotal += zoneTotal;
+            else if (z.country === 'mexico') mxTotal += zoneTotal;
+        });
+        desbloqueados = desbloqueados.concat(Logros.setStat('chileStars', chileTotal));
+        desbloqueados = desbloqueados.concat(Logros.setStat('argentinaStars', argTotal));
+        desbloqueados = desbloqueados.concat(Logros.setStat('mexicoStars', mxTotal));
+        desbloqueados = desbloqueados.concat(Logros.setStat('totalStars', grandTotal));
+        return desbloqueados;
+    }
+
+    // [FASE 4] Muestra un toast dorado por cada logro desbloqueado.
+    function mostrarLogrosDesbloqueados(logros) {
+        if (!logros || logros.length === 0) return;
+        logros.forEach(function(l, idx) {
+            setTimeout(function() {
+                spawnFloatingAchievementToast(l);
+                // Sumar monedas de recompensa.
+                addCoins(l.recompensa);
+            }, idx * 800 + 200);  // delay mayor que misiones para no pisarlas
+        });
+    }
+    function spawnFloatingAchievementToast(logro) {
+        var el = document.createElement('div');
+        el.className = 'achievement-toast';
+        el.innerHTML =
+            '<div style="display:flex;align-items:center;gap:12px;">' +
+                '<div style="font-size:2em;">' + logro.icono + '</div>' +
+                '<div>' +
+                    '<div style="font-size:0.7em;color:#f2ca50;letter-spacing:0.15em;text-transform:uppercase;">Logro desbloqueado</div>' +
+                    '<div style="font-size:1em;font-weight:bold;color:white;margin-top:2px;">' + logro.nombre + '</div>' +
+                    '<div style="font-size:0.75em;color:#4ade80;margin-top:2px;">+' + logro.recompensa + ' 🪙</div>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(el);
+        // Haptic especial para logros.
+        haptic([30, 50, 30, 50, 80]);
+        setTimeout(function() { if (el.parentNode) el.remove(); }, 3500);
+    }
+
+    // [FASE 4] Pantalla de logros.
+    function showLogros() {
+        document.getElementById('appRoot').innerHTML = Logros.renderPanel();
     }
 
     // [FASE 2] Reclama todas las recompensas pendientes.
@@ -1014,6 +1106,7 @@ var UI = (function() {
         showZone: showZone, selectLevel: selectLevel, startGameWithDifficulty: startGameWithDifficulty,
         goBackFromGame: goBackFromGame, useShuffle: useShuffle, useHint: useHint, undoLastSelection: undoLastSelection,
         showTienda: showTienda, showAlbum: showAlbum,
+        showLogros: showLogros,
         showRewardedVideo: showRewardedVideo, closeRewardModal: closeRewardModal,
         simulateRewardedVideo: simulateRewardedVideo,
         closeVictory: closeVictory, nextLevel: nextLevel,
