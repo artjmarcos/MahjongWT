@@ -352,11 +352,11 @@ var UI = (function() {
         var tiles = GameEngine.getTiles();
         var vt = tiles.filter(function(t) { return !t.matched && !t.inSlot; });
         if (vt.length === 0) { c.innerHTML = ''; return; }
-        // [FASE 6] 5 columnas en vez de 6 para fichas mas grandes. Aspect ratio 1.5 (mas altas).
-        var w = c.clientWidth - 16, margin = 8, COLS = 5, cw = (w - margin * 2) / COLS, ch = cw * 1.5;
+        // [FASE 6] 6 columnas para fichas mas pequenas y power-ups mas visibles. Aspect ratio 1.45.
+        var w = c.clientWidth - 12, margin = 6, COLS = 6, cw = (w - margin * 2) / COLS, ch = cw * 1.45;
         var maxRow = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.row; })) : 0;
         var maxLayer = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.layer; })) : 0;
-        var layerOffset = 18;
+        var layerOffset = 14;
         var nh = Math.max((maxRow + 1) * ch + margin * 2 + (maxLayer * layerOffset) + 20, 300);
         c.style.minHeight = nh + 'px'; c.innerHTML = '';
         var inner = document.createElement('div');
@@ -404,18 +404,28 @@ var UI = (function() {
             if (isSel) el.classList.add('selected-card');
             el.style.touchAction = 'manipulation';
             // [FIX BUG #7] Handler unificado con deduplicacion click+touchend.
+            // [FASE 6] Verificacion explicita de bloqueo antes de llamar al motor.
             function handleTileTap(e) {
                 if (e) { e.preventDefault(); e.stopPropagation(); }
                 var now = Date.now();
                 if (now - lastTapTime < 300) return;
                 lastTapTime = now;
-                // [FEATURE #3] Al hacer click en cualquier ficha, limpiar resalte de hint.
                 clearHintHighlight();
                 var idx = parseInt(el.getAttribute('data-index'));
                 var allTiles = GameEngine.getTiles();
-                if (idx >= 0 && idx < allTiles.length && allTiles[idx] === t) {
-                    GameEngine.onTileClick(idx);
+                if (idx < 0 || idx >= allTiles.length || allTiles[idx] !== t) return;
+                // [FASE 6] Verificar bloqueo explicitamente: si esta bloqueada, feedback de error.
+                if (t.blocked) {
+                    // Feedback: vibracion corta + shake de la ficha.
+                    haptic(20);
+                    el.style.animation = 'none';
+                    void el.offsetWidth;
+                    el.style.animation = 'shakeBlocked 0.3s ease';
+                    setTimeout(function() { el.style.animation = ''; }, 350);
+                    showMessage('🔒 Ficha bloqueada');
+                    return;
                 }
+                GameEngine.onTileClick(idx);
                 if (tutorialActive) advanceTutorial();
             }
             el.addEventListener('click', handleTileTap);

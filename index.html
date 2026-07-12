@@ -57,8 +57,18 @@
         .btn-reward { background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%); color: #052e16; font-weight: 700; border: none; cursor: pointer; }
         .btn-video { background: linear-gradient(180deg, #c084fc 0%, #a855f7 100%); color: #1a0033; font-weight: 700; border: none; cursor: pointer; }
         .btn-next { background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%); color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(96,165,250,0.3); border: none; cursor: pointer; }
-        .power-up-btn { background: rgba(242,202,80,0.1); border: 1px solid rgba(242,202,80,0.3); color: #f2ca50; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; cursor: pointer; position: relative; }
-        .power-up-badge { position: absolute; top: -4px; right: -4px; background: #e74c3c; color: white; font-size: 0.5em; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .power-up-btn { background: rgba(242,202,80,0.15); border: 1.5px solid rgba(242,202,80,0.45); color: #f2ca50; border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; font-size: 1.4em; cursor: pointer; position: relative; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .power-up-btn:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(242,202,80,0.4); }
+        .power-up-btn:active { transform: scale(0.95); }
+        .power-up-badge { position: absolute; top: -3px; right: -3px; background: #e74c3c; color: white; font-size: 0.45em; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.4); border: 1.5px solid #0b1512; }
+        /* [FASE 6] Animacion shake para fichas bloqueadas al intentar clickearlas */
+        @keyframes shakeBlocked {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+        }
         /* [FASE 6] Fichas estilo Candy Crush: glossy, coloridas, con brillo y sombra */
         .vita-tile {
             position: absolute; border-radius: 12px; cursor: pointer;
