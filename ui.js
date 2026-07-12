@@ -199,6 +199,50 @@ var UI = (function() {
         return 'menu';
     }
 
+    // [FASE 6] Aplica el tema de color segun el pais. Transicion suave de 1s.
+    var bgParticlesTimer = null;
+    function applyTheme(country) {
+        var container = document.getElementById('appRoot');
+        if (!container) return;
+        // Quitar clases theme-* anteriores (sin tocar app-container).
+        var themes = ['theme-menu', 'theme-chile', 'theme-argentina', 'theme-mexico'];
+        themes.forEach(function(t) { container.classList.remove(t); });
+        container.classList.add('theme-' + (country || 'menu'));
+        // Reiniciar particulas de fondo.
+        spawnBgParticles(country);
+    }
+
+    // [FASE 6] Genera particulas decorativas de fondo segun el pais.
+    function spawnBgParticles(country) {
+        if (bgParticlesTimer) clearInterval(bgParticlesTimer);
+        var container = document.getElementById('bgParticlesContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        var colors = {
+            menu: ['#f2ca50', '#ffd700'],
+            chile: ['#ffffff', '#b8e0ec', '#5fa8c9'],
+            argentina: ['#f0b070', '#ffd700', '#ff9f43'],
+            mexico: ['#f9c74f', '#ff6b9d', '#e85d4e']
+        };
+        var palette = colors[country] || colors.menu;
+        bgParticlesTimer = setInterval(function() {
+            if (document.hidden) return;
+            var p = document.createElement('div');
+            p.className = 'bg-particle';
+            var size = 3 + Math.random() * 5;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.bottom = '-10px';
+            p.style.background = palette[Math.floor(Math.random() * palette.length)];
+            p.style.boxShadow = '0 0 8px ' + palette[0];
+            p.style.animationDuration = (6 + Math.random() * 4) + 's';
+            p.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(p);
+            setTimeout(function() { if (p.parentNode) p.remove(); }, 12000);
+        }, 800);
+    }
+
     // [FASE 1] Muestra el combo flotante sobre el tablero.
     function showComboDisplay(combo, isBonus) {
         if (!comboDisplay) {
@@ -440,10 +484,12 @@ var UI = (function() {
         currentZone = ZONES.find(function(z) { return z.id === zid; });
         // [FASE 5] Cambiar musica segun el pais de la zona.
         if (currentZone && currentZone.country) Musica.play(currentZone.country);
+        // [FASE 6] Aplicar tema de color del pais.
+        if (currentZone && currentZone.country) applyTheme(currentZone.country);
         var totalStars = currentZone.levels.reduce(function(s, l) { return s + getStars(zid, l.num); }, 0);
         var maxStars = currentZone.levels.length * 3;
         var backFn = currentZone.country === 'argentina' ? 'UI.showArgentineZones()' : currentZone.country === 'mexico' ? 'UI.showMexicanZones()' : 'UI.showChileZones()';
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">';
         html += '<button onclick="' + backFn + '" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
         html += '<span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + currentZone.icon + ' ' + currentZone.name + '</span>';
@@ -470,14 +516,14 @@ var UI = (function() {
             html += '</div>';
         });
         html += '</div></div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
     }
 
     function selectLevel(n) {
         if (shouldStartTutorial() && n === 1 && currentZone.id === 'norte') { startTutorial(currentZone.id); return; }
         var originalLevel = currentZone.levels.find(function(l) { return l.num === n; });
         currentLevel = { num: originalLevel.num, pairs: originalLevel.pairs, zoneId: currentZone.id };
-        document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b1512;text-align:center;padding:32px;">' +
+        document.getElementById('appContent').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;text-align:center;padding:32px;">' +
             '<div style="font-size:3em;margin-bottom:16px;">' + currentZone.icon + '</div>' +
             '<h2 style="color:#f2ca50;font-size:1.5em;font-weight:bold;margin-bottom:8px;">Nivel ' + currentLevel.num + '</h2>' +
             '<p style="color:rgba(255,255,255,0.5);margin-bottom:16px;">' + currentLevel.pairs + ' pares base</p>' +
@@ -500,8 +546,10 @@ var UI = (function() {
 
     function startGame(config) {
         GameEngine.init(config, currentZone.photos, traditionalTiles);
+        // [FASE 6] Mantener tema del pais durante el juego.
+        if (currentZone && currentZone.country) applyTheme(currentZone.country);
         var timeLeft = GameEngine.getTimeLeft(), pu = GameEngine.getPowerUps();
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:12px;">';
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:12px;">';
         html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
         html += '<button onclick="UI.goBackFromGame()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
         html += '<span style="color:#f2ca50;font-weight:bold;" id="pairsLeft">' + config.pairs + ' pares</span>';
@@ -521,7 +569,7 @@ var UI = (function() {
             html += '</div>';
         }
         html += '<div style="text-align:center;margin-top:8px;height:16px;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
         renderBoard();
         if (tutorialActive) showTutorialOverlay();
     }
@@ -618,8 +666,8 @@ var UI = (function() {
             var originalLevel = currentZone.levels.find(function(l) { return l.num === nextNum; });
             if (originalLevel) {
                 currentLevel = { num: originalLevel.num, pairs: originalLevel.pairs, zoneId: zoneId };
-                document.getElementById('appRoot').innerHTML =
-                    '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b1512;text-align:center;padding:32px;">' +
+                document.getElementById('appContent').innerHTML =
+                    '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;text-align:center;padding:32px;">' +
                     '<div style="font-size:3em;margin-bottom:16px;">' + currentZone.icon + '</div>' +
                     '<h2 style="color:#f2ca50;font-size:1.5em;font-weight:bold;margin-bottom:8px;">Nivel ' + currentLevel.num + '</h2>' +
                     '<p style="color:rgba(255,255,255,0.5);margin-bottom:16px;">' + currentLevel.pairs + ' pares base</p>' +
@@ -837,11 +885,13 @@ var UI = (function() {
     function showWorldMain() {
         // [FASE 5] Musica ambiental del menu.
         Musica.play('menu');
+        // [FASE 6] Tema de color del menu.
+        applyTheme('menu');
         var ts = ZONES.reduce(function(s, z) { return s + z.levels.reduce(function(ss, l) { return ss + getStars(z.id, l.num); }, 0); }, 0);
         var cpChile = Math.round((getTotalStarsForCountry('chile') / 120) * 100);
         var cpArgentina = Math.round((getTotalStarsForCountry('argentina') / 120) * 100);
         var cpMexico = Math.round((getTotalStarsForCountry('mexico') / 120) * 100);
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;overflow-y:auto;padding-bottom:70px;">';
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="height:192px;overflow:hidden;position:relative;background:linear-gradient(to bottom, transparent, #0b1512), url(https://drive.google.com/thumbnail?id=1hsx1UaDia9i7oOLdeslGtGLwl0tqUP71&sz=w800) center/cover no-repeat;">';
         html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">';
         html += '<span style="font-size:3em;">🌎</span>';
@@ -863,7 +913,7 @@ var UI = (function() {
             '</button>';
         html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;">🛒 TIENDA</button>';
         html += '</div></div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
     }
 
     function countryCard(flag, name, progress, onclick) {
@@ -877,7 +927,9 @@ var UI = (function() {
 
     function showCountryZones(country, title) {
         var zones = ZONES.filter(function(z) { return z.country === country; });
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        // [FASE 6] Aplicar tema del pais.
+        applyTheme(country);
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + title + '</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
         html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
         zones.forEach(function(z) {
@@ -885,11 +937,11 @@ var UI = (function() {
             html += '<span style="font-size:2em;">' + z.icon + '</span><span style="color:white;font-weight:bold;font-size:0.9em;">' + z.name + '</span></div>';
         });
         html += '</div></div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
     }
 
     function showAlbum() {
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🌎 Album de Viajes</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
         var countries = [
             { flag:'🇨🇱', name:'Chile', zones:['norte','centro','sur','austral'] },
@@ -912,11 +964,11 @@ var UI = (function() {
             html += '</div></div>';
         });
         html += '</div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
     }
 
     function showTienda() {
-        document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
+        document.getElementById('appContent').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
             '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🛒 Tienda</span><span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">💰 ' + coins + ' monedas</span><button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>' +
             '<p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">Compra power-ups para ayudarte.</p>' +
             '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">💡 Pista extra</span></div><button onclick="UI.comprarPowerUp(\'hint\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
@@ -996,7 +1048,7 @@ var UI = (function() {
 
     // [FASE 4] Pantalla de logros.
     function showLogros() {
-        document.getElementById('appRoot').innerHTML = Logros.renderPanel();
+        document.getElementById('appContent').innerHTML = Logros.renderPanel();
     }
 
     // [FASE 2] Reclama todas las recompensas pendientes.
