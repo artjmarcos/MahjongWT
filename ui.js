@@ -311,17 +311,20 @@ var UI = (function() {
         var w = c.clientWidth - 16, margin = 10, COLS = 6, cw = (w - margin * 2) / COLS, ch = cw * 1.45;
         var maxRow = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.row; })) : 0;
         var maxLayer = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.layer; })) : 0;
-        var nh = Math.max((maxRow + 1) * ch + margin * 2 + (maxLayer * 15) + 20, 300);
+        // [FASE 6] Mas separacion entre capas para que se distingan mejor.
+        var layerOffset = 16;
+        var nh = Math.max((maxRow + 1) * ch + margin * 2 + (maxLayer * layerOffset) + 20, 300);
         c.style.minHeight = nh + 'px'; c.innerHTML = '';
         var inner = document.createElement('div');
         inner.style.cssText = 'position:relative;width:100%;display:flex;align-items:center;justify-content:center;height:' + nh + 'px;';
         var grid = document.createElement('div');
-        grid.style.cssText = 'position:relative;width:' + (COLS * cw) + 'px;height:' + ((maxRow + 1) * ch + maxLayer * 15) + 'px;';
+        grid.style.cssText = 'position:relative;width:' + (COLS * cw) + 'px;height:' + ((maxRow + 1) * ch + maxLayer * layerOffset) + 'px;';
         vt.forEach(function(t, vidx) {
             var el = document.createElement('div'); el.className = 'vita-tile';
             if (t.bonus) el.classList.add('bonus-tile');
             el.style.left = (t.col * cw + margin) + 'px';
-            el.style.top = (t.row * ch + margin + t.layer * 12) + 'px';
+            // [FASE 6] Offset de capa mas pronunciado para profundidad 3D.
+            el.style.top = (t.row * ch + margin + t.layer * layerOffset) + 'px';
             el.style.width = (cw - 4) + 'px'; el.style.height = (ch - 4) + 'px';
             el.style.zIndex = t.layer * 100 + Math.floor(t.row * 2);
             // [FASE 5] Stagger: cada ficha cae con un pequeno delay (max 0.6s total).
@@ -337,9 +340,10 @@ var UI = (function() {
                 el.style.backgroundImage = 'url(' + t.url + ')';
                 el.style.backgroundSize = 'cover';
             } else {
-                el.style.background = 'linear-gradient(145deg, #faf5eb, #b8a880)';
-                el.style.fontSize = '1.6em'; el.style.color = '#2a1a0a';
-                el.textContent = t.symbol;
+                // [FASE 6] Ficha ceramica con simbolo colorido.
+                el.style.background = 'linear-gradient(180deg, #fff8e8 0%, #f5ecd5 50%, #e8d8b0 100%)';
+                var symbolColor = t.color || '#2a1a0a';
+                el.innerHTML = '<div class="symbol-text" style="color:' + symbolColor + ';">' + t.symbol + '</div>';
             }
             var nm = document.createElement('div'); nm.className = 'card-name';
             nm.textContent = t.name || t.symbol; el.appendChild(nm);
@@ -387,7 +391,11 @@ var UI = (function() {
                 var t = slots[i];
                 el.className = 'w-14 h-20 rounded-lg border-2 border-primary flex items-center justify-center text-xl font-bold slot-item overflow-hidden';
                 if (t.url) { el.style.backgroundImage = 'url(' + t.url + ')'; el.style.backgroundSize = 'cover'; }
-                else { el.style.background = 'linear-gradient(145deg, #f5f0e8, #d4c4a8)'; el.textContent = t.symbol; el.style.color = '#2a1a0a'; }
+                else {
+                    // [FASE 6] Slot con simbolo colorido.
+                    el.style.background = 'linear-gradient(180deg, #fff8e8 0%, #f5ecd5 50%, #e8d8b0 100%)';
+                    el.innerHTML = '<span style="font-size:1.6em;color:' + (t.color || '#2a1a0a') + ';">' + t.symbol + '</span>';
+                }
             } else { el.className = 'w-14 h-20 rounded-lg slot-empty'; el.textContent = '+'; }
         }
     }

@@ -191,38 +191,67 @@ var valparaisoPhotos = [
     { name:'Valpo 10', url:'https://drive.google.com/thumbnail?id=1Oj8J0SWtItxwpAEcvaEUo04MlrGUiJcv&sz=w400', nota:'Escaleras que conducen al cielo.' },
 ];
 
+// [FASE 6] Fichas tradicionales + nuevos simbolos coloridos tipo Candy Crush.
+// Cada ficha puede tener un "color" CSS para el simbolo (default: dorado oscuro).
 var traditionalTiles = [
-    { name:'Bambú 1', symbol:'一' },{ name:'Bambú 2', symbol:'二' },{ name:'Bambú 3', symbol:'三' },
-    { name:'Bambú 4', symbol:'四' },{ name:'Bambú 5', symbol:'五' },{ name:'Bambú 6', symbol:'六' },
-    { name:'Bambú 7', symbol:'七' },{ name:'Bambú 8', symbol:'八' },{ name:'Bambú 9', symbol:'九' },
-    { name:'Carácter 1', symbol:'一' },{ name:'Carácter 2', symbol:'二' },{ name:'Carácter 3', symbol:'三' },
-    { name:'Carácter 4', symbol:'四' },{ name:'Carácter 5', symbol:'五' },{ name:'Carácter 6', symbol:'六' },
-    { name:'Carácter 7', symbol:'七' },{ name:'Carácter 8', symbol:'八' },{ name:'Carácter 9', symbol:'九' },
-    { name:'Círculo 1', symbol:'●' },{ name:'Círculo 2', symbol:'◎' },{ name:'Círculo 3', symbol:'◉' },
-    { name:'Círculo 4', symbol:'◯' },{ name:'Círculo 5', symbol:'⬤' },{ name:'Círculo 6', symbol:'⭕' },
-    { name:'Círculo 7', symbol:'⚫' },{ name:'Círculo 8', symbol:'🔴' },{ name:'Círculo 9', symbol:'🔵' },
-    { name:'Viento Este', symbol:'東' },{ name:'Viento Sur', symbol:'南' },
-    { name:'Viento Oeste', symbol:'西' },{ name:'Viento Norte', symbol:'北' },
-    { name:'Dragón Rojo', symbol:'中' },{ name:'Dragón Verde', symbol:'發' },{ name:'Dragón Blanco', symbol:'白' },
-    { name:'Primavera', symbol:'春' },{ name:'Verano', symbol:'夏' },
-    { name:'Otoño', symbol:'秋' },{ name:'Invierno', symbol:'冬' },
-    { name:'Ciruelo', symbol:'梅' },{ name:'Orquídea', symbol:'蘭' },
-    { name:'Crisantemo', symbol:'菊' },{ name:'Bambú Flor', symbol:'竹' },
+    // Bambus (verde)
+    { name:'Bambú 1', symbol:'🎋', color:'#2d8a3e' },{ name:'Bambú 2', symbol:'🎍', color:'#2d8a3e' },
+    { name:'Bambú 3', symbol:'🌿', color:'#4ade80' },{ name:'Bambú 4', symbol:'☘️', color:'#22c55e' },
+    { name:'Bambú 5', symbol:'🌱', color:'#16a34a' },{ name:'Bambú 6', symbol:'🌴', color:'#15803d' },
+    // Caracteres chinos (rojo y dorado)
+    { name:'Fortuna', symbol:'福', color:'#dc2626' },{ name:'Riqueza', symbol:'財', color:'#d4af37' },
+    { name:'Vida', symbol:'壽', color:'#dc2626' },{ name:'Amor', symbol:'愛', color:'#e11d48' },
+    { name:'Paz', symbol:'和', color:'#0891b2' },{ name:'Felicidad', symbol:'喜', color:'#dc2626' },
+    { name:'Dragón', symbol:'龍', color:'#ea580c' },{ name:'Tigre', symbol:'虎', color:'#ca8a04' },
+    // Circulos (azul y rojo)
+    { name:'Sol', symbol:'☀️', color:'#f59e0b' },{ name:'Luna', symbol:'🌙', color:'#6366f1' },
+    { name:'Estrella', symbol:'⭐', color:'#fbbf24' },{ name:'Cometa', symbol:'☄️', color:'#8b5cf6' },
+    { name:'Planeta', symbol:'🪐', color:'#06b6d4' },{ name:'Cielo', symbol:'☁️', color:'#0ea5e9' },
+    // Vientos (azul oscuro)
+    { name:'Viento Este', symbol:'東', color:'#1e40af' },{ name:'Viento Sur', symbol:'南', color:'#1e3a8a' },
+    { name:'Viento Oeste', symbol:'西', color:'#3730a3' },{ name:'Viento Norte', symbol:'北', color:'#312e81' },
+    // Dragones (rojo, verde, blanco)
+    { name:'Dragón Rojo', symbol:'中', color:'#dc2626' },{ name:'Dragón Verde', symbol:'發', color:'#16a34a' },
+    { name:'Dragón Blanco', symbol:'白', color:'#6b7280' },
+    // Estaciones (colores pastel)
+    { name:'Primavera', symbol:'🌸', color:'#ec4899' },{ name:'Verano', symbol:'🌞', color:'#f59e0b' },
+    { name:'Otoño', symbol:'🍂', color:'#c2410c' },{ name:'Invierno', symbol:'❄️', color:'#0ea5e9' },
+    // Flores (rosa, rojo, blanco)
+    { name:'Ciruelo', symbol:'🌺', color:'#dc2626' },{ name:'Orquídea', symbol:'🪷', color:'#ec4899' },
+    { name:'Crisantemo', symbol:'🌻', color:'#f59e0b' },{ name:'Loto', symbol:'🌷', color:'#e11d48' },
+    { name:'Rosa', symbol:'🌹', color:'#be123c' },{ name:'Girasol', symbol:'🌼', color:'#eab308' },
+    // Animales (gatos como Vita Mahjong)
+    { name:'Gato Negro', symbol:'🐱', color:'#1f2937' },{ name:'Gato Naranja', symbol:'😺', color:'#ea580c' },
+    { name:'Gato Blanco', symbol:'😻', color:'#6b7280' },{ name:'León', symbol:'🦁', color:'#ca8a04' },
+    { name:'Tigre', symbol:'🐯', color:'#ea580c' },{ name:'Zorro', symbol:'🦊', color:'#c2410c' },
+    { name:'Búho', symbol:'🦉', color:'#7c3aed' },{ name:'Mariposa', symbol:'🦋', color:'#8b5cf6' },
+    // Frutas (colores vibrantes)
+    { name:'Cereza', symbol:'🍒', color:'#dc2626' },{ name:'Sandía', symbol:'🍉', color:'#16a34a' },
+    { name:'Limón', symbol:'🍋', color:'#eab308' },{ name:'Naranja', symbol:'🍊', color:'#f97316' },
+    { name:'Manzana', symbol:'🍎', color:'#dc2626' },{ name:'Fresa', symbol:'🍓', color:'#e11d48' },
+    // Objetos culturales
+    { name:'Tetera', symbol:'🫖', color:'#92400e' },{ name:'Linterna', symbol:'🏮', color:'#dc2626' },
+    { name:'Abanico', symbol:'🪭', color:'#ec4899' },{ name:'Yin Yang', symbol:'☯️', color:'#1f2937' },
+    { name:'Sello', symbol:'🔰', color:'#dc2626' },{ name:'Corazón', symbol:'💖', color:'#e11d48' },
+    // Naturaleza
+    { name:'Montaña', symbol:'⛰️', color:'#57534e' },{ name:'Volcán', symbol:'🌋', color:'#dc2626' },
+    { name:'Ola', symbol:'🌊', color:'#0284c7' },{ name:'Fuego', symbol:'🔥', color:'#ea580c' },
+    { name:'Rayo', symbol:'⚡', color:'#fbbf24' },{ name:'Arcoíris', symbol:'🌈', color:'#8b5cf6' },
 ];
 
 var ZONES = [
-    { id:'norte', name:'NORTE', icon:'🏜️', country:'chile', photos:nortePhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'centro', name:'CENTRO', icon:'🏛️', country:'chile', photos:centroPhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'sur', name:'SUR', icon:'🌋', country:'chile', photos:surPhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'austral', name:'AUSTRAL', icon:'🗻', country:'chile', photos:patagoniaPhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'argentina-norte', name:'ARG NORTE', icon:'🏜️', country:'argentina', photos:argentinaNortePhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'argentina-centro', name:'ARG CENTRO', icon:'🏛️', country:'argentina', photos:argentinaCentroPhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'argentina-patagonia', name:'ARG PATAGONIA', icon:'🗻', country:'argentina', photos:argentinaPatagoniaPhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'argentina-litoral', name:'ARG LITORAL', icon:'🌴', country:'argentina', photos:argentinaLitoralPhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'mexico-norte', name:'MX NORTE', icon:'🏜️', country:'mexico', photos:mexicoNortePhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'mexico-centro', name:'MX CENTRO', icon:'🏛️', country:'mexico', photos:mexicoCentroPhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'mexico-sur', name:'MX SUR', icon:'🌋', country:'mexico', photos:mexicoSurPhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
-    { id:'mexico-caribe', name:'MX CARIBE', icon:'🌴', country:'mexico', photos:mexicoCaribePhotos, levels:[ {num:1,pairs:6},{num:2,pairs:8},{num:3,pairs:10},{num:4,pairs:12},{num:5,pairs:14},{num:6,pairs:16},{num:7,pairs:18},{num:8,pairs:20},{num:9,pairs:24},{num:10,pairs:28} ] },
+    { id:'norte', name:'NORTE', icon:'🏜️', country:'chile', photos:nortePhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'centro', name:'CENTRO', icon:'🏛️', country:'chile', photos:centroPhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'sur', name:'SUR', icon:'🌋', country:'chile', photos:surPhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'austral', name:'AUSTRAL', icon:'🗻', country:'chile', photos:patagoniaPhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'argentina-norte', name:'ARG NORTE', icon:'🏜️', country:'argentina', photos:argentinaNortePhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'argentina-centro', name:'ARG CENTRO', icon:'🏛️', country:'argentina', photos:argentinaCentroPhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'argentina-patagonia', name:'ARG PATAGONIA', icon:'🗻', country:'argentina', photos:argentinaPatagoniaPhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'argentina-litoral', name:'ARG LITORAL', icon:'🌴', country:'argentina', photos:argentinaLitoralPhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'mexico-norte', name:'MX NORTE', icon:'🏜️', country:'mexico', photos:mexicoNortePhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'mexico-centro', name:'MX CENTRO', icon:'🏛️', country:'mexico', photos:mexicoCentroPhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'mexico-sur', name:'MX SUR', icon:'🌋', country:'mexico', photos:mexicoSurPhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
+    { id:'mexico-caribe', name:'MX CARIBE', icon:'🌴', country:'mexico', photos:mexicoCaribePhotos, levels:[ {num:1,pairs:8},{num:2,pairs:10},{num:3,pairs:14},{num:4,pairs:16},{num:5,pairs:20},{num:6,pairs:22},{num:7,pairs:26},{num:8,pairs:28},{num:9,pairs:32},{num:10,pairs:40} ] },
 ];
 
 // ========== TRIVIA CULTURAL (FASE 3) ==========

@@ -92,13 +92,13 @@ var GameEngine = (function() {
             var tradIdx = 0;
             while (pairItems.length < totalPairs) {
                 var trad = traditionalTilesList[tradIdx % traditionalTilesList.length];
-                pairItems.push({ name: trad.name, symbol: trad.symbol, type: 'ceramic' });
+                pairItems.push({ name: trad.name, symbol: trad.symbol, color: trad.color, type: 'ceramic' });
                 tradIdx++;
             }
             pairItems.forEach(function(item, pid) {
                 var fd = shouldBeFaceDown(currentLevelConfig.num), bonus = difficulty === 'dificil' && Math.random() < 0.2;
-                tiles.push({ name: item.name, url: item.url, zone: item.zone, nota: item.nota, symbol: item.symbol, type: item.type, pid: pid, matched: false, blocked: false, inSlot: false, col: 0, row: 0, layer: 0, faceDown: fd, revealed: !fd, bonus: bonus });
-                tiles.push({ name: item.name, url: item.url, zone: item.zone, nota: item.nota, symbol: item.symbol, type: item.type, pid: pid, matched: false, blocked: false, inSlot: false, col: 0, row: 0, layer: 0, faceDown: fd, revealed: !fd, bonus: bonus });
+                tiles.push({ name: item.name, url: item.url, zone: item.zone, nota: item.nota, symbol: item.symbol, color: item.color, type: item.type, pid: pid, matched: false, blocked: false, inSlot: false, col: 0, row: 0, layer: 0, faceDown: fd, revealed: !fd, bonus: bonus });
+                tiles.push({ name: item.name, url: item.url, zone: item.zone, nota: item.nota, symbol: item.symbol, color: item.color, type: item.type, pid: pid, matched: false, blocked: false, inSlot: false, col: 0, row: 0, layer: 0, faceDown: fd, revealed: !fd, bonus: bonus });
             });
             var count = {}; tiles.forEach(function(t) { count[t.pid] = (count[t.pid] || 0) + 1; });
             var allPairsOk = Object.values(count).every(function(c) { return c === 2; });
@@ -143,12 +143,27 @@ var GameEngine = (function() {
     }
 
     // [FIX BUG #11] Layout separado en funcion para reutilizar en useShuffle.
+    // [FASE 6] Layout escalable: 2 capas para niveles pequenos, 3 capas para niveles grandes.
     function layoutTiles(tileArr) {
-        var totalTiles = tileArr.length, colsBase = 6, rowsBase = Math.ceil(totalTiles * 0.7 / colsBase);
-        var tilesLayer0 = Math.min(totalTiles, colsBase * rowsBase), tilesLayer1 = totalTiles - tilesLayer0, colsLayer1 = 4, offsetCol = Math.floor((colsBase - colsLayer1) / 2);
+        var totalTiles = tileArr.length, colsBase = 6;
+        // Distribucion: 60% capa 0, 28% capa 1, 12% capa 2 (para niveles grandes).
+        var tilesLayer0, tilesLayer1, tilesLayer2;
+        if (totalTiles > 30) {
+            tilesLayer0 = Math.floor(totalTiles * 0.6);
+            tilesLayer1 = Math.floor(totalTiles * 0.28);
+            tilesLayer2 = totalTiles - tilesLayer0 - tilesLayer1;
+        } else {
+            tilesLayer0 = Math.floor(totalTiles * 0.7);
+            tilesLayer1 = totalTiles - tilesLayer0;
+            tilesLayer2 = 0;
+        }
+        var rowsBase = Math.ceil(tilesLayer0 / colsBase);
+        var colsLayer1 = 4, offsetCol1 = Math.floor((colsBase - colsLayer1) / 2);
+        var colsLayer2 = 3, offsetCol2 = Math.floor((colsBase - colsLayer2) / 2);
         var idx = 0;
         for (var k = 0; k < tilesLayer0; k++) { tileArr[idx].col = k % colsBase; tileArr[idx].row = Math.floor(k / colsBase); tileArr[idx].layer = 0; idx++; }
-        for (var m = 0; m < tilesLayer1; m++) { tileArr[idx].col = offsetCol + (m % colsLayer1); tileArr[idx].row = Math.floor(m / colsLayer1); tileArr[idx].layer = 1; idx++; }
+        for (var m = 0; m < tilesLayer1; m++) { tileArr[idx].col = offsetCol1 + (m % colsLayer1); tileArr[idx].row = Math.floor(m / colsLayer1); tileArr[idx].layer = 1; idx++; }
+        for (var n = 0; n < tilesLayer2; n++) { tileArr[idx].col = offsetCol2 + (n % colsLayer2); tileArr[idx].row = Math.floor(n / colsLayer2); tileArr[idx].layer = 2; idx++; }
     }
 
     // [FIX BUG #1] Calculo correcto del shift del slot.idx tras eliminar 2 fichas.
@@ -307,7 +322,7 @@ var GameEngine = (function() {
             if (slots.length >= MAX_SLOTS) return false;
             if (t.faceDown && !t.revealed) t.revealed = true;
             sound.select(); t.inSlot = true;
-            slots.push({ name: t.name, url: t.url, zone: t.zone, nota: t.nota, symbol: t.symbol, type: t.type, pid: t.pid, idx: index, bonus: t.bonus });
+            slots.push({ name: t.name, url: t.url, zone: t.zone, nota: t.nota, symbol: t.symbol, color: t.color, type: t.type, pid: t.pid, idx: index, bonus: t.bonus });
             selectedTileIdx = index; updateBlocked(); checkForMatchInSlots();
             // [FEATURE #1] Tras cada click, verificar si el tablero quedo insoluble y auto-shuffle.
             autoUnstickIfNeeded();
