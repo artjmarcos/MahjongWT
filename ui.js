@@ -443,15 +443,15 @@ var UI = (function() {
             if (i < slots.length) {
                 var t = slots[i];
                 el.className = 'rounded-lg border-2 border-primary flex items-center justify-center text-xl font-bold slot-item overflow-hidden';
-                el.style.width = '64px'; el.style.height = '92px';
+                el.style.width = '52px'; el.style.height = '72px';
                 if (t.url) { el.style.backgroundImage = 'url(' + t.url + ')'; el.style.backgroundSize = 'cover'; }
                 else {
                     el.style.background = 'linear-gradient(180deg, #fff8e8 0%, #f5ecd5 50%, #e8d8b0 100%)';
-                    el.innerHTML = '<span style="font-size:2em;color:' + (t.color || '#2a1a0a') + ';">' + t.symbol + '</span>';
+                    el.innerHTML = '<span style="font-size:1.6em;color:' + (t.color || '#2a1a0a') + ';">' + t.symbol + '</span>';
                 }
             } else {
                 el.className = 'rounded-lg slot-empty';
-                el.style.width = '64px'; el.style.height = '92px';
+                el.style.width = '52px'; el.style.height = '72px';
                 el.textContent = '+';
             }
         }
@@ -559,18 +559,23 @@ var UI = (function() {
         // [FASE 6] Mantener tema del pais durante el juego.
         if (currentZone && currentZone.country) applyTheme(currentZone.country);
         var timeLeft = GameEngine.getTimeLeft(), pu = GameEngine.getPowerUps();
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:12px;">';
-        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
-        html += '<button onclick="UI.goBackFromGame()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
-        html += '<span style="color:#f2ca50;font-weight:bold;" id="pairsLeft">' + config.pairs + ' pares</span>';
-        if (timeLeft > 0) html += '<span style="color:white;font-weight:bold;" id="timerDisplay">' + timeLeft + 's</span>';
+        // [FASE 6] Layout compacto: padding y margenes reducidos para que entren los power-ups.
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:8px;">';
+        // Header mas compacto
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-shrink:0;">';
+        html += '<button onclick="UI.goBackFromGame()" style="color:white;background:none;border:none;font-size:1.4em;cursor:pointer;">←</button>';
+        html += '<span style="color:#f2ca50;font-weight:bold;font-size:0.95em;" id="pairsLeft">' + config.pairs + ' pares</span>';
+        if (timeLeft > 0) html += '<span style="color:white;font-weight:bold;font-size:0.95em;" id="timerDisplay">' + timeLeft + 's</span>';
         html += '</div>';
-        html += '<div style="display:flex;gap:4px;margin-bottom:8px;justify-content:center;" id="slotsContainer">';
-        for (var i = 0; i < 4; i++) html += '<div class="slot-empty" id="slot-' + i + '" style="width:64px;height:92px;">+</div>';
+        // Slots mas pequenos
+        html += '<div style="display:flex;gap:4px;margin-bottom:6px;justify-content:center;flex-shrink:0;" id="slotsContainer">';
+        for (var i = 0; i < 4; i++) html += '<div class="slot-empty" id="slot-' + i + '" style="width:52px;height:72px;font-size:1.2em;">+</div>';
         html += '</div>';
-        html += '<div style="flex:1;background:rgba(0,0,0,0.2);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;min-height:300px;" id="boardContainer"></div>';
+        // Board con flex:1 pero min-height reducido y overflow auto para scroll si hace falta
+        html += '<div style="flex:1;background:rgba(0,0,0,0.2);border-radius:12px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;min-height:180px;" id="boardContainer"></div>';
+        // Power-ups siempre visibles, flex-shrink:0 para que no se oculten
         if (!tutorialActive) {
-            html += '<div style="display:flex;justify-content:center;gap:12px;margin-top:12px;">';
+            html += '<div style="display:flex;justify-content:center;gap:10px;margin-top:8px;flex-shrink:0;">';
             html += '<button onclick="UI.useHint()" class="power-up-btn">💡<span class="power-up-badge" id="hintBadge">' + pu.hintUses + '</span></button>';
             html += '<button onclick="UI.useShuffle()" class="power-up-btn">🔀<span class="power-up-badge" id="shuffleBadge">' + pu.shuffleUses + '</span></button>';
             html += '<button onclick="UI.undoLastSelection()" class="power-up-btn">↩️<span class="power-up-badge" id="undoBadge">' + pu.undoUses + '</span></button>';
@@ -578,7 +583,7 @@ var UI = (function() {
             html += '<button onclick="UI.toggleMusica()" class="power-up-btn" id="musicaToggleBtn" title="Musica: ' + (Musica.isEnabled() ? 'ON' : 'OFF') + '" style="font-size:0.9em;opacity:' + (Musica.isEnabled() ? '1' : '0.5') + ';">' + (Musica.isEnabled() ? '🔊' : '🔇') + '</button>';
             html += '</div>';
         }
-        html += '<div style="text-align:center;margin-top:8px;height:16px;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
+        html += '<div style="text-align:center;margin-top:6px;height:16px;flex-shrink:0;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
         document.getElementById('appContent').innerHTML = html;
         renderBoard();
         if (tutorialActive) showTutorialOverlay();
