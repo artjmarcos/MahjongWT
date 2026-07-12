@@ -308,11 +308,11 @@ var UI = (function() {
         var tiles = GameEngine.getTiles();
         var vt = tiles.filter(function(t) { return !t.matched && !t.inSlot; });
         if (vt.length === 0) { c.innerHTML = ''; return; }
-        var w = c.clientWidth - 16, margin = 10, COLS = 6, cw = (w - margin * 2) / COLS, ch = cw * 1.45;
+        // [FASE 6] 5 columnas en vez de 6 para fichas mas grandes. Aspect ratio 1.5 (mas altas).
+        var w = c.clientWidth - 16, margin = 8, COLS = 5, cw = (w - margin * 2) / COLS, ch = cw * 1.5;
         var maxRow = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.row; })) : 0;
         var maxLayer = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.layer; })) : 0;
-        // [FASE 6] Mas separacion entre capas para que se distingan mejor.
-        var layerOffset = 16;
+        var layerOffset = 18;
         var nh = Math.max((maxRow + 1) * ch + margin * 2 + (maxLayer * layerOffset) + 20, 300);
         c.style.minHeight = nh + 'px'; c.innerHTML = '';
         var inner = document.createElement('div');
@@ -323,7 +323,6 @@ var UI = (function() {
             var el = document.createElement('div'); el.className = 'vita-tile';
             if (t.bonus) el.classList.add('bonus-tile');
             el.style.left = (t.col * cw + margin) + 'px';
-            // [FASE 6] Offset de capa mas pronunciado para profundidad 3D.
             el.style.top = (t.row * ch + margin + t.layer * layerOffset) + 'px';
             el.style.width = (cw - 4) + 'px'; el.style.height = (ch - 4) + 'px';
             el.style.zIndex = t.layer * 100 + Math.floor(t.row * 2);
@@ -389,14 +388,18 @@ var UI = (function() {
             el.innerHTML = ''; el.style.backgroundImage = '';
             if (i < slots.length) {
                 var t = slots[i];
-                el.className = 'w-14 h-20 rounded-lg border-2 border-primary flex items-center justify-center text-xl font-bold slot-item overflow-hidden';
+                el.className = 'rounded-lg border-2 border-primary flex items-center justify-center text-xl font-bold slot-item overflow-hidden';
+                el.style.width = '64px'; el.style.height = '92px';
                 if (t.url) { el.style.backgroundImage = 'url(' + t.url + ')'; el.style.backgroundSize = 'cover'; }
                 else {
-                    // [FASE 6] Slot con simbolo colorido.
                     el.style.background = 'linear-gradient(180deg, #fff8e8 0%, #f5ecd5 50%, #e8d8b0 100%)';
-                    el.innerHTML = '<span style="font-size:1.6em;color:' + (t.color || '#2a1a0a') + ';">' + t.symbol + '</span>';
+                    el.innerHTML = '<span style="font-size:2em;color:' + (t.color || '#2a1a0a') + ';">' + t.symbol + '</span>';
                 }
-            } else { el.className = 'w-14 h-20 rounded-lg slot-empty'; el.textContent = '+'; }
+            } else {
+                el.className = 'rounded-lg slot-empty';
+                el.style.width = '64px'; el.style.height = '92px';
+                el.textContent = '+';
+            }
         }
     }
 
@@ -404,7 +407,12 @@ var UI = (function() {
 
     function showZoomAndNote(photo) {
         var overlay = document.createElement('div'); overlay.className = 'zoom-overlay';
-        overlay.innerHTML = '<img src="' + photo.url + '" class="zoom-image" alt="' + photo.name + '" onerror="this.style.display=\'none\'"><div class="zoom-note"><h3 style="color:#f2ca50;font-size:1.2em;font-weight:bold;margin-bottom:8px;">' + photo.name + '</h3><p style="color:white;">' + (photo.nota || 'Un rincon magico.') + '</p></div><button onclick="this.parentElement.remove()" style="margin-top:16px;padding:8px 24px;border-radius:12px;background:rgba(255,255,255,0.1);color:white;">Cerrar</button>';
+        overlay.innerHTML = '<img src="' + photo.url + '" class="zoom-image" alt="' + photo.name + '" onerror="this.style.display=\'none\'">' +
+            '<div class="zoom-note">' +
+                '<h3 style="color:#f2ca50;font-size:1.4em;font-weight:bold;margin-bottom:12px;text-shadow:0 2px 8px rgba(242,202,80,0.4);">' + photo.name + '</h3>' +
+                '<p style="color:white;font-size:1.05em;line-height:1.5;font-style:italic;">' + (photo.nota || 'Un rincon magico.') + '</p>' +
+            '</div>' +
+            '<button onclick="this.parentElement.remove()" style="margin-top:20px;padding:10px 32px;border-radius:12px;background:linear-gradient(180deg,#f2ca50 0%,#d4af37 100%);color:#241a00;font-weight:bold;font-size:1em;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(242,202,80,0.3);">Cerrar</button>';
         document.body.appendChild(overlay);
         overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
     }
@@ -500,7 +508,7 @@ var UI = (function() {
         if (timeLeft > 0) html += '<span style="color:white;font-weight:bold;" id="timerDisplay">' + timeLeft + 's</span>';
         html += '</div>';
         html += '<div style="display:flex;gap:4px;margin-bottom:8px;justify-content:center;" id="slotsContainer">';
-        for (var i = 0; i < 4; i++) html += '<div class="slot-empty" id="slot-' + i + '" style="width:56px;height:80px;">+</div>';
+        for (var i = 0; i < 4; i++) html += '<div class="slot-empty" id="slot-' + i + '" style="width:64px;height:92px;">+</div>';
         html += '</div>';
         html += '<div style="flex:1;background:rgba(0,0,0,0.2);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;min-height:300px;" id="boardContainer"></div>';
         if (!tutorialActive) {

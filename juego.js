@@ -144,9 +144,9 @@ var GameEngine = (function() {
 
     // [FIX BUG #11] Layout separado en funcion para reutilizar en useShuffle.
     // [FASE 6] Layout escalable: 2 capas para niveles pequenos, 3 capas para niveles grandes.
+    // 5 columnas en la base para fichas mas grandes.
     function layoutTiles(tileArr) {
-        var totalTiles = tileArr.length, colsBase = 6;
-        // Distribucion: 60% capa 0, 28% capa 1, 12% capa 2 (para niveles grandes).
+        var totalTiles = tileArr.length, colsBase = 5;
         var tilesLayer0, tilesLayer1, tilesLayer2;
         if (totalTiles > 30) {
             tilesLayer0 = Math.floor(totalTiles * 0.6);
@@ -158,7 +158,7 @@ var GameEngine = (function() {
             tilesLayer2 = 0;
         }
         var rowsBase = Math.ceil(tilesLayer0 / colsBase);
-        var colsLayer1 = 4, offsetCol1 = Math.floor((colsBase - colsLayer1) / 2);
+        var colsLayer1 = 3, offsetCol1 = Math.floor((colsBase - colsLayer1) / 2);
         var colsLayer2 = 3, offsetCol2 = Math.floor((colsBase - colsLayer2) / 2);
         var idx = 0;
         for (var k = 0; k < tilesLayer0; k++) { tileArr[idx].col = k % colsBase; tileArr[idx].row = Math.floor(k / colsBase); tileArr[idx].layer = 0; idx++; }

@@ -64,7 +64,7 @@
             background: linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.1) 70%, transparent 100%);
             border-radius: 10px 10px 50% 50%; pointer-events: none; z-index: 4;
         }
-        .vita-tile .card-name { position: absolute; bottom: 3px; left: 3px; right: 3px; background: rgba(0,0,0,0.75); color: #fff; font-size: 0.38em; text-align: center; padding: 1px 3px; border-radius: 0 0 8px 8px; z-index: 6; font-weight: 700; letter-spacing: 0.3px; }
+        .vita-tile .card-name { position: absolute; bottom: 3px; left: 3px; right: 3px; background: rgba(0,0,0,0.78); color: #fff; font-size: 0.42em; text-align: center; padding: 2px 4px; border-radius: 0 0 8px 8px; z-index: 6; font-weight: 700; letter-spacing: 0.3px; line-height: 1.1; }
         .vita-tile.blocked {
             filter: brightness(0.3) saturate(0.3) grayscale(0.5);
             cursor: not-allowed;
@@ -95,15 +95,17 @@
         }
         @keyframes selectedGlow { 0%,100%{box-shadow:0 0 30px rgba(242,202,80,0.95),0 0 60px rgba(242,202,80,0.5)} 50%{box-shadow:0 0 45px rgba(242,202,80,1),0 0 80px rgba(242,202,80,0.7)} }
         /* [FASE 6] Colores tematicos para simbolos ceramicos */
-        .vita-tile .symbol-text { font-size: 1.7em; line-height: 1; text-shadow: 0 2px 3px rgba(0,0,0,0.2); z-index: 5; }
+        .vita-tile .symbol-text { font-size: 2.1em; line-height: 1; text-shadow: 0 2px 3px rgba(0,0,0,0.25); z-index: 5; }
         .slot-item { animation: slotPop 0.4s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); border-radius: 8px; overflow: hidden; }
         .slot-empty { background: rgba(255,255,255,0.08); border: 2px dashed rgba(255,255,255,0.4); color: rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold; border-radius: 8px; }
         @keyframes slotPop { 0%{transform:scale(0.4) translateY(-30px);opacity:0} 100%{transform:scale(1);opacity:1} }
         .particle { position: absolute; pointer-events: none; z-index: 100; animation: particleBurst 0.8s ease-out forwards; font-size: 16px; font-weight: bold; color: #f2ca50; }
         @keyframes particleBurst { 0%{transform:translate(0,0) scale(1);opacity:1} 100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0} }
-        .zoom-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 400; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .zoom-image { width: 80%; max-width: 350px; border-radius: 16px; object-fit: cover; border: 2px solid #f2ca50; }
-        .zoom-note { color: white; text-align: center; padding: 1rem; font-size: 0.9rem; max-width: 350px; }
+        .zoom-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 400; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .zoom-image { width: 85%; max-width: 380px; border-radius: 16px; object-fit: cover; border: 2px solid #f2ca50; box-shadow: 0 8px 32px rgba(0,0,0,0.6); }
+        .zoom-note { color: white; text-align: center; padding: 1.2rem; font-size: 1.05rem; max-width: 380px; line-height: 1.5; }
+        .zoom-note h3 { font-size: 1.3em !important; margin-bottom: 10px !important; }
+        .zoom-note p { font-size: 1em !important; line-height: 1.5; }
         #ad-banner { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 70; background: rgba(0,0,0,0.8); width: 100%; max-width: 440px; display: flex; justify-content: center; align-items: center; min-height: 50px; }
         .memorice-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 400; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .memorice-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 340px; width: 100%; }
