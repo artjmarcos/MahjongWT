@@ -243,6 +243,38 @@ var UI = (function() {
         }, 800);
     }
 
+    // [FASE 6] Voltea visualmente una ficha boca abajo con animacion 3D flip.
+    function flipTileVisual(el, t) {
+        if (!el) return;
+        // Aplicar animacion de volteo.
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = 'flipReveal 0.5s ease-in-out';
+        // A mitad de la animacion (cuando la ficha esta "de canto"), actualizar el contenido.
+        setTimeout(function() {
+            // Reconstruir el contenido como en renderBoard.
+            if (t.type === 'photo') {
+                el.style.background = '';
+                el.style.backgroundImage = 'url(' + t.url + ')';
+                el.style.backgroundSize = 'cover';
+                el.innerHTML = '';
+            } else {
+                el.style.background = 'linear-gradient(180deg, #fff8e8 0%, #f5ecd5 50%, #e8d8b0 100%)';
+                var symbolColor = t.color || '#2a1a0a';
+                el.innerHTML = '<div class="symbol-text" style="color:' + symbolColor + ';">' + t.symbol + '</div>';
+            }
+            // Agregar el nombre (ahora que esta revelada).
+            var nm = document.createElement('div'); nm.className = 'card-name';
+            nm.textContent = t.name || t.symbol;
+            el.appendChild(nm);
+            // Asegurar que tenga la clase correcta (free o blocked).
+            if (t.blocked) { el.classList.remove('free'); el.classList.add('blocked'); }
+            else { el.classList.remove('blocked'); el.classList.add('free'); }
+        }, 250);  // mitad de 0.5s
+        // Quitar la animacion al terminar.
+        setTimeout(function() { el.style.animation = ''; }, 550);
+    }
+
     // [FASE 1] Muestra el combo flotante sobre el tablero.
     function showComboDisplay(combo, isBonus) {
         if (!comboDisplay) {
@@ -416,13 +448,22 @@ var UI = (function() {
                 if (idx < 0 || idx >= allTiles.length || allTiles[idx] !== t) return;
                 // [FASE 6] Verificar bloqueo explicitamente: si esta bloqueada, feedback de error.
                 if (t.blocked) {
-                    // Feedback: vibracion corta + shake de la ficha.
                     haptic(20);
                     el.style.animation = 'none';
                     void el.offsetWidth;
                     el.style.animation = 'shakeBlocked 0.3s ease';
                     setTimeout(function() { el.style.animation = ''; }, 350);
                     showMessage('🔒 Ficha bloqueada');
+                    return;
+                }
+                // [FASE 6] Si la ficha esta boca abajo, PRIMERO revelarla (no mandar al slot).
+                // El segundo click (ya revelada) recien la manda al slot.
+                if (t.faceDown && !t.revealed) {
+                    t.revealed = true;
+                    haptic(15);
+                    GameEngine.playRevealSound();
+                    // Animar el volteo y actualizar el contenido de la ficha.
+                    flipTileVisual(el, t);
                     return;
                 }
                 GameEngine.onTileClick(idx);

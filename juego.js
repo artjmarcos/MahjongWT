@@ -54,7 +54,12 @@ var GameEngine = (function() {
         error: function() { playTone(180, 0.3, 'square', 0.06); },
         victory: function() { [523,659,784,1047].forEach(function(f,i) { setTimeout(function() { playTone(f, 0.4, 'sine', 0.3); }, i*200); }); },
         shuffle: function() { playTone(440, 0.2, 'triangle', 0.12); },
-        hint: function() { playTone(880, 0.15, 'sine', 0.18); }
+        hint: function() { playTone(880, 0.15, 'sine', 0.18); },
+        // [FASE 6] Sonido de revelar ficha: dos tonos ascendentes suaves.
+        reveal: function() {
+            playTone(440, 0.08, 'sine', 0.10);
+            setTimeout(function() { playTone(660, 0.10, 'sine', 0.12); }, 60);
+        }
     };
 
     // [FIX BUG #10] Solo considera "encima" a una ficha en la MISMA col/row (capa superior).
@@ -323,7 +328,12 @@ var GameEngine = (function() {
         onTileClick: function(index) {
             var t = tiles[index]; if (!t || t.matched || t.blocked || t.inSlot) return false;
             if (slots.length >= MAX_SLOTS) return false;
-            if (t.faceDown && !t.revealed) t.revealed = true;
+            // [FASE 6] Si la ficha esta boca abajo, NO mandarla al slot (la UI la revela primero).
+            // Retornar false para que la UI sepa que no se proceso, y revelar manualmente.
+            if (t.faceDown && !t.revealed) {
+                t.revealed = true;
+                return false;  // la UI debe manejar el volteo visual
+            }
             sound.select(); t.inSlot = true;
             slots.push({ name: t.name, url: t.url, zone: t.zone, nota: t.nota, symbol: t.symbol, color: t.color, type: t.type, pid: t.pid, idx: index, bonus: t.bonus });
             selectedTileIdx = index; updateBlocked(); checkForMatchInSlots();
@@ -379,6 +389,8 @@ var GameEngine = (function() {
         setOnStateChange: function(callback) { onStateChange = callback; },
         isGameOver: function() { return tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0; },
         getCombo: function() { return combo; },
+        // [FASE 6] Reproduce el sonido de revelar ficha (para fichas boca abajo).
+        playRevealSound: function() { sound.reveal(); },
         stopTimer: function() { if (timerInterval) clearInterval(timerInterval); },
         // [FEATURE #1] Expuesto para que la UI pueda verificar y mostrar aviso.
         isBoardStuck: function() { return isBoardStuck(); },
