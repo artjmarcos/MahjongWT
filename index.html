@@ -65,7 +65,18 @@
             border-radius: 10px 10px 50% 50%; pointer-events: none; z-index: 4;
         }
         .vita-tile .card-name { position: absolute; bottom: 3px; left: 3px; right: 3px; background: rgba(0,0,0,0.75); color: #fff; font-size: 0.38em; text-align: center; padding: 1px 3px; border-radius: 0 0 8px 8px; z-index: 6; font-weight: 700; letter-spacing: 0.3px; }
-        .vita-tile.blocked { filter: brightness(0.4) saturate(0.5); cursor: not-allowed; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .vita-tile.blocked {
+            filter: brightness(0.3) saturate(0.3) grayscale(0.5);
+            cursor: not-allowed;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.4);
+            border-color: rgba(0,0,0,0.5) !important;
+        }
+        .vita-tile.blocked::before {
+            content: '🔒'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); font-size: 0.9em; opacity: 0.6;
+            z-index: 7; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
+        }
+        .vita-tile.blocked .symbol-text, .vita-tile.blocked .card-name { opacity: 0.3; }
         .vita-tile.free {
             filter: brightness(1.08) saturate(1.15);
             box-shadow: 0 6px 14px rgba(0,0,0,0.5), 0 0 18px rgba(242,202,80,0.35), inset 0 -3px 0 rgba(139,105,20,0.2);
