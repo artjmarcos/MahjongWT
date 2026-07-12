@@ -71,10 +71,13 @@ var GameEngine = (function() {
         var active = tiles.filter(function(t) { return !t.matched && !t.inSlot; });
         tiles.forEach(function(t) { if (t.matched || t.inSlot) { t.blocked = false; return; } t.blocked = !isTileFree(t, active); });
     }
+    // [FASE 6] Fichas boca abajo: desde nivel 4 en normal y dificil. Nunca en facil.
     function shouldBeFaceDown(levelNum) {
         if (difficulty === 'facil') return false;
-        if (difficulty === 'dificil') return levelNum >= 4 ? Math.random() < 0.6 : false;
-        return levelNum >= 6 ? Math.random() < 0.5 : false;
+        if (levelNum < 4) return false;
+        if (difficulty === 'dificil') return Math.random() < 0.55;
+        if (difficulty === 'normal') return levelNum >= 6 ? Math.random() < 0.45 : Math.random() < 0.3;
+        return false;
     }
     function createTiles(zonePhotos, traditionalTilesList) {
         var attempts = 0;

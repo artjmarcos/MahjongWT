@@ -377,8 +377,15 @@ var UI = (function() {
             el.setAttribute('data-index', td);
             el.setAttribute('data-pid', t.pid);
             if (t.faceDown && !t.revealed) {
-                el.style.background = 'linear-gradient(145deg, #1a3a2a, #0d2518)';
-                el.innerHTML = '<div style="font-size:2em;color:rgba(242,202,80,0.4);">🪭</div>';
+                // [FASE 6] Ficha boca abajo: patron decorativo, SIN nombre.
+                el.style.background = 'linear-gradient(145deg, #1a3a2a 0%, #0d2518 50%, #1a3a2a 100%)';
+                el.innerHTML = '<div style="position:absolute;inset:6px;border:1.5px solid rgba(242,202,80,0.35);border-radius:8px;display:flex;align-items:center;justify-content:center;">' +
+                    '<div style="font-size:1.8em;color:rgba(242,202,80,0.5);filter:drop-shadow(0 0 4px rgba(242,202,80,0.3));">🪭</div>' +
+                    '</div>' +
+                    '<div style="position:absolute;top:4px;left:4px;width:6px;height:6px;border-top:1.5px solid rgba(242,202,80,0.4);border-left:1.5px solid rgba(242,202,80,0.4);"></div>' +
+                    '<div style="position:absolute;top:4px;right:4px;width:6px;height:6px;border-top:1.5px solid rgba(242,202,80,0.4);border-right:1.5px solid rgba(242,202,80,0.4);"></div>' +
+                    '<div style="position:absolute;bottom:4px;left:4px;width:6px;height:6px;border-bottom:1.5px solid rgba(242,202,80,0.4);border-left:1.5px solid rgba(242,202,80,0.4);"></div>' +
+                    '<div style="position:absolute;bottom:4px;right:4px;width:6px;height:6px;border-bottom:1.5px solid rgba(242,202,80,0.4);border-right:1.5px solid rgba(242,202,80,0.4);"></div>';
             } else if (t.type === 'photo') {
                 el.style.backgroundImage = 'url(' + t.url + ')';
                 el.style.backgroundSize = 'cover';
@@ -388,8 +395,11 @@ var UI = (function() {
                 var symbolColor = t.color || '#2a1a0a';
                 el.innerHTML = '<div class="symbol-text" style="color:' + symbolColor + ';">' + t.symbol + '</div>';
             }
-            var nm = document.createElement('div'); nm.className = 'card-name';
-            nm.textContent = t.name || t.symbol; el.appendChild(nm);
+            // [FASE 6] Solo mostrar nombre si la ficha esta revelada (no boca abajo).
+            if (!t.faceDown || t.revealed) {
+                var nm = document.createElement('div'); nm.className = 'card-name';
+                nm.textContent = t.name || t.symbol; el.appendChild(nm);
+            }
             if (t.blocked) el.classList.add('blocked'); else el.classList.add('free');
             if (isSel) el.classList.add('selected-card');
             el.style.touchAction = 'manipulation';
