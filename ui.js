@@ -199,6 +199,82 @@ var UI = (function() {
         return 'menu';
     }
 
+    // [FASE 6] Aplica el tema de color segun el pais. Transicion suave de 1s.
+    var bgParticlesTimer = null;
+    function applyTheme(country) {
+        var container = document.getElementById('appRoot');
+        if (!container) return;
+        // Quitar clases theme-* anteriores (sin tocar app-container).
+        var themes = ['theme-menu', 'theme-chile', 'theme-argentina', 'theme-mexico'];
+        themes.forEach(function(t) { container.classList.remove(t); });
+        container.classList.add('theme-' + (country || 'menu'));
+        // Reiniciar particulas de fondo.
+        spawnBgParticles(country);
+    }
+
+    // [FASE 6] Genera particulas decorativas de fondo segun el pais.
+    function spawnBgParticles(country) {
+        if (bgParticlesTimer) clearInterval(bgParticlesTimer);
+        var container = document.getElementById('bgParticlesContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        var colors = {
+            menu: ['#f2ca50', '#ffd700'],
+            chile: ['#ffffff', '#b8e0ec', '#5fa8c9'],
+            argentina: ['#f0b070', '#ffd700', '#ff9f43'],
+            mexico: ['#f9c74f', '#ff6b9d', '#e85d4e']
+        };
+        var palette = colors[country] || colors.menu;
+        bgParticlesTimer = setInterval(function() {
+            if (document.hidden) return;
+            var p = document.createElement('div');
+            p.className = 'bg-particle';
+            var size = 3 + Math.random() * 5;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.bottom = '-10px';
+            p.style.background = palette[Math.floor(Math.random() * palette.length)];
+            p.style.boxShadow = '0 0 8px ' + palette[0];
+            p.style.animationDuration = (6 + Math.random() * 4) + 's';
+            p.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(p);
+            setTimeout(function() { if (p.parentNode) p.remove(); }, 12000);
+        }, 800);
+    }
+
+    // [FASE 6] Voltea visualmente una ficha boca abajo con animacion 3D flip.
+    function flipTileVisual(el, t) {
+        if (!el) return;
+        // Aplicar animacion de volteo.
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = 'flipReveal 0.5s ease-in-out';
+        // A mitad de la animacion (cuando la ficha esta "de canto"), actualizar el contenido.
+        setTimeout(function() {
+            // Reconstruir el contenido como en renderBoard.
+            if (t.type === 'photo') {
+                el.style.background = '';
+                el.style.backgroundImage = 'url(' + t.url + ')';
+                el.style.backgroundSize = 'cover';
+                el.innerHTML = '';
+            } else {
+                el.style.background = 'linear-gradient(180deg, #fff8e8 0%, #f5ecd5 50%, #e8d8b0 100%)';
+                var symbolColor = t.color || '#2a1a0a';
+                el.innerHTML = '<div class="symbol-text" style="color:' + symbolColor + ';">' + t.symbol + '</div>';
+            }
+            // Agregar el nombre (ahora que esta revelada).
+            var nm = document.createElement('div'); nm.className = 'card-name';
+            nm.textContent = t.name || t.symbol;
+            el.appendChild(nm);
+            // Asegurar que tenga la clase correcta (free o blocked).
+            if (t.blocked) { el.classList.remove('free'); el.classList.add('blocked'); }
+            else { el.classList.remove('blocked'); el.classList.add('free'); }
+        }, 250);  // mitad de 0.5s
+        // Quitar la animacion al terminar.
+        setTimeout(function() { el.style.animation = ''; }, 550);
+    }
+
     // [FASE 1] Muestra el combo flotante sobre el tablero.
     function showComboDisplay(combo, isBonus) {
         if (!comboDisplay) {
@@ -308,20 +384,22 @@ var UI = (function() {
         var tiles = GameEngine.getTiles();
         var vt = tiles.filter(function(t) { return !t.matched && !t.inSlot; });
         if (vt.length === 0) { c.innerHTML = ''; return; }
-        var w = c.clientWidth - 16, margin = 10, COLS = 6, cw = (w - margin * 2) / COLS, ch = cw * 1.45;
+        // [FASE 6] 6 columnas para fichas mas pequenas y power-ups mas visibles. Aspect ratio 1.45.
+        var w = c.clientWidth - 12, margin = 6, COLS = 6, cw = (w - margin * 2) / COLS, ch = cw * 1.45;
         var maxRow = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.row; })) : 0;
         var maxLayer = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.layer; })) : 0;
-        var nh = Math.max((maxRow + 1) * ch + margin * 2 + (maxLayer * 15) + 20, 300);
+        var layerOffset = 14;
+        var nh = Math.max((maxRow + 1) * ch + margin * 2 + (maxLayer * layerOffset) + 20, 300);
         c.style.minHeight = nh + 'px'; c.innerHTML = '';
         var inner = document.createElement('div');
         inner.style.cssText = 'position:relative;width:100%;display:flex;align-items:center;justify-content:center;height:' + nh + 'px;';
         var grid = document.createElement('div');
-        grid.style.cssText = 'position:relative;width:' + (COLS * cw) + 'px;height:' + ((maxRow + 1) * ch + maxLayer * 15) + 'px;';
+        grid.style.cssText = 'position:relative;width:' + (COLS * cw) + 'px;height:' + ((maxRow + 1) * ch + maxLayer * layerOffset) + 'px;';
         vt.forEach(function(t, vidx) {
             var el = document.createElement('div'); el.className = 'vita-tile';
             if (t.bonus) el.classList.add('bonus-tile');
             el.style.left = (t.col * cw + margin) + 'px';
-            el.style.top = (t.row * ch + margin + t.layer * 12) + 'px';
+            el.style.top = (t.row * ch + margin + t.layer * layerOffset) + 'px';
             el.style.width = (cw - 4) + 'px'; el.style.height = (ch - 4) + 'px';
             el.style.zIndex = t.layer * 100 + Math.floor(t.row * 2);
             // [FASE 5] Stagger: cada ficha cae con un pequeno delay (max 0.6s total).
@@ -331,34 +409,64 @@ var UI = (function() {
             el.setAttribute('data-index', td);
             el.setAttribute('data-pid', t.pid);
             if (t.faceDown && !t.revealed) {
-                el.style.background = 'linear-gradient(145deg, #1a3a2a, #0d2518)';
-                el.innerHTML = '<div style="font-size:2em;color:rgba(242,202,80,0.4);">🪭</div>';
+                // [FASE 6] Ficha boca abajo: patron decorativo, SIN nombre.
+                el.style.background = 'linear-gradient(145deg, #1a3a2a 0%, #0d2518 50%, #1a3a2a 100%)';
+                el.innerHTML = '<div style="position:absolute;inset:6px;border:1.5px solid rgba(242,202,80,0.35);border-radius:8px;display:flex;align-items:center;justify-content:center;">' +
+                    '<div style="font-size:1.8em;color:rgba(242,202,80,0.5);filter:drop-shadow(0 0 4px rgba(242,202,80,0.3));">🪭</div>' +
+                    '</div>' +
+                    '<div style="position:absolute;top:4px;left:4px;width:6px;height:6px;border-top:1.5px solid rgba(242,202,80,0.4);border-left:1.5px solid rgba(242,202,80,0.4);"></div>' +
+                    '<div style="position:absolute;top:4px;right:4px;width:6px;height:6px;border-top:1.5px solid rgba(242,202,80,0.4);border-right:1.5px solid rgba(242,202,80,0.4);"></div>' +
+                    '<div style="position:absolute;bottom:4px;left:4px;width:6px;height:6px;border-bottom:1.5px solid rgba(242,202,80,0.4);border-left:1.5px solid rgba(242,202,80,0.4);"></div>' +
+                    '<div style="position:absolute;bottom:4px;right:4px;width:6px;height:6px;border-bottom:1.5px solid rgba(242,202,80,0.4);border-right:1.5px solid rgba(242,202,80,0.4);"></div>';
             } else if (t.type === 'photo') {
                 el.style.backgroundImage = 'url(' + t.url + ')';
                 el.style.backgroundSize = 'cover';
             } else {
-                el.style.background = 'linear-gradient(145deg, #faf5eb, #b8a880)';
-                el.style.fontSize = '1.6em'; el.style.color = '#2a1a0a';
-                el.textContent = t.symbol;
+                // [FASE 6] Ficha ceramica con simbolo colorido.
+                el.style.background = 'linear-gradient(180deg, #fff8e8 0%, #f5ecd5 50%, #e8d8b0 100%)';
+                var symbolColor = t.color || '#2a1a0a';
+                el.innerHTML = '<div class="symbol-text" style="color:' + symbolColor + ';">' + t.symbol + '</div>';
             }
-            var nm = document.createElement('div'); nm.className = 'card-name';
-            nm.textContent = t.name || t.symbol; el.appendChild(nm);
+            // [FASE 6] Solo mostrar nombre si la ficha esta revelada (no boca abajo).
+            if (!t.faceDown || t.revealed) {
+                var nm = document.createElement('div'); nm.className = 'card-name';
+                nm.textContent = t.name || t.symbol; el.appendChild(nm);
+            }
             if (t.blocked) el.classList.add('blocked'); else el.classList.add('free');
             if (isSel) el.classList.add('selected-card');
             el.style.touchAction = 'manipulation';
             // [FIX BUG #7] Handler unificado con deduplicacion click+touchend.
+            // [FASE 6] Verificacion explicita de bloqueo antes de llamar al motor.
             function handleTileTap(e) {
                 if (e) { e.preventDefault(); e.stopPropagation(); }
                 var now = Date.now();
                 if (now - lastTapTime < 300) return;
                 lastTapTime = now;
-                // [FEATURE #3] Al hacer click en cualquier ficha, limpiar resalte de hint.
                 clearHintHighlight();
                 var idx = parseInt(el.getAttribute('data-index'));
                 var allTiles = GameEngine.getTiles();
-                if (idx >= 0 && idx < allTiles.length && allTiles[idx] === t) {
-                    GameEngine.onTileClick(idx);
+                if (idx < 0 || idx >= allTiles.length || allTiles[idx] !== t) return;
+                // [FASE 6] Verificar bloqueo explicitamente: si esta bloqueada, feedback de error.
+                if (t.blocked) {
+                    haptic(20);
+                    el.style.animation = 'none';
+                    void el.offsetWidth;
+                    el.style.animation = 'shakeBlocked 0.3s ease';
+                    setTimeout(function() { el.style.animation = ''; }, 350);
+                    showMessage('🔒 Ficha bloqueada');
+                    return;
                 }
+                // [FASE 6] Si la ficha esta boca abajo, PRIMERO revelarla (no mandar al slot).
+                // El segundo click (ya revelada) recien la manda al slot.
+                if (t.faceDown && !t.revealed) {
+                    t.revealed = true;
+                    haptic(15);
+                    GameEngine.playRevealSound();
+                    // Animar el volteo y actualizar el contenido de la ficha.
+                    flipTileVisual(el, t);
+                    return;
+                }
+                GameEngine.onTileClick(idx);
                 if (tutorialActive) advanceTutorial();
             }
             el.addEventListener('click', handleTileTap);
@@ -385,10 +493,18 @@ var UI = (function() {
             el.innerHTML = ''; el.style.backgroundImage = '';
             if (i < slots.length) {
                 var t = slots[i];
-                el.className = 'w-14 h-20 rounded-lg border-2 border-primary flex items-center justify-center text-xl font-bold slot-item overflow-hidden';
+                el.className = 'rounded-lg border-2 border-primary flex items-center justify-center text-xl font-bold slot-item overflow-hidden';
+                el.style.width = '52px'; el.style.height = '72px';
                 if (t.url) { el.style.backgroundImage = 'url(' + t.url + ')'; el.style.backgroundSize = 'cover'; }
-                else { el.style.background = 'linear-gradient(145deg, #f5f0e8, #d4c4a8)'; el.textContent = t.symbol; el.style.color = '#2a1a0a'; }
-            } else { el.className = 'w-14 h-20 rounded-lg slot-empty'; el.textContent = '+'; }
+                else {
+                    el.style.background = 'linear-gradient(180deg, #fff8e8 0%, #f5ecd5 50%, #e8d8b0 100%)';
+                    el.innerHTML = '<span style="font-size:1.6em;color:' + (t.color || '#2a1a0a') + ';">' + t.symbol + '</span>';
+                }
+            } else {
+                el.className = 'rounded-lg slot-empty';
+                el.style.width = '52px'; el.style.height = '72px';
+                el.textContent = '+';
+            }
         }
     }
 
@@ -396,7 +512,12 @@ var UI = (function() {
 
     function showZoomAndNote(photo) {
         var overlay = document.createElement('div'); overlay.className = 'zoom-overlay';
-        overlay.innerHTML = '<img src="' + photo.url + '" class="zoom-image" alt="' + photo.name + '" onerror="this.style.display=\'none\'"><div class="zoom-note"><h3 style="color:#f2ca50;font-size:1.2em;font-weight:bold;margin-bottom:8px;">' + photo.name + '</h3><p style="color:white;">' + (photo.nota || 'Un rincon magico.') + '</p></div><button onclick="this.parentElement.remove()" style="margin-top:16px;padding:8px 24px;border-radius:12px;background:rgba(255,255,255,0.1);color:white;">Cerrar</button>';
+        overlay.innerHTML = '<img src="' + photo.url + '" class="zoom-image" alt="' + photo.name + '" onerror="this.style.display=\'none\'">' +
+            '<div class="zoom-note">' +
+                '<h3 style="color:#f2ca50;font-size:1.4em;font-weight:bold;margin-bottom:12px;text-shadow:0 2px 8px rgba(242,202,80,0.4);">' + photo.name + '</h3>' +
+                '<p style="color:white;font-size:1.05em;line-height:1.5;font-style:italic;">' + (photo.nota || 'Un rincon magico.') + '</p>' +
+            '</div>' +
+            '<button onclick="this.parentElement.remove()" style="margin-top:20px;padding:10px 32px;border-radius:12px;background:linear-gradient(180deg,#f2ca50 0%,#d4af37 100%);color:#241a00;font-weight:bold;font-size:1em;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(242,202,80,0.3);">Cerrar</button>';
         document.body.appendChild(overlay);
         overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
     }
@@ -424,10 +545,12 @@ var UI = (function() {
         currentZone = ZONES.find(function(z) { return z.id === zid; });
         // [FASE 5] Cambiar musica segun el pais de la zona.
         if (currentZone && currentZone.country) Musica.play(currentZone.country);
+        // [FASE 6] Aplicar tema de color del pais.
+        if (currentZone && currentZone.country) applyTheme(currentZone.country);
         var totalStars = currentZone.levels.reduce(function(s, l) { return s + getStars(zid, l.num); }, 0);
         var maxStars = currentZone.levels.length * 3;
         var backFn = currentZone.country === 'argentina' ? 'UI.showArgentineZones()' : currentZone.country === 'mexico' ? 'UI.showMexicanZones()' : 'UI.showChileZones()';
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">';
         html += '<button onclick="' + backFn + '" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
         html += '<span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + currentZone.icon + ' ' + currentZone.name + '</span>';
@@ -454,14 +577,14 @@ var UI = (function() {
             html += '</div>';
         });
         html += '</div></div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
     }
 
     function selectLevel(n) {
         if (shouldStartTutorial() && n === 1 && currentZone.id === 'norte') { startTutorial(currentZone.id); return; }
         var originalLevel = currentZone.levels.find(function(l) { return l.num === n; });
         currentLevel = { num: originalLevel.num, pairs: originalLevel.pairs, zoneId: currentZone.id };
-        document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b1512;text-align:center;padding:32px;">' +
+        document.getElementById('appContent').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;text-align:center;padding:32px;">' +
             '<div style="font-size:3em;margin-bottom:16px;">' + currentZone.icon + '</div>' +
             '<h2 style="color:#f2ca50;font-size:1.5em;font-weight:bold;margin-bottom:8px;">Nivel ' + currentLevel.num + '</h2>' +
             '<p style="color:rgba(255,255,255,0.5);margin-bottom:16px;">' + currentLevel.pairs + ' pares base</p>' +
@@ -484,19 +607,26 @@ var UI = (function() {
 
     function startGame(config) {
         GameEngine.init(config, currentZone.photos, traditionalTiles);
+        // [FASE 6] Mantener tema del pais durante el juego.
+        if (currentZone && currentZone.country) applyTheme(currentZone.country);
         var timeLeft = GameEngine.getTimeLeft(), pu = GameEngine.getPowerUps();
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:12px;">';
-        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
-        html += '<button onclick="UI.goBackFromGame()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
-        html += '<span style="color:#f2ca50;font-weight:bold;" id="pairsLeft">' + config.pairs + ' pares</span>';
-        if (timeLeft > 0) html += '<span style="color:white;font-weight:bold;" id="timerDisplay">' + timeLeft + 's</span>';
+        // [FASE 6] Layout compacto: padding y margenes reducidos para que entren los power-ups.
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:8px;">';
+        // Header mas compacto
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-shrink:0;">';
+        html += '<button onclick="UI.goBackFromGame()" style="color:white;background:none;border:none;font-size:1.4em;cursor:pointer;">←</button>';
+        html += '<span style="color:#f2ca50;font-weight:bold;font-size:0.95em;" id="pairsLeft">' + config.pairs + ' pares</span>';
+        if (timeLeft > 0) html += '<span style="color:white;font-weight:bold;font-size:0.95em;" id="timerDisplay">' + timeLeft + 's</span>';
         html += '</div>';
-        html += '<div style="display:flex;gap:4px;margin-bottom:8px;justify-content:center;" id="slotsContainer">';
-        for (var i = 0; i < 4; i++) html += '<div class="slot-empty" id="slot-' + i + '" style="width:56px;height:80px;">+</div>';
+        // Slots mas pequenos
+        html += '<div style="display:flex;gap:4px;margin-bottom:6px;justify-content:center;flex-shrink:0;" id="slotsContainer">';
+        for (var i = 0; i < 4; i++) html += '<div class="slot-empty" id="slot-' + i + '" style="width:52px;height:72px;font-size:1.2em;">+</div>';
         html += '</div>';
-        html += '<div style="flex:1;background:rgba(0,0,0,0.2);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;min-height:300px;" id="boardContainer"></div>';
+        // Board con flex:1 y overflow auto para scroll si hay muchas fichas
+        html += '<div style="flex:1;background:rgba(0,0,0,0.2);border-radius:12px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;justify-content:center;min-height:120px;" id="boardContainer"></div>';
+        // Power-ups siempre visibles, flex-shrink:0 para que no se oculten
         if (!tutorialActive) {
-            html += '<div style="display:flex;justify-content:center;gap:12px;margin-top:12px;">';
+            html += '<div style="display:flex;justify-content:center;gap:10px;margin-top:8px;flex-shrink:0;">';
             html += '<button onclick="UI.useHint()" class="power-up-btn">💡<span class="power-up-badge" id="hintBadge">' + pu.hintUses + '</span></button>';
             html += '<button onclick="UI.useShuffle()" class="power-up-btn">🔀<span class="power-up-badge" id="shuffleBadge">' + pu.shuffleUses + '</span></button>';
             html += '<button onclick="UI.undoLastSelection()" class="power-up-btn">↩️<span class="power-up-badge" id="undoBadge">' + pu.undoUses + '</span></button>';
@@ -504,8 +634,8 @@ var UI = (function() {
             html += '<button onclick="UI.toggleMusica()" class="power-up-btn" id="musicaToggleBtn" title="Musica: ' + (Musica.isEnabled() ? 'ON' : 'OFF') + '" style="font-size:0.9em;opacity:' + (Musica.isEnabled() ? '1' : '0.5') + ';">' + (Musica.isEnabled() ? '🔊' : '🔇') + '</button>';
             html += '</div>';
         }
-        html += '<div style="text-align:center;margin-top:8px;height:16px;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
-        document.getElementById('appRoot').innerHTML = html;
+        html += '<div style="text-align:center;margin-top:6px;height:16px;flex-shrink:0;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
+        document.getElementById('appContent').innerHTML = html;
         renderBoard();
         if (tutorialActive) showTutorialOverlay();
     }
@@ -602,8 +732,8 @@ var UI = (function() {
             var originalLevel = currentZone.levels.find(function(l) { return l.num === nextNum; });
             if (originalLevel) {
                 currentLevel = { num: originalLevel.num, pairs: originalLevel.pairs, zoneId: zoneId };
-                document.getElementById('appRoot').innerHTML =
-                    '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0b1512;text-align:center;padding:32px;">' +
+                document.getElementById('appContent').innerHTML =
+                    '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;text-align:center;padding:32px;">' +
                     '<div style="font-size:3em;margin-bottom:16px;">' + currentZone.icon + '</div>' +
                     '<h2 style="color:#f2ca50;font-size:1.5em;font-weight:bold;margin-bottom:8px;">Nivel ' + currentLevel.num + '</h2>' +
                     '<p style="color:rgba(255,255,255,0.5);margin-bottom:16px;">' + currentLevel.pairs + ' pares base</p>' +
@@ -821,11 +951,13 @@ var UI = (function() {
     function showWorldMain() {
         // [FASE 5] Musica ambiental del menu.
         Musica.play('menu');
+        // [FASE 6] Tema de color del menu.
+        applyTheme('menu');
         var ts = ZONES.reduce(function(s, z) { return s + z.levels.reduce(function(ss, l) { return ss + getStars(z.id, l.num); }, 0); }, 0);
         var cpChile = Math.round((getTotalStarsForCountry('chile') / 120) * 100);
         var cpArgentina = Math.round((getTotalStarsForCountry('argentina') / 120) * 100);
         var cpMexico = Math.round((getTotalStarsForCountry('mexico') / 120) * 100);
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;overflow-y:auto;padding-bottom:70px;">';
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="height:192px;overflow:hidden;position:relative;background:linear-gradient(to bottom, transparent, #0b1512), url(https://drive.google.com/thumbnail?id=1hsx1UaDia9i7oOLdeslGtGLwl0tqUP71&sz=w800) center/cover no-repeat;">';
         html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">';
         html += '<span style="font-size:3em;">🌎</span>';
@@ -845,9 +977,10 @@ var UI = (function() {
             '<span>🏆 LOGROS</span>' +
             '<span style="font-size:0.8em;color:rgba(242,202,80,0.7);">' + logrosResumen.desbloqueados + '/' + logrosResumen.total + '</span>' +
             '</button>';
-        html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;">🛒 TIENDA</button>';
+        html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">🛒 TIENDA</button>';
+        html += '<button onclick="UI.showAjustes()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;">⚙️ AJUSTES</button>';
         html += '</div></div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
     }
 
     function countryCard(flag, name, progress, onclick) {
@@ -861,7 +994,9 @@ var UI = (function() {
 
     function showCountryZones(country, title) {
         var zones = ZONES.filter(function(z) { return z.country === country; });
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        // [FASE 6] Aplicar tema del pais.
+        applyTheme(country);
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + title + '</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
         html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
         zones.forEach(function(z) {
@@ -869,11 +1004,11 @@ var UI = (function() {
             html += '<span style="font-size:2em;">' + z.icon + '</span><span style="color:white;font-weight:bold;font-size:0.9em;">' + z.name + '</span></div>';
         });
         html += '</div></div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
     }
 
     function showAlbum() {
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🌎 Album de Viajes</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
         var countries = [
             { flag:'🇨🇱', name:'Chile', zones:['norte','centro','sur','austral'] },
@@ -896,11 +1031,11 @@ var UI = (function() {
             html += '</div></div>';
         });
         html += '</div>';
-        document.getElementById('appRoot').innerHTML = html;
+        document.getElementById('appContent').innerHTML = html;
     }
 
     function showTienda() {
-        document.getElementById('appRoot').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
+        document.getElementById('appContent').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
             '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🛒 Tienda</span><span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">💰 ' + coins + ' monedas</span><button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>' +
             '<p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">Compra power-ups para ayudarte.</p>' +
             '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">💡 Pista extra</span></div><button onclick="UI.comprarPowerUp(\'hint\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
@@ -980,7 +1115,127 @@ var UI = (function() {
 
     // [FASE 4] Pantalla de logros.
     function showLogros() {
-        document.getElementById('appRoot').innerHTML = Logros.renderPanel();
+        document.getElementById('appContent').innerHTML = Logros.renderPanel();
+    }
+
+    // [FASE 6] Pantalla de Ajustes estilo Vita.
+    function showAjustes() {
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        // Header
+        html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:12px;background:linear-gradient(135deg,rgba(242,202,80,0.15),rgba(255,159,67,0.08));border-radius:12px;border:1px solid rgba(242,202,80,0.3);">';
+        html += '<button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.3em;cursor:pointer;padding:4px;">←</button>';
+        html += '<span style="font-size:1.15em;font-weight:bold;color:#f2ca50;">⚙️ Ajustes</span>';
+        html += '</div>';
+        // Seccion de audio
+        html += '<div style="margin-bottom:16px;padding:14px;background:rgba(0,0,0,0.25);border-radius:12px;border:1px solid rgba(242,202,80,0.15);">';
+        html += '<h3 style="color:rgba(242,202,80,0.7);font-size:0.7em;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">🔊 Audio</h3>';
+        // Toggle musica
+        html += renderToggle('🎵', 'Música', 'musicaEnabled', 'UI.toggleMusica()');
+        // Toggle sonido (efectos)
+        html += renderToggle('🔊', 'Efectos de sonido', 'sonidoEnabled', 'UI.toggleSonido()');
+        // Toggle vibracion
+        html += renderToggle('📳', 'Vibración', 'hapticEnabled', 'UI.toggleHaptic()');
+        html += '</div>';
+        // Seccion de preferencias
+        html += '<div style="margin-bottom:16px;padding:14px;background:rgba(0,0,0,0.25);border-radius:12px;border:1px solid rgba(242,202,80,0.15);">';
+        html += '<h3 style="color:rgba(242,202,80,0.7);font-size:0.7em;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">📋 Preferencias</h3>';
+        // Idioma
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">';
+        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">🌐 Idioma</span>';
+        html += '<span style="color:rgba(242,202,80,0.8);font-size:0.85em;background:rgba(242,202,80,0.1);padding:4px 12px;border-radius:8px;">Español</span>';
+        html += '</div>';
+        // Acerca de
+        html += '<div onclick="UI.showAcercaDe()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;">';
+        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">ℹ️ Acerca de</span>';
+        html += '<span style="color:rgba(255,255,255,0.4);font-size:1em;">›</span>';
+        html += '</div>';
+        // Compartir
+        html += '<div onclick="UI.compartirJuego()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;cursor:pointer;">';
+        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">📤 Compartir con amigos</span>';
+        html += '<span style="color:rgba(255,255,255,0.4);font-size:1em;">›</span>';
+        html += '</div>';
+        html += '</div>';
+        // Boton reset progreso
+        html += '<button onclick="UI.resetProgreso()" style="width:100%;padding:12px;border-radius:12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#ef4444;font-weight:bold;font-size:0.9em;cursor:pointer;margin-top:8px;">🗑️ Reiniciar progreso</button>';
+        // Footer con version
+        html += '<p style="text-align:center;color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:24px;">Mahjong World Tour v7.0<br>Hecho con cariño desde Chile 🇨🇱</p>';
+        html += '</div>';
+        document.getElementById('appContent').innerHTML = html;
+    }
+
+    // [FASE 6] Renderiza un toggle switch estilo Vita.
+    function renderToggle(icono, label, storageKey, onclickFn) {
+        var enabled = localStorage.getItem(storageKey) !== '0';
+        // Casos especiales: musicaEnabled default OFF, hapticEnabled default ON
+        if (storageKey === 'musicaEnabled') enabled = localStorage.getItem(storageKey) === '1';
+        if (storageKey === 'sonidoEnabled') enabled = localStorage.getItem(storageKey) !== '0';
+        var toggleBg = enabled ? 'background:linear-gradient(180deg,#4ade80,#22c55e);' : 'background:rgba(255,255,255,0.15);';
+        var knobPos = enabled ? 'transform:translateX(22px);' : 'transform:translateX(0);';
+        var html = '<div onclick="' + onclickFn + '" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;">';
+        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">' + icono + ' ' + label + '</span>';
+        html += '<div style="width:48px;height:26px;border-radius:13px;' + toggleBg + 'position:relative;transition:background 0.3s;">';
+        html += '<div style="width:22px;height:22px;background:white;border-radius:50%;position:absolute;top:2px;left:2px;' + knobPos + 'transition:transform 0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.3);"></div>';
+        html += '</div></div>';
+        return html;
+    }
+
+    // [FASE 6] Toggle de efectos de sonido (separado de musica).
+    var sonidoEnabled = localStorage.getItem('sonidoEnabled') !== '0';
+    function toggleSonido() {
+        sonidoEnabled = !sonidoEnabled;
+        localStorage.setItem('sonidoEnabled', sonidoEnabled ? '1' : '0');
+        // Refrescar pantalla de ajustes
+        showAjustes();
+        if (sonidoEnabled) haptic(20);
+    }
+    function isSonidoEnabled() { return sonidoEnabled; }
+
+    // [FASE 6] Modal "Acerca de".
+    function showAcercaDe() {
+        var modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;';
+        modal.innerHTML = '<div style="background:linear-gradient(145deg,rgba(23,34,30,0.95),rgba(11,21,18,0.95));padding:32px;border-radius:20px;text-align:center;border:1px solid rgba(242,202,80,0.3);max-width:320px;">' +
+            '<div style="font-size:3em;margin-bottom:12px;">🌎</div>' +
+            '<h2 style="color:#f2ca50;font-size:1.4em;font-weight:bold;margin-bottom:8px;">Descubre América</h2>' +
+            '<p style="color:rgba(242,202,80,0.6);font-size:0.8em;letter-spacing:0.2em;margin-bottom:16px;">WORLD TOUR</p>' +
+            '<p style="color:white;font-size:0.9em;line-height:1.6;margin-bottom:16px;">Un viaje meditativo por Chile, Argentina y México a través del Mahjong. Descubre rincones mágicos, supera desafíos y conviértete en Maestro Mahjong.</p>' +
+            '<p style="color:rgba(242,202,80,0.5);font-size:0.75em;margin-bottom:20px;">Versión 7.0 · Hecho con cariño desde Chile 🇨🇱</p>' +
+            '<button onclick="this.parentElement.parentElement.remove()" class="btn-primary" style="width:100%;padding:10px;border-radius:12px;font-size:1em;">Cerrar</button>' +
+            '</div>';
+        document.body.appendChild(modal);
+    }
+
+    // [FASE 6] Compartir juego (Web Share API).
+    function compartirJuego() {
+        if (navigator.share) {
+            navigator.share({ title: 'Descubre América · Mahjong World Tour', text: '¡Juega Mahjong viajando por Chile, Argentina y México!', url: window.location.href })
+                .catch(function() { showMessage('No se pudo compartir'); });
+        } else {
+            // Fallback: copiar URL
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.href);
+                showMessage('📋 Enlace copiado');
+            } else {
+                showMessage('Comparte: ' + window.location.href);
+            }
+        }
+    }
+
+    // [FASE 6] Reiniciar progreso (con confirmacion).
+    function resetProgreso() {
+        if (!confirm('¿Estás seguro de que quieres reiniciar todo tu progreso? Esta acción no se puede deshacer.')) return;
+        localStorage.removeItem('coins');
+        localStorage.removeItem('tutorialCompleted');
+        localStorage.removeItem('misiones_state');
+        localStorage.removeItem('streak_state');
+        localStorage.removeItem('logros_state');
+        // Limpiar estrellas por zona
+        Object.keys(localStorage).forEach(function(key) {
+            if (key.indexOf('zone_') === 0) localStorage.removeItem(key);
+        });
+        coins = 0;
+        showMessage('✓ Progreso reiniciado');
+        setTimeout(function() { showWorldMain(); }, 1000);
     }
 
     // [FASE 2] Reclama todas las recompensas pendientes.
@@ -1199,6 +1454,9 @@ var UI = (function() {
         goBackFromGame: goBackFromGame, useShuffle: useShuffle, useHint: useHint, undoLastSelection: undoLastSelection,
         showTienda: showTienda, showAlbum: showAlbum,
         showLogros: showLogros,
+        showAjustes: showAjustes, showAcercaDe: showAcercaDe,
+        toggleSonido: toggleSonido, compartirJuego: compartirJuego,
+        resetProgreso: resetProgreso,
         showRewardedVideo: showRewardedVideo, closeRewardModal: closeRewardModal,
         simulateRewardedVideo: simulateRewardedVideo,
         closeVictory: closeVictory, nextLevel: nextLevel,
