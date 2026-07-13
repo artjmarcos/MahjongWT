@@ -243,6 +243,9 @@ var UI = (function() {
         }, 800);
     }
 
+    // [FASE 6] Flag para saber si es el primer render del tablero (con stagger) o un re-render (instantaneo).
+    var boardFirstRender = true;
+
     // [FASE 6] Voltea visualmente una ficha boca abajo con animacion 3D flip.
     function flipTileVisual(el, t) {
         if (!el) return;
@@ -402,8 +405,12 @@ var UI = (function() {
             el.style.top = (t.row * ch + margin + t.layer * layerOffset) + 'px';
             el.style.width = (cw - 4) + 'px'; el.style.height = (ch - 4) + 'px';
             el.style.zIndex = t.layer * 100 + Math.floor(t.row * 2);
-            // [FASE 5] Stagger: cada ficha cae con un pequeno delay (max 0.6s total).
-            el.style.animationDelay = Math.min(vidx * 0.02, 0.5) + 's';
+            // [FASE 6] Stagger SOLO en el primer render del tablero. En re-renders (tras match), sin delay = instantaneo.
+            if (boardFirstRender) {
+                el.style.animationDelay = Math.min(vidx * 0.02, 0.5) + 's';
+            } else {
+                el.style.animation = 'none';
+            }
             var td = tiles.indexOf(t);
             var isSel = (GameEngine.getSelectedTileIdx() === td);
             el.setAttribute('data-index', td);
@@ -476,6 +483,8 @@ var UI = (function() {
         inner.appendChild(grid); c.appendChild(inner);
         updateSlotsUI();
         document.getElementById('pairsLeft').textContent = (vt.length / 2) + ' pares';
+        // [FASE 6] Marcar que el primer render ya paso (los siguientes seran instantaneos).
+        boardFirstRender = false;
         // [FEATURE #3] Re-aplicar resalte de hint si seguia activo tras el re-render.
         if (hintIdxA !== null || hintIdxB !== null) {
             var els2 = document.querySelectorAll('.vita-tile');
@@ -636,6 +645,7 @@ var UI = (function() {
         }
         html += '<div style="text-align:center;margin-top:6px;height:16px;flex-shrink:0;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
         document.getElementById('appContent').innerHTML = html;
+        boardFirstRender = true;  // [FASE 6] Nuevo nivel: aplicar stagger en el primer render.
         renderBoard();
         if (tutorialActive) showTutorialOverlay();
     }
