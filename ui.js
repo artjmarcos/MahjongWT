@@ -1078,7 +1078,8 @@ var UI = (function() {
             '<span style="font-size:0.8em;color:rgba(242,202,80,0.7);">' + logrosResumen.desbloqueados + '/' + logrosResumen.total + '</span>' +
             '</button>';
         html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">🛒 TIENDA</button>';
-        html += '<button onclick="UI.showAjustes()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;">⚙️ AJUSTES</button>';
+        html += '<button onclick="UI.showAjustes()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">⚙️ AJUSTES</button>';
+        html += '<button onclick="UI.despedida()" style="width:100%;padding:12px;border-radius:12px;background:rgba(242,202,80,0.1);border:1px solid rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;">👋 SALIR</button>';
         html += '</div></div>';
         document.getElementById('appContent').innerHTML = html;
     }
@@ -1329,13 +1330,28 @@ var UI = (function() {
         localStorage.removeItem('misiones_state');
         localStorage.removeItem('streak_state');
         localStorage.removeItem('logros_state');
-        // Limpiar estrellas por zona
         Object.keys(localStorage).forEach(function(key) {
             if (key.indexOf('zone_') === 0) localStorage.removeItem(key);
         });
         coins = 0;
         showMessage('✓ Progreso reiniciado');
         setTimeout(function() { showWorldMain(); }, 1000);
+    }
+
+    // [FASE 6] Saludo de despedida con frase aleatoria.
+    function despedida() {
+        var frase = DESPEDIDA_FRASES[Math.floor(Math.random() * DESPEDIDA_FRASES.length)];
+        var overlay = document.createElement('div');
+        overlay.id = 'despedidaOverlay';
+        overlay.style.cssText = 'position:fixed;inset:0;background:radial-gradient(ellipse at center,#0d2018 0%,#050a08 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;animation:despedidaFade 0.8s ease-out;';
+        overlay.innerHTML = '<div style="font-size:4em;margin-bottom:20px;animation:despedidaWave 2s ease-in-out infinite;">🫶</div>' +
+            '<p style="color:#f2ca50;font-size:1.5em;font-weight:bold;text-align:center;max-width:320px;line-height:1.4;text-shadow:0 0 24px rgba(242,202,80,0.5);">' + frase + '</p>' +
+            '<div style="margin-top:24px;width:80px;height:2px;background:linear-gradient(to right,transparent,#f2ca50,transparent);"></div>' +
+            '<p style="color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:20px;letter-spacing:0.25em;">DESCUBRE AMÉRICA · WORLD TOUR</p>' +
+            '<p style="color:rgba(242,202,80,0.3);font-size:0.6em;margin-top:8px;">Hecho con cariño desde Chile 🇨🇱</p>' +
+            '<button onclick="document.getElementById(\'despedidaOverlay\').remove()" style="margin-top:32px;padding:10px 28px;border-radius:12px;background:rgba(242,202,80,0.15);border:1px solid rgba(242,202,80,0.3);color:#f2ca50;font-weight:bold;cursor:pointer;font-size:0.9em;">← Seguir jugando</button>';
+        document.body.appendChild(overlay);
+        haptic([20, 40, 20]);
     }
 
     // [FASE 2] Reclama todas las recompensas pendientes.
@@ -1556,7 +1572,7 @@ var UI = (function() {
         showLogros: showLogros,
         showAjustes: showAjustes, showAcercaDe: showAcercaDe,
         toggleSonido: toggleSonido, compartirJuego: compartirJuego,
-        resetProgreso: resetProgreso,
+        resetProgreso: resetProgreso, despedida: despedida,
         showRewardedVideo: showRewardedVideo, closeRewardModal: closeRewardModal,
         simulateRewardedVideo: simulateRewardedVideo,
         closeVictory: closeVictory, nextLevel: nextLevel,
@@ -1574,3 +1590,31 @@ var UI = (function() {
 })();
 
 UI.showSplash();
+
+// [FASE 6] Saludo de despedida al salir del juego.
+var DESPEDIDA_FRASES = [
+    '¡Hasta pronto, viajero! 🌎',
+    '¡Te esperamos de vuelta! 🎴',
+    '¡Vuelve a descubrir América! 🗺️',
+    '¡Tu aventura Mahjong continúa mañana! ⭐',
+    '¡Gracias por jugar! Nos vemos pronto 🇨🇱',
+    '¡El mundo te espera! Regresa cuando quieras 🌄',
+    '¡Buen viaje! Tu Mahjong estará aquí esperándote ✨',
+    '¡Descansa, maestro! Las fichas te esperan 🧘',
+    '¡Nos vemos en la próxima parada! ✈️',
+    '¡Tu racha diaria cuenta! Vuelve mañana 🔥'
+];
+window.addEventListener('beforeunload', function(e) {
+    // Solo mostrar despedida si el usuario estuvo jugando (no en splash inicial).
+    if (document.getElementById('appContent') && document.getElementById('appContent').innerHTML.length > 100) {
+        var frase = DESPEDIDA_FRASES[Math.floor(Math.random() * DESPEDIDA_FRASES.length)];
+        // Crear overlay de despedida.
+        var overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;background:radial-gradient(ellipse at center,#0d2018 0%,#050a08 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;';
+        overlay.innerHTML = '<div style="font-size:3em;margin-bottom:16px;">🫶</div>' +
+            '<p style="color:#f2ca50;font-size:1.3em;font-weight:bold;text-align:center;max-width:300px;line-height:1.4;text-shadow:0 0 20px rgba(242,202,80,0.4);">' + frase + '</p>' +
+            '<div style="margin-top:20px;width:60px;height:2px;background:linear-gradient(to right,transparent,#f2ca50,transparent);"></div>' +
+            '<p style="color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:16px;letter-spacing:0.2em;">DESCUBRE AMÉRICA · WORLD TOUR</p>';
+        document.body.appendChild(overlay);
+    }
+});

@@ -116,8 +116,58 @@ var GameEngine = (function() {
         }
         layoutTiles(tiles);
         updateBlocked();
+        // [FASE 6] Separar parejas adyacentes para mayor dificultad.
+        separateAdjacentPairs();
+        updateBlocked();
         // [FEATURE #2] Asegurar que el tablero inicial tenga al menos una pareja jugable.
         ensureSolvable();
+    }
+
+    // [FASE 6] Intercambia fichas para que las parejas NO queden adyacentes (misma col/row +/- 1).
+    // Reintenta hasta 50 veces, luego desiste (mejor que queda trabado).
+    function separateAdjacentPairs() {
+        var maxSwaps = 50;
+        for (var swap = 0; swap < maxSwaps; swap++) {
+            var foundAdjacent = false;
+            for (var i = 0; i < tiles.length; i++) {
+                if (tiles[i].matched || tiles[i].inSlot) continue;
+                for (var j = i + 1; j < tiles.length; j++) {
+                    if (tiles[j].matched || tiles[j].inSlot) continue;
+                    if (tiles[i].pid !== tiles[j].pid) continue;  // no son pareja
+                    // Son pareja: verificar si estan adyacentes (misma layer, col +/- 1 o row +/- 1).
+                    if (tiles[i].layer === tiles[j].layer) {
+                        var dCol = Math.abs(tiles[i].col - tiles[j].col);
+                        var dRow = Math.abs(tiles[i].row - tiles[j].row);
+                        if ((dCol <= 1 && dRow === 0) || (dRow <= 1 && dCol === 0)) {
+                            // Adyacentes: intercambiar una de ellas con una ficha lejana del mismo layer.
+                            foundAdjacent = true;
+                            var candidates = [];
+                            for (var k = 0; k < tiles.length; k++) {
+                                if (k === i || k === j) continue;
+                                if (tiles[k].matched || tiles[k].inSlot) continue;
+                                if (tiles[k].layer !== tiles[i].layer) continue;
+                                if (tiles[k].pid === tiles[i].pid) continue;  // no intercambiar con su pareja
+                                // Verificar que el intercambio no cree otra adyacencia.
+                                var newDCol = Math.abs(tiles[k].col - tiles[j].col);
+                                var newDRow = Math.abs(tiles[k].row - tiles[j].row);
+                                var farEnough = (newDCol > 1 || newDRow > 1);
+                                if (farEnough) candidates.push(k);
+                            }
+                            if (candidates.length > 0) {
+                                var pick = candidates[Math.floor(Math.random() * candidates.length)];
+                                // Intercambiar posiciones (col, row) entre i y pick.
+                                var tmpCol = tiles[i].col, tmpRow = tiles[i].row;
+                                tiles[i].col = tiles[pick].col; tiles[i].row = tiles[pick].row;
+                                tiles[pick].col = tmpCol; tiles[pick].row = tmpRow;
+                            }
+                            break;  // reiniciar busqueda
+                        }
+                    }
+                }
+                if (foundAdjacent) break;
+            }
+            if (!foundAdjacent) break;  // no hay mas adyacentes, listo
+        }
     }
 
     // [FEATURE #2] Re-layout hasta que exista al menos una pareja jugable. Si tras 30 intentos
@@ -296,6 +346,8 @@ var GameEngine = (function() {
             }
             layoutTiles(tiles);
             updateBlocked();
+            separateAdjacentPairs();
+            updateBlocked();
             tries++;
         } while (!hasAnyPlayablePair() && tries < 30);
         if (!hasAnyPlayablePair()) forceFirstPairFree();
@@ -377,6 +429,8 @@ var GameEngine = (function() {
                     var temp2 = tiles[i2]; tiles[i2] = tiles[j2]; tiles[j2] = temp2;
                 }
                 layoutTiles(tiles);
+                updateBlocked();
+                separateAdjacentPairs();
                 updateBlocked();
                 tries++;
             }

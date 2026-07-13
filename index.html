@@ -208,6 +208,10 @@
         /* [FASE 1] Bonus tile: glow dorado extra */
         .vita-tile.bonus-tile { box-shadow: 0 0 12px rgba(255,215,0,0.4) !important; }
 
+        /* [FASE 6] Animaciones de despedida */
+        @keyframes despedidaFade { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes despedidaWave { 0%,100% { transform: rotate(0deg) scale(1); } 25% { transform: rotate(-8deg) scale(1.1); } 75% { transform: rotate(8deg) scale(1.1); } }
+
         /* [FASE 2] Toast de mision completada */
         .mission-toast {
             position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
