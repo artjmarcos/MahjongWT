@@ -62,10 +62,11 @@ var GameEngine = (function() {
         }
     };
 
-    // [FIX BUG #10] Solo considera "encima" a una ficha en la MISMA col/row (capa superior).
+    // [FIX BLOQUEO] Revisa TODAS las capas superiores, no solo layer+1.
+    // Una ficha esta bloqueada si hay ANY ficha encima (misma col/row, layer mayor).
     function isTileFree(tile, activeTiles) {
         var above = activeTiles.find(function(t) {
-            return t.layer === tile.layer + 1 && t.col === tile.col && t.row === tile.row;
+            return t.layer > tile.layer && t.col === tile.col && t.row === tile.row;
         });
         if (above) return false;
         var left = activeTiles.find(function(t) { return t.layer === tile.layer && t.row === tile.row && t.col === tile.col - 1; });
