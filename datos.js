@@ -371,12 +371,16 @@ var TRIVIA = {
 
 // ========== MINIJUEGOS (FASE 3): 2 por zona = 24 en total ==========
 var MINIGAMES = {
+    // Nivel 3: Memorice especial (Valparaiso y Villarrica - originales del juego)
     // Nivel 4: Trivia cultural (1er minijuego, accesible temprano)
-    // Nivel 7: Memorice (2do minijuego, mid-game)
+    // Nivel 5: Memorice especial (Villarrica - original del juego)
+    // Nivel 7: Memorice de la zona (2do minijuego, mid-game)
     'norte-4': { name:'Trivia Norte', type:'trivia', icon:'🧠', zone:'norte' },
     'norte-7': { name:'Memorice Norte', type:'memorice', icon:'🎨', photos: nortePhotos },
+    'centro-3': { name:'Memorice de Valparaíso', type:'memorice', icon:'🎨', photos: valparaisoPhotos },
     'centro-4': { name:'Trivia Centro', type:'trivia', icon:'🧠', zone:'centro' },
     'centro-7': { name:'Memorice Centro', type:'memorice', icon:'🎨', photos: centroPhotos },
+    'sur-5': { name:'Memorice de Villarrica', type:'memorice', icon:'🌋', photos: villarricaPhotos },
     'sur-4': { name:'Trivia Sur', type:'trivia', icon:'🧠', zone:'sur' },
     'sur-7': { name:'Memorice Sur', type:'memorice', icon:'🎨', photos: surPhotos },
     'austral-4': { name:'Trivia Austral', type:'trivia', icon:'🧠', zone:'austral' },
