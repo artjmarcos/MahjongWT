@@ -568,18 +568,28 @@ var UI = (function() {
         currentZone.levels.forEach(function(l) {
             var u = isUnlocked(zid, l.num), s = getStars(zid, l.num);
             var miniKey = zid + '-' + l.num, mini = MINIGAMES[miniKey];
-            html += '<div style="padding:16px;border-radius:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;';
+            // [FASE 6] Si hay un minijuego en este nivel, mostrarlo ARRIBA del nivel normal (no reemplazarlo).
             if (mini) {
-                html += 'background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);">';
-                html += '<div><span style="color:white;font-weight:bold;">' + mini.icon + ' ' + mini.name + '</span><p style="font-size:0.75em;color:rgba(168,85,247,0.8);">Minijuego especial</p></div>';
-                // [FASE 3] Dispatcher de minijuego segun tipo.
-                html += '<button onclick="event.stopPropagation();UI.showRewardedVideo(function(){UI.startMinigame(\'' + zid + '\',' + l.num + ');})" class="btn-video" style="padding:8px 16px;border-radius:12px;font-size:0.85em;">🎮 Jugar</button>';
-            } else if (u) {
-                html += 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);" onclick="UI.selectLevel(' + l.num + ')">';
+                // Tarjeta del minijuego (siempre desbloqueada si el nivel esta desbloqueado).
+                if (u) {
+                    html += '<div style="padding:14px;border-radius:12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(168,85,247,0.15),rgba(168,85,247,0.05));border:1px solid rgba(168,85,247,0.35);">';
+                    html += '<div><span style="color:white;font-weight:bold;font-size:0.95em;">' + mini.icon + ' ' + mini.name + '</span><p style="font-size:0.7em;color:rgba(168,85,247,0.8);margin-top:2px;">🎮 Minijuego especial</p></div>';
+                    html += '<button onclick="event.stopPropagation();UI.showRewardedVideo(function(){UI.startMinigame(\'' + zid + '\',' + l.num + ');})" class="btn-video" style="padding:8px 16px;border-radius:12px;font-size:0.85em;">🎬 Jugar</button>';
+                    html += '</div>';
+                } else {
+                    // Minijuego bloqueado.
+                    html += '<div style="padding:14px;border-radius:12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;opacity:0.4;background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.15);">';
+                    html += '<div><span style="color:rgba(255,255,255,0.6);font-weight:bold;font-size:0.95em;">' + mini.icon + ' ' + mini.name + '</span><p style="font-size:0.7em;color:rgba(168,85,247,0.5);margin-top:2px;">🔒 Completa el nivel anterior</p></div>';
+                    html += '</div>';
+                }
+            }
+            // Nivel normal (siempre se muestra, incluso si hay minijuego).
+            if (u) {
+                html += '<div style="padding:16px;border-radius:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);cursor:pointer;" onclick="UI.selectLevel(' + l.num + ')">';
                 html += '<div><span style="color:white;font-weight:bold;">Nivel ' + l.num + '</span><p style="font-size:0.75em;color:rgba(255,255,255,0.5);">' + l.pairs + ' pares</p></div>';
                 html += '<div style="color:#f2ca50;">' + (s > 0 ? '⭐'.repeat(s) + '☆'.repeat(3 - s) : '🔓') + '</div>';
             } else {
-                html += 'opacity:0.4;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);">';
+                html += '<div style="padding:16px;border-radius:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;opacity:0.4;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);">';
                 html += '<div><span style="color:white;font-weight:bold;">Nivel ' + l.num + '</span><p style="font-size:0.75em;color:rgba(255,255,255,0.5);">' + l.pairs + ' pares</p></div>';
                 html += '<div style="color:#f2ca50;">🔒</div>';
             }
