@@ -54,7 +54,12 @@ var GameEngine = (function() {
         error: function() { playTone(180, 0.3, 'square', 0.06); },
         victory: function() { [523,659,784,1047].forEach(function(f,i) { setTimeout(function() { playTone(f, 0.4, 'sine', 0.3); }, i*200); }); },
         shuffle: function() { playTone(440, 0.2, 'triangle', 0.12); },
-        hint: function() { playTone(880, 0.15, 'sine', 0.18); }
+        hint: function() { playTone(880, 0.15, 'sine', 0.18); },
+        // [FASE 6] Sonido de revelar ficha: dos tonos ascendentes suaves.
+        reveal: function() {
+            playTone(440, 0.08, 'sine', 0.10);
+            setTimeout(function() { playTone(660, 0.10, 'sine', 0.12); }, 60);
+        }
     };
 
     // [FIX BUG #10] Solo considera "encima" a una ficha en la MISMA col/row (capa superior).
@@ -71,10 +76,13 @@ var GameEngine = (function() {
         var active = tiles.filter(function(t) { return !t.matched && !t.inSlot; });
         tiles.forEach(function(t) { if (t.matched || t.inSlot) { t.blocked = false; return; } t.blocked = !isTileFree(t, active); });
     }
+    // [FASE 6] Fichas boca abajo: desde nivel 4 en normal y dificil. Nunca en facil.
     function shouldBeFaceDown(levelNum) {
         if (difficulty === 'facil') return false;
-        if (difficulty === 'dificil') return levelNum >= 4 ? Math.random() < 0.6 : false;
-        return levelNum >= 6 ? Math.random() < 0.5 : false;
+        if (levelNum < 4) return false;
+        if (difficulty === 'dificil') return Math.random() < 0.55;
+        if (difficulty === 'normal') return levelNum >= 6 ? Math.random() < 0.45 : Math.random() < 0.3;
+        return false;
     }
     function createTiles(zonePhotos, traditionalTilesList) {
         var attempts = 0;
@@ -92,13 +100,13 @@ var GameEngine = (function() {
             var tradIdx = 0;
             while (pairItems.length < totalPairs) {
                 var trad = traditionalTilesList[tradIdx % traditionalTilesList.length];
-                pairItems.push({ name: trad.name, symbol: trad.symbol, type: 'ceramic' });
+                pairItems.push({ name: trad.name, symbol: trad.symbol, color: trad.color, type: 'ceramic' });
                 tradIdx++;
             }
             pairItems.forEach(function(item, pid) {
                 var fd = shouldBeFaceDown(currentLevelConfig.num), bonus = difficulty === 'dificil' && Math.random() < 0.2;
-                tiles.push({ name: item.name, url: item.url, zone: item.zone, nota: item.nota, symbol: item.symbol, type: item.type, pid: pid, matched: false, blocked: false, inSlot: false, col: 0, row: 0, layer: 0, faceDown: fd, revealed: !fd, bonus: bonus });
-                tiles.push({ name: item.name, url: item.url, zone: item.zone, nota: item.nota, symbol: item.symbol, type: item.type, pid: pid, matched: false, blocked: false, inSlot: false, col: 0, row: 0, layer: 0, faceDown: fd, revealed: !fd, bonus: bonus });
+                tiles.push({ name: item.name, url: item.url, zone: item.zone, nota: item.nota, symbol: item.symbol, color: item.color, type: item.type, pid: pid, matched: false, blocked: false, inSlot: false, col: 0, row: 0, layer: 0, faceDown: fd, revealed: !fd, bonus: bonus });
+                tiles.push({ name: item.name, url: item.url, zone: item.zone, nota: item.nota, symbol: item.symbol, color: item.color, type: item.type, pid: pid, matched: false, blocked: false, inSlot: false, col: 0, row: 0, layer: 0, faceDown: fd, revealed: !fd, bonus: bonus });
             });
             var count = {}; tiles.forEach(function(t) { count[t.pid] = (count[t.pid] || 0) + 1; });
             var allPairsOk = Object.values(count).every(function(c) { return c === 2; });
@@ -143,12 +151,27 @@ var GameEngine = (function() {
     }
 
     // [FIX BUG #11] Layout separado en funcion para reutilizar en useShuffle.
+    // [FASE 6] Layout escalable: 2 capas para niveles pequenos, 3 capas para niveles grandes.
+    // 6 columnas en la base.
     function layoutTiles(tileArr) {
-        var totalTiles = tileArr.length, colsBase = 6, rowsBase = Math.ceil(totalTiles * 0.7 / colsBase);
-        var tilesLayer0 = Math.min(totalTiles, colsBase * rowsBase), tilesLayer1 = totalTiles - tilesLayer0, colsLayer1 = 4, offsetCol = Math.floor((colsBase - colsLayer1) / 2);
+        var totalTiles = tileArr.length, colsBase = 6;
+        var tilesLayer0, tilesLayer1, tilesLayer2;
+        if (totalTiles > 30) {
+            tilesLayer0 = Math.floor(totalTiles * 0.6);
+            tilesLayer1 = Math.floor(totalTiles * 0.28);
+            tilesLayer2 = totalTiles - tilesLayer0 - tilesLayer1;
+        } else {
+            tilesLayer0 = Math.floor(totalTiles * 0.7);
+            tilesLayer1 = totalTiles - tilesLayer0;
+            tilesLayer2 = 0;
+        }
+        var rowsBase = Math.ceil(tilesLayer0 / colsBase);
+        var colsLayer1 = 4, offsetCol1 = Math.floor((colsBase - colsLayer1) / 2);
+        var colsLayer2 = 3, offsetCol2 = Math.floor((colsBase - colsLayer2) / 2);
         var idx = 0;
         for (var k = 0; k < tilesLayer0; k++) { tileArr[idx].col = k % colsBase; tileArr[idx].row = Math.floor(k / colsBase); tileArr[idx].layer = 0; idx++; }
-        for (var m = 0; m < tilesLayer1; m++) { tileArr[idx].col = offsetCol + (m % colsLayer1); tileArr[idx].row = Math.floor(m / colsLayer1); tileArr[idx].layer = 1; idx++; }
+        for (var m = 0; m < tilesLayer1; m++) { tileArr[idx].col = offsetCol1 + (m % colsLayer1); tileArr[idx].row = Math.floor(m / colsLayer1); tileArr[idx].layer = 1; idx++; }
+        for (var n = 0; n < tilesLayer2; n++) { tileArr[idx].col = offsetCol2 + (n % colsLayer2); tileArr[idx].row = Math.floor(n / colsLayer2); tileArr[idx].layer = 2; idx++; }
     }
 
     // [FIX BUG #1] Calculo correcto del shift del slot.idx tras eliminar 2 fichas.
@@ -305,9 +328,14 @@ var GameEngine = (function() {
         onTileClick: function(index) {
             var t = tiles[index]; if (!t || t.matched || t.blocked || t.inSlot) return false;
             if (slots.length >= MAX_SLOTS) return false;
-            if (t.faceDown && !t.revealed) t.revealed = true;
+            // [FASE 6] Si la ficha esta boca abajo, NO mandarla al slot (la UI la revela primero).
+            // Retornar false para que la UI sepa que no se proceso, y revelar manualmente.
+            if (t.faceDown && !t.revealed) {
+                t.revealed = true;
+                return false;  // la UI debe manejar el volteo visual
+            }
             sound.select(); t.inSlot = true;
-            slots.push({ name: t.name, url: t.url, zone: t.zone, nota: t.nota, symbol: t.symbol, type: t.type, pid: t.pid, idx: index, bonus: t.bonus });
+            slots.push({ name: t.name, url: t.url, zone: t.zone, nota: t.nota, symbol: t.symbol, color: t.color, type: t.type, pid: t.pid, idx: index, bonus: t.bonus });
             selectedTileIdx = index; updateBlocked(); checkForMatchInSlots();
             // [FEATURE #1] Tras cada click, verificar si el tablero quedo insoluble y auto-shuffle.
             autoUnstickIfNeeded();
@@ -361,6 +389,8 @@ var GameEngine = (function() {
         setOnStateChange: function(callback) { onStateChange = callback; },
         isGameOver: function() { return tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0; },
         getCombo: function() { return combo; },
+        // [FASE 6] Reproduce el sonido de revelar ficha (para fichas boca abajo).
+        playRevealSound: function() { sound.reveal(); },
         stopTimer: function() { if (timerInterval) clearInterval(timerInterval); },
         // [FEATURE #1] Expuesto para que la UI pueda verificar y mostrar aviso.
         isBoardStuck: function() { return isBoardStuck(); },
