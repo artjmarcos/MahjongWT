@@ -151,27 +151,38 @@ var GameEngine = (function() {
     }
 
     // [FIX BUG #11] Layout separado en funcion para reutilizar en useShuffle.
-    // [FASE 6] Layout escalable: 2 capas para niveles pequenos, 3 capas para niveles grandes.
-    // 6 columnas en la base.
+    // [FASE 6] Layout escalable: 2, 3 o 4 capas segun el tamanio del nivel.
+    // 6 columnas en la base, decreciendo en capas superiores.
     function layoutTiles(tileArr) {
         var totalTiles = tileArr.length, colsBase = 6;
-        var tilesLayer0, tilesLayer1, tilesLayer2;
-        if (totalTiles > 30) {
-            tilesLayer0 = Math.floor(totalTiles * 0.6);
+        var tilesLayer0, tilesLayer1, tilesLayer2, tilesLayer3;
+        if (totalTiles > 60) {
+            // Niveles muy grandes: 4 capas (50% / 25% / 15% / 10%)
+            tilesLayer0 = Math.floor(totalTiles * 0.50);
+            tilesLayer1 = Math.floor(totalTiles * 0.25);
+            tilesLayer2 = Math.floor(totalTiles * 0.15);
+            tilesLayer3 = totalTiles - tilesLayer0 - tilesLayer1 - tilesLayer2;
+        } else if (totalTiles > 30) {
+            // Niveles medianos: 3 capas (60% / 28% / 12%)
+            tilesLayer0 = Math.floor(totalTiles * 0.60);
             tilesLayer1 = Math.floor(totalTiles * 0.28);
             tilesLayer2 = totalTiles - tilesLayer0 - tilesLayer1;
+            tilesLayer3 = 0;
         } else {
-            tilesLayer0 = Math.floor(totalTiles * 0.7);
+            // Niveles pequenos: 2 capas (70% / 30%)
+            tilesLayer0 = Math.floor(totalTiles * 0.70);
             tilesLayer1 = totalTiles - tilesLayer0;
             tilesLayer2 = 0;
+            tilesLayer3 = 0;
         }
-        var rowsBase = Math.ceil(tilesLayer0 / colsBase);
         var colsLayer1 = 4, offsetCol1 = Math.floor((colsBase - colsLayer1) / 2);
         var colsLayer2 = 3, offsetCol2 = Math.floor((colsBase - colsLayer2) / 2);
+        var colsLayer3 = 2, offsetCol3 = Math.floor((colsBase - colsLayer3) / 2);
         var idx = 0;
         for (var k = 0; k < tilesLayer0; k++) { tileArr[idx].col = k % colsBase; tileArr[idx].row = Math.floor(k / colsBase); tileArr[idx].layer = 0; idx++; }
         for (var m = 0; m < tilesLayer1; m++) { tileArr[idx].col = offsetCol1 + (m % colsLayer1); tileArr[idx].row = Math.floor(m / colsLayer1); tileArr[idx].layer = 1; idx++; }
         for (var n = 0; n < tilesLayer2; n++) { tileArr[idx].col = offsetCol2 + (n % colsLayer2); tileArr[idx].row = Math.floor(n / colsLayer2); tileArr[idx].layer = 2; idx++; }
+        for (var p = 0; p < tilesLayer3; p++) { tileArr[idx].col = offsetCol3 + (p % colsLayer3); tileArr[idx].row = Math.floor(p / colsLayer3); tileArr[idx].layer = 3; idx++; }
     }
 
     // [FIX BUG #1] Calculo correcto del shift del slot.idx tras eliminar 2 fichas.
