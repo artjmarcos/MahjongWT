@@ -886,74 +886,154 @@ var UI = (function() {
     }
     function closeTrivia() { var m = document.getElementById('triviaModal'); if (m) m.style.display = 'none'; }
 
+    // [FASE 6] Memorice mejorado: 8 parejas, 3D flip, contador, pantalla de finalizacion.
+    var memoriceAttempts = 0;
     function startMemoriceMinigame(zoneId, levelNum) {
         var mini = MINIGAMES[zoneId + '-' + levelNum]; if (!mini || !mini.photos) return;
         var shuffled = mini.photos.slice().sort(function() { return Math.random() - 0.5; });
-        memoricePhotos = shuffled.slice(0, 6);
+        // 8 parejas si hay suficientes fotos, sino 6.
+        var numPairs = shuffled.length >= 8 ? 8 : 6;
+        memoricePhotos = shuffled.slice(0, numPairs);
         memoriceCards = [];
         memoricePhotos.forEach(function(photo, idx) {
-            memoriceCards.push({ url: photo.url, name: photo.name, pairId: idx, matched: false });
-            memoriceCards.push({ url: photo.url, name: photo.name, pairId: idx, matched: false });
+            memoriceCards.push({ url: photo.url, name: photo.name, nota: photo.nota, pairId: idx, matched: false });
+            memoriceCards.push({ url: photo.url, name: photo.name, nota: photo.nota, pairId: idx, matched: false });
         });
         for (var i = memoriceCards.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var temp = memoriceCards[i]; memoriceCards[i] = memoriceCards[j]; memoriceCards[j] = temp; }
-        memoriceFlipped = []; memoriceMatched = 0; memoriceLocked = false;
+        memoriceFlipped = []; memoriceMatched = 0; memoriceLocked = false; memoriceAttempts = 0;
+        var totalPairs = numPairs;
         if (!document.getElementById('memoriceModal')) {
             var modal = document.createElement('div'); modal.id = 'memoriceModal'; modal.className = 'memorice-modal';
-            modal.innerHTML = '<div style="max-width:340px;width:100%;background:linear-gradient(145deg,rgba(23,34,30,0.95),rgba(11,21,18,0.95));border-radius:16px;border:1px solid rgba(242,202,80,0.3);padding:16px;">' +
-                '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">' +
+            modal.innerHTML = '<div style="max-width:380px;width:100%;background:linear-gradient(145deg,rgba(23,34,30,0.95),rgba(11,21,18,0.95));border-radius:18px;border:1px solid rgba(242,202,80,0.35);padding:20px;box-shadow:0 8px 32px rgba(0,0,0,0.5);">' +
+                '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">' +
                 '<span style="color:#f2ca50;font-weight:bold;font-size:1.1em;" id="memoriceTitle">Memorice</span>' +
                 '<button onclick="UI.closeMemorice()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">✕</button></div>' +
-                '<div class="memorice-board" id="memoriceBoard"></div></div>';
+                '<div id="memoriceProgress" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding:8px 12px;background:rgba(0,0,0,0.25);border-radius:10px;">' +
+                '<span style="color:rgba(242,202,80,0.7);font-size:0.75em;">Parejas: <span id="memPairsFound" style="color:#4ade80;font-weight:bold;">0</span>/' + totalPairs + '</span>' +
+                '<span style="color:rgba(255,255,255,0.4);font-size:0.7em;">Intentos: <span id="memAttempts" style="color:white;">0</span></span>' +
+                '</div>' +
+                '<div class="memorice-board" id="memoriceBoard"></div>' +
+                '<div id="memoriceResult" style="display:none;margin-top:16px;"></div>' +
+                '</div>';
             document.body.appendChild(modal);
+        }
+        // Resetear el total de parejas en el contador.
+        var progressEl = document.getElementById('memoriceProgress');
+        if (progressEl) {
+            var spans = progressEl.querySelectorAll('span');
+            if (spans[0]) spans[0].innerHTML = 'Parejas: <span id="memPairsFound" style="color:#4ade80;font-weight:bold;">0</span>/' + totalPairs;
         }
         document.getElementById('memoriceModal').style.display = 'flex';
         document.getElementById('memoriceTitle').textContent = mini.icon + ' ' + mini.name;
+        document.getElementById('memoriceResult').style.display = 'none';
         renderMemoriceBoard();
     }
 
     function renderMemoriceBoard() {
         var board = document.getElementById('memoriceBoard'); if (!board) return; board.innerHTML = '';
+        // Determinar el icono del reverso segun la zona.
+        var mini = currentZone ? MINIGAMES[currentZone.id + '-' + (currentLevel ? currentLevel.num : '')] : null;
+        var backIcon = (mini && mini.icon) ? mini.icon : '🪭';
         memoriceCards.forEach(function(card, index) {
             var el = document.createElement('div'); el.className = 'memorice-card';
-            if (memoriceFlipped.indexOf(index) !== -1 || card.matched) {
-                el.classList.add('flipped');
-                el.innerHTML = '<img src="' + card.url + '" alt="' + card.name + '" onerror="this.style.display=\'none\'">';
-            } else { el.innerHTML = '<span class="card-back">🪭</span>'; }
+            if (memoriceFlipped.indexOf(index) !== -1 || card.matched) el.classList.add('flipped');
             if (card.matched) el.classList.add('matched');
+            // Estructura 3D flip: back + front
+            el.innerHTML = '<div class="memorice-card-inner">' +
+                '<div class="memorice-card-face memorice-card-back">' +
+                    '<span class="memorice-card-back-pattern">' + backIcon + '</span>' +
+                '</div>' +
+                '<div class="memorice-card-face memorice-card-front">' +
+                    '<img src="' + card.url + '" alt="' + card.name + '" onerror="this.style.display=\'none\'">' +
+                    (card.matched ? '<div class="card-name-mini">' + card.name + '</div>' : '') +
+                '</div>' +
+            '</div>';
             el.onclick = function() { flipMemoriceCard(index); };
             board.appendChild(el);
         });
+        // Actualizar contador.
+        var pf = document.getElementById('memPairsFound');
+        var at = document.getElementById('memAttempts');
+        if (pf) pf.textContent = memoriceMatched;
+        if (at) at.textContent = memoriceAttempts;
     }
 
     function flipMemoriceCard(index) {
         if (memoriceLocked || memoriceFlipped.indexOf(index) !== -1 || memoriceCards[index].matched) return;
-        memoriceFlipped.push(index); renderMemoriceBoard();
+        memoriceFlipped.push(index);
+        GameEngine.playRevealSound();  // sonido de flip
+        haptic(10);
+        renderMemoriceBoard();
         if (memoriceFlipped.length === 2) {
             memoriceLocked = true;
+            memoriceAttempts++;
             var a = memoriceFlipped[0], b = memoriceFlipped[1];
             if (memoriceCards[a].pairId === memoriceCards[b].pairId) {
-                memoriceCards[a].matched = true; memoriceCards[b].matched = true;
-                memoriceMatched++; memoriceFlipped = []; memoriceLocked = false;
-                renderMemoriceBoard();
-                if (memoriceMatched === 6) {
-                    setTimeout(function() {
-                        addCoins(10);
-                        document.getElementById('memoriceModal').style.display = 'none';
-                        showMessage('Memorice completado! +10 monedas');
-                        // [FASE 2] Tracking de misiones: minigameComplete + coinsEarned.
-                        var mgCompletadas = Misiones.registrarEvento('minigameComplete', 1);
-                        mgCompletadas = mgCompletadas.concat(Misiones.registrarEvento('coinsEarned', 10));
-                        mostrarMisionesCompletadas(mgCompletadas);
-                        Misiones.registrarActividad();
-                        // [FASE 4] Tracking de logros: minigameComplete, memoricePerfect.
-                        var mgLogros = [];
-                        mgLogros = mgLogros.concat(Logros.registrarEvento('minigameComplete'));
-                        mgLogros = mgLogros.concat(Logros.registrarEvento('memoricePerfect'));
-                        mostrarLogrosDesbloqueados(mgLogros);
-                    }, 500);
-                }
-            } else { setTimeout(function() { memoriceFlipped = []; memoriceLocked = false; renderMemoriceBoard(); }, 800); }
+                // Match!
+                setTimeout(function() {
+                    memoriceCards[a].matched = true; memoriceCards[b].matched = true;
+                    memoriceMatched++; memoriceFlipped = []; memoriceLocked = false;
+                    GameEngine.playRevealSound();  // sonido de match
+                    haptic([20, 30, 20]);
+                    renderMemoriceBoard();
+                    var totalPairs = memoricePhotos.length;
+                    if (memoriceMatched === totalPairs) {
+                        setTimeout(function() { showMemoriceResult(); }, 600);
+                    }
+                }, 400);
+            } else {
+                // No match
+                setTimeout(function() {
+                    memoriceFlipped = []; memoriceLocked = false;
+                    renderMemoriceBoard();
+                }, 900);
+            }
         }
+    }
+
+    // [FASE 6] Pantalla de finalizacion del memorice.
+    function showMemoriceResult() {
+        var totalPairs = memoricePhotos.length;
+        var perfect = memoriceAttempts === totalPairs;  // sin fallos
+        var baseReward = 15;
+        var bonus = perfect ? 10 : 0;
+        var totalReward = baseReward + bonus;
+
+        var resultEl = document.getElementById('memoriceResult');
+        var boardEl = document.getElementById('memoriceBoard');
+        if (boardEl) boardEl.style.display = 'none';
+        if (resultEl) {
+            resultEl.style.display = 'block';
+            var html = '<div style="text-align:center;padding:12px 0;">';
+            html += '<div style="font-size:3em;margin-bottom:8px;">' + (perfect ? '🏆' : '🎉') + '</div>';
+            html += '<h3 style="color:' + (perfect ? '#fbbf24' : '#4ade80') + ';font-size:1.3em;font-weight:bold;margin-bottom:8px;">' + (perfect ? '¡Perfecto! Sin fallos!' : '¡Memorice completado!') + '</h3>';
+            html += '<p style="color:white;font-size:0.95em;margin-bottom:4px;">' + memoriceMatched + '/' + totalPairs + ' parejas en ' + memoriceAttempts + ' intentos</p>';
+            html += '<p style="color:#4ade80;font-size:1.1em;font-weight:bold;margin-bottom:16px;">+' + totalReward + ' 🪙' + (bonus > 0 ? ' (incl. bonus perfección!)' : '') + '</p>';
+            // Galeria de fotos descubiertas
+            html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;">';
+            memoricePhotos.forEach(function(p) {
+                html += '<div style="aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid rgba(242,202,80,0.3);position:relative;">';
+                html += '<img src="' + p.url + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">';
+                html += '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.8);color:#f2ca50;font-size:0.45em;text-align:center;padding:1px;">' + p.name + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '<button onclick="UI.closeMemorice()" class="btn-primary" style="width:100%;padding:10px;border-radius:12px;font-size:1em;">Cerrar</button>';
+            html += '</div>';
+            resultEl.innerHTML = html;
+        }
+
+        addCoins(totalReward);
+        // Tracking de misiones y logros.
+        var mgCompletadas = Misiones.registrarEvento('minigameComplete', 1);
+        mgCompletadas = mgCompletadas.concat(Misiones.registrarEvento('coinsEarned', totalReward));
+        mostrarMisionesCompletadas(mgCompletadas);
+        Misiones.registrarActividad();
+        var mgLogros = [];
+        mgLogros = mgLogros.concat(Logros.registrarEvento('minigameComplete'));
+        if (perfect) mgLogros = mgLogros.concat(Logros.registrarEvento('memoricePerfect'));
+        mostrarLogrosDesbloqueados(mgLogros);
+        haptic([30, 50, 30, 50, 80]);
     }
 
     function closeMemorice() { document.getElementById('memoriceModal').style.display = 'none'; }

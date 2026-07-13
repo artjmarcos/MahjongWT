@@ -140,14 +140,19 @@
         .zoom-note p { font-size: 1em !important; line-height: 1.5; }
         #ad-banner { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 70; background: rgba(0,0,0,0.8); width: 100%; max-width: 440px; display: flex; justify-content: center; align-items: center; min-height: 50px; }
         .memorice-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 400; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .memorice-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 340px; width: 100%; }
-        .memorice-card { aspect-ratio: 4/3; border-radius: 12px; background: #1a3a2a; border: 2px solid rgba(242,202,80,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; }
-        .memorice-card.flipped { border-color: #f2ca50; }
-        .memorice-card.matched { border-color: #4ade80; opacity: 0.7; pointer-events: none; }
-        .memorice-card img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: none; }
-        .memorice-card.flipped img { display: block; }
-        .memorice-card .card-back { font-size: 2em; color: rgba(242,202,80,0.5); }
-        .memorice-card.flipped .card-back { display: none; }
+        .memorice-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 380px; width: 100%; }
+        .memorice-card { aspect-ratio: 1; border-radius: 12px; cursor: pointer; perspective: 600px; position: relative; }
+        .memorice-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.5s; transform-style: preserve-3d; }
+        .memorice-card.flipped .memorice-card-inner { transform: rotateY(180deg); }
+        .memorice-card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .memorice-card-back { background: linear-gradient(145deg, #1a3a2a 0%, #0d2518 50%, #1a3a2a 100%); border: 2px solid rgba(242,202,80,0.35); }
+        .memorice-card-back-pattern { font-size: 2em; color: rgba(242,202,80,0.45); filter: drop-shadow(0 0 4px rgba(242,202,80,0.2)); }
+        .memorice-card-front { background: #0b1512; border: 2px solid #f2ca50; transform: rotateY(180deg); }
+        .memorice-card-front img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+        .memorice-card.matched .memorice-card-front { border-color: #4ade80; box-shadow: 0 0 16px rgba(74,222,128,0.5); }
+        .memorice-card.matched { animation: memoriceMatch 0.5s ease; }
+        @keyframes memoriceMatch { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+        .memorice-card .card-name-mini { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #f2ca50; font-size: 0.5em; text-align: center; padding: 1px 2px; z-index: 5; }
         .tutorial-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); z-index: 300; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
         .tutorial-message { background: rgba(23,34,30,0.95); border: 2px solid #f2ca50; border-radius: 16px; padding: 20px; max-width: 280px; text-align: center; color: white; pointer-events: auto; }
         /* [FIX BUG #9] Estilos para fichas bonus (x2 puntos) */
