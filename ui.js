@@ -387,13 +387,30 @@ var UI = (function() {
         var tiles = GameEngine.getTiles();
         var vt = tiles.filter(function(t) { return !t.matched && !t.inSlot; });
         if (vt.length === 0) { c.innerHTML = ''; return; }
-        // [FASE 6] 6 columnas para fichas mas pequenas y power-ups mas visibles. Aspect ratio 1.45.
-        var w = c.clientWidth - 12, margin = 6, COLS = 6, cw = (w - margin * 2) / COLS, ch = cw * 1.45;
+        // [FASE 6] Auto-escalado: calcula el tamanio de ficha para que TODO quepa en pantalla.
+        // El espacio disponible es el alto del boardContainer (que tiene flex:1).
+        var w = c.clientWidth - 12, margin = 6;
         var maxRow = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.row; })) : 0;
         var maxLayer = vt.length > 0 ? Math.max.apply(null, vt.map(function(t) { return t.layer; })) : 0;
+        var COLS = 6;  // layout base siempre usa 6 columnas
         var layerOffset = 14;
-        var nh = Math.max((maxRow + 1) * ch + margin * 2 + (maxLayer * layerOffset) + 20, 300);
-        c.style.minHeight = nh + 'px'; c.innerHTML = '';
+        // Calcular alto y ancho necesarios con tamanio "ideal" de ficha.
+        var availableH = c.clientHeight > 0 ? c.clientHeight : (window.innerHeight * 0.5);
+        availableH -= 20;  // padding
+        var neededRows = maxRow + 1;
+        var neededLayers = maxLayer;
+        // Calcular cw maximo para que el alto quepa: (neededRows * ch) + (neededLayers * layerOffset) + margins <= availableH
+        // ch = cw * 1.45, despejando: cw <= (availableH - margins - layers*offset) / (neededRows * 1.45)
+        var maxCwByHeight = (availableH - margin * 2 - neededLayers * layerOffset - 20) / (neededRows * 1.45);
+        var maxCwByWidth = (w - margin * 2) / COLS;
+        // Usar el menor de los dos para que quepa tanto en alto como en ancho.
+        var cw = Math.min(maxCwByWidth, maxCwByHeight);
+        // Limitar: no mas grande que el ideal por ancho, no mas chico que 28px (legible).
+        cw = Math.max(28, Math.min(cw, maxCwByWidth));
+        var ch = cw * 1.45;
+        var nh = (maxRow + 1) * ch + margin * 2 + (maxLayer * layerOffset) + 20;
+        // [FASE 6] No forzar minHeight mayor que el container: dejar que flex:1 controle el alto.
+        c.style.minHeight = '0'; c.innerHTML = '';
         var inner = document.createElement('div');
         inner.style.cssText = 'position:relative;width:100%;display:flex;align-items:center;justify-content:center;height:' + nh + 'px;';
         var grid = document.createElement('div');
