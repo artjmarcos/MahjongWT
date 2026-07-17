@@ -255,12 +255,38 @@ var chile_aricaPhotos = [
     { name:'Putre', url:'https://sfile.chatglm.cn/images-ppt/d331e465eec9.jpg', zone:'chile-arica', nota:'Portal del altiplano, a 3.500m sobre el mar.' },
     { name:'Cuya', url:'https://sfile.chatglm.cn/images-ppt/237572c32e0e.jpg', zone:'chile-arica', nota:'Caleta pesquera en la costa del desierto.' },
     { name:'General Lagos', url:'https://sfile.chatglm.cn/images-ppt/8bcf9d9eb5f4.jpg', zone:'chile-arica', nota:'Pueblo altiplánico en la frontera con Perú.' }
+,
+    { name:'Piedras Rojas', url:'https://drive.google.com/thumbnail?id=1F0IYAE6mROqz0nBtOrRL0-r-7xMQFwhb&sz=w400', zone:'chile-arica', nota:'Donde la tierra se viste de fuego.' },
+    { name:'Laguna Miscanti', url:'https://drive.google.com/thumbnail?id=1UQtlAR9wOdNBsC-E2XnYpLEbCXPDGtsA&sz=w400', zone:'chile-arica', nota:'Un espejo de agua que toca el cielo.' },
+    { name:'Valle de la Luna', url:'https://drive.google.com/thumbnail?id=14Od2N2_ZkM4avnh1UiOHI6U3gqeMxLny&sz=w400', zone:'chile-arica', nota:'Caminar entre estrellas sin salir de la Tierra.' },
+    { name:'Iglesia', url:'https://drive.google.com/thumbnail?id=1CU-oHqUlBsoeit8D7THQCnvdzeE3Ri0o&sz=w400', zone:'chile-arica', nota:'Adobes que guardan siglos de fe.' },
+    { name:'Flamenco', url:'https://drive.google.com/thumbnail?id=14Qdu0r0OuSeZgFb9-Nz1VSq0ytx_SqG1&sz=w400', zone:'chile-arica', nota:'Bailarines rosados sobre sal blanca.' },
+    { name:'La Portada', url:'https://drive.google.com/thumbnail?id=1cLUas6xEls2ZgtyI14qiX04KLDjroqcG&sz=w400', zone:'chile-arica', nota:'El mar tallando eternamente la piedra.' },
+    { name:'Lagunas Escondidas', url:'https://drive.google.com/thumbnail?id=1dKEA6oYUsiEXfE5Yf2-Yp8Eu0f6baMvK&sz=w400', zone:'chile-arica', nota:'Secretos de agua escondidos al sol.' },
+    { name:'Desierto Florido', url:'https://drive.google.com/thumbnail?id=1zw6EbP5jjmpuM6izdhL9GTbrUPv2_pEg&sz=w400', zone:'chile-arica', nota:'La vida florece donde parece imposible.' },
+    { name:'Géiser del Tatio', url:'https://drive.google.com/thumbnail?id=1myfk3mUjy78mLbMvSe1pjdXw8uvRism-&sz=w400', zone:'chile-arica', nota:'La tierra respirando vapor sagrado.' },
+    { name:'Valle del Arcoíris', url:'https://drive.google.com/thumbnail?id=1glWxef_1S66sAAIwemQx1_KXEnPKwtam&sz=w400', zone:'chile-arica', nota:'Cerros pintados por manos divinas.' },
+    { name:'Lagunas Altiplánicas', url:'https://drive.google.com/thumbnail?id=19R2ZGOtvO9iOcLhOtVcTpDATOb4igup6&sz=w400', zone:'chile-arica', nota:'Donde el cielo se detiene a descansar.' },
+    { name:'Salar de Atacama', url:'https://drive.google.com/thumbnail?id=1grEzPHz96h3nI3Am8DRBbdN3PFs71-or&sz=w400', zone:'chile-arica', nota:'Un mar de sal que nunca existió.' }
 ];
 var chile_tarapacaPhotos = [
     { name:'Iquique', url:'https://sfile.chatglm.cn/images-ppt/53030d57cc0b.jpg', zone:'chile-tarapaca', nota:'Playas doradas y olas perfectas en el norte.' },
     { name:'Pozo Almonte', url:'https://sfile.chatglm.cn/images-ppt/9e8ccf233c4e.jpg', zone:'chile-tarapaca', nota:'Capital del salitre, corazón del desierto de Tarapacá.' },
     { name:'Huara', url:'https://sfile.chatglm.cn/images-ppt/dc0812e4a75c.jpeg', zone:'chile-tarapaca', nota:'Cruce de caminos en la pampa del Tamarugal.' },
     { name:'Pica', url:'https://sfile.chatglm.cn/images-ppt/d4309ca2718c.jpg', zone:'chile-tarapaca', nota:'Oasis con mangos y limones en medio del desierto.' }
+,
+    { name:'Piedras Rojas', url:'https://drive.google.com/thumbnail?id=1F0IYAE6mROqz0nBtOrRL0-r-7xMQFwhb&sz=w400', zone:'chile-tarapaca', nota:'Donde la tierra se viste de fuego.' },
+    { name:'Laguna Miscanti', url:'https://drive.google.com/thumbnail?id=1UQtlAR9wOdNBsC-E2XnYpLEbCXPDGtsA&sz=w400', zone:'chile-tarapaca', nota:'Un espejo de agua que toca el cielo.' },
+    { name:'Valle de la Luna', url:'https://drive.google.com/thumbnail?id=14Od2N2_ZkM4avnh1UiOHI6U3gqeMxLny&sz=w400', zone:'chile-tarapaca', nota:'Caminar entre estrellas sin salir de la Tierra.' },
+    { name:'Iglesia', url:'https://drive.google.com/thumbnail?id=1CU-oHqUlBsoeit8D7THQCnvdzeE3Ri0o&sz=w400', zone:'chile-tarapaca', nota:'Adobes que guardan siglos de fe.' },
+    { name:'Flamenco', url:'https://drive.google.com/thumbnail?id=14Qdu0r0OuSeZgFb9-Nz1VSq0ytx_SqG1&sz=w400', zone:'chile-tarapaca', nota:'Bailarines rosados sobre sal blanca.' },
+    { name:'La Portada', url:'https://drive.google.com/thumbnail?id=1cLUas6xEls2ZgtyI14qiX04KLDjroqcG&sz=w400', zone:'chile-tarapaca', nota:'El mar tallando eternamente la piedra.' },
+    { name:'Lagunas Escondidas', url:'https://drive.google.com/thumbnail?id=1dKEA6oYUsiEXfE5Yf2-Yp8Eu0f6baMvK&sz=w400', zone:'chile-tarapaca', nota:'Secretos de agua escondidos al sol.' },
+    { name:'Desierto Florido', url:'https://drive.google.com/thumbnail?id=1zw6EbP5jjmpuM6izdhL9GTbrUPv2_pEg&sz=w400', zone:'chile-tarapaca', nota:'La vida florece donde parece imposible.' },
+    { name:'Géiser del Tatio', url:'https://drive.google.com/thumbnail?id=1myfk3mUjy78mLbMvSe1pjdXw8uvRism-&sz=w400', zone:'chile-tarapaca', nota:'La tierra respirando vapor sagrado.' },
+    { name:'Valle del Arcoíris', url:'https://drive.google.com/thumbnail?id=1glWxef_1S66sAAIwemQx1_KXEnPKwtam&sz=w400', zone:'chile-tarapaca', nota:'Cerros pintados por manos divinas.' },
+    { name:'Lagunas Altiplánicas', url:'https://drive.google.com/thumbnail?id=19R2ZGOtvO9iOcLhOtVcTpDATOb4igup6&sz=w400', zone:'chile-tarapaca', nota:'Donde el cielo se detiene a descansar.' },
+    { name:'Salar de Atacama', url:'https://drive.google.com/thumbnail?id=1grEzPHz96h3nI3Am8DRBbdN3PFs71-or&sz=w400', zone:'chile-tarapaca', nota:'Un mar de sal que nunca existió.' }
 ];
 var chile_antofagastaPhotos = [
     { name:'Antofagasta', url:'https://sfile.chatglm.cn/images-ppt/9d75e9a6e4a1.jpg', zone:'chile-antofagasta', nota:'La perla del norte, puerto y puerta al desierto.' },
@@ -268,6 +294,19 @@ var chile_antofagastaPhotos = [
     { name:'Tocopilla', url:'https://sfile.chatglm.cn/images-ppt/2734c6c22a68.jpg', zone:'chile-antofagasta', nota:'Ciudad costera con historia salitrera.' },
     { name:'Taltal', url:'https://sfile.chatglm.cn/images-ppt/266706fe2d4d.jpg', zone:'chile-antofagasta', nota:'Puerto pesquero entre el mar y el desierto.' },
     { name:'Mejillones', url:'https://sfile.chatglm.cn/images-ppt/3eb01e38ae71.jpg', zone:'chile-antofagasta', nota:'Bahía protegida con aguas turquesa.' }
+,
+    { name:'Piedras Rojas', url:'https://drive.google.com/thumbnail?id=1F0IYAE6mROqz0nBtOrRL0-r-7xMQFwhb&sz=w400', zone:'chile-antofagasta', nota:'Donde la tierra se viste de fuego.' },
+    { name:'Laguna Miscanti', url:'https://drive.google.com/thumbnail?id=1UQtlAR9wOdNBsC-E2XnYpLEbCXPDGtsA&sz=w400', zone:'chile-antofagasta', nota:'Un espejo de agua que toca el cielo.' },
+    { name:'Valle de la Luna', url:'https://drive.google.com/thumbnail?id=14Od2N2_ZkM4avnh1UiOHI6U3gqeMxLny&sz=w400', zone:'chile-antofagasta', nota:'Caminar entre estrellas sin salir de la Tierra.' },
+    { name:'Iglesia', url:'https://drive.google.com/thumbnail?id=1CU-oHqUlBsoeit8D7THQCnvdzeE3Ri0o&sz=w400', zone:'chile-antofagasta', nota:'Adobes que guardan siglos de fe.' },
+    { name:'Flamenco', url:'https://drive.google.com/thumbnail?id=14Qdu0r0OuSeZgFb9-Nz1VSq0ytx_SqG1&sz=w400', zone:'chile-antofagasta', nota:'Bailarines rosados sobre sal blanca.' },
+    { name:'La Portada', url:'https://drive.google.com/thumbnail?id=1cLUas6xEls2ZgtyI14qiX04KLDjroqcG&sz=w400', zone:'chile-antofagasta', nota:'El mar tallando eternamente la piedra.' },
+    { name:'Lagunas Escondidas', url:'https://drive.google.com/thumbnail?id=1dKEA6oYUsiEXfE5Yf2-Yp8Eu0f6baMvK&sz=w400', zone:'chile-antofagasta', nota:'Secretos de agua escondidos al sol.' },
+    { name:'Desierto Florido', url:'https://drive.google.com/thumbnail?id=1zw6EbP5jjmpuM6izdhL9GTbrUPv2_pEg&sz=w400', zone:'chile-antofagasta', nota:'La vida florece donde parece imposible.' },
+    { name:'Géiser del Tatio', url:'https://drive.google.com/thumbnail?id=1myfk3mUjy78mLbMvSe1pjdXw8uvRism-&sz=w400', zone:'chile-antofagasta', nota:'La tierra respirando vapor sagrado.' },
+    { name:'Valle del Arcoíris', url:'https://drive.google.com/thumbnail?id=1glWxef_1S66sAAIwemQx1_KXEnPKwtam&sz=w400', zone:'chile-antofagasta', nota:'Cerros pintados por manos divinas.' },
+    { name:'Lagunas Altiplánicas', url:'https://drive.google.com/thumbnail?id=19R2ZGOtvO9iOcLhOtVcTpDATOb4igup6&sz=w400', zone:'chile-antofagasta', nota:'Donde el cielo se detiene a descansar.' },
+    { name:'Salar de Atacama', url:'https://drive.google.com/thumbnail?id=1grEzPHz96h3nI3Am8DRBbdN3PFs71-or&sz=w400', zone:'chile-antofagasta', nota:'Un mar de sal que nunca existió.' }
 ];
 var chile_atacamaPhotos = [
     { name:'Copiapó', url:'https://sfile.chatglm.cn/images-ppt/59e55d8edfd3.jpg', zone:'chile-atacama', nota:'Oasis en el desierto florido, capital de Atacama.' },
@@ -275,6 +314,19 @@ var chile_atacamaPhotos = [
     { name:'Caldera', url:'https://sfile.chatglm.cn/images-ppt/69aff8c745df.jpg', zone:'chile-atacama', nota:'Puerto histórico con playas de aguas tibias.' },
     { name:'Chañaral', url:'https://sfile.chatglm.cn/images-ppt/300abf8c8135.jpg', zone:'chile-atacama', nota:'Puerto norteño, puerta a Pan de Azúcar.' },
     { name:'Diego de Almagro', url:'https://sfile.chatglm.cn/images-ppt/6ec7aa00fbd1.jpg', zone:'chile-atacama', nota:'Cruce de rutas en el desierto de Atacama.' }
+,
+    { name:'Piedras Rojas', url:'https://drive.google.com/thumbnail?id=1F0IYAE6mROqz0nBtOrRL0-r-7xMQFwhb&sz=w400', zone:'chile-atacama', nota:'Donde la tierra se viste de fuego.' },
+    { name:'Laguna Miscanti', url:'https://drive.google.com/thumbnail?id=1UQtlAR9wOdNBsC-E2XnYpLEbCXPDGtsA&sz=w400', zone:'chile-atacama', nota:'Un espejo de agua que toca el cielo.' },
+    { name:'Valle de la Luna', url:'https://drive.google.com/thumbnail?id=14Od2N2_ZkM4avnh1UiOHI6U3gqeMxLny&sz=w400', zone:'chile-atacama', nota:'Caminar entre estrellas sin salir de la Tierra.' },
+    { name:'Iglesia', url:'https://drive.google.com/thumbnail?id=1CU-oHqUlBsoeit8D7THQCnvdzeE3Ri0o&sz=w400', zone:'chile-atacama', nota:'Adobes que guardan siglos de fe.' },
+    { name:'Flamenco', url:'https://drive.google.com/thumbnail?id=14Qdu0r0OuSeZgFb9-Nz1VSq0ytx_SqG1&sz=w400', zone:'chile-atacama', nota:'Bailarines rosados sobre sal blanca.' },
+    { name:'La Portada', url:'https://drive.google.com/thumbnail?id=1cLUas6xEls2ZgtyI14qiX04KLDjroqcG&sz=w400', zone:'chile-atacama', nota:'El mar tallando eternamente la piedra.' },
+    { name:'Lagunas Escondidas', url:'https://drive.google.com/thumbnail?id=1dKEA6oYUsiEXfE5Yf2-Yp8Eu0f6baMvK&sz=w400', zone:'chile-atacama', nota:'Secretos de agua escondidos al sol.' },
+    { name:'Desierto Florido', url:'https://drive.google.com/thumbnail?id=1zw6EbP5jjmpuM6izdhL9GTbrUPv2_pEg&sz=w400', zone:'chile-atacama', nota:'La vida florece donde parece imposible.' },
+    { name:'Géiser del Tatio', url:'https://drive.google.com/thumbnail?id=1myfk3mUjy78mLbMvSe1pjdXw8uvRism-&sz=w400', zone:'chile-atacama', nota:'La tierra respirando vapor sagrado.' },
+    { name:'Valle del Arcoíris', url:'https://drive.google.com/thumbnail?id=1glWxef_1S66sAAIwemQx1_KXEnPKwtam&sz=w400', zone:'chile-atacama', nota:'Cerros pintados por manos divinas.' },
+    { name:'Lagunas Altiplánicas', url:'https://drive.google.com/thumbnail?id=19R2ZGOtvO9iOcLhOtVcTpDATOb4igup6&sz=w400', zone:'chile-atacama', nota:'Donde el cielo se detiene a descansar.' },
+    { name:'Salar de Atacama', url:'https://drive.google.com/thumbnail?id=1grEzPHz96h3nI3Am8DRBbdN3PFs71-or&sz=w400', zone:'chile-atacama', nota:'Un mar de sal que nunca existió.' }
 ];
 var chile_coquimboPhotos = [
     { name:'La Serena', url:'https://sfile.chatglm.cn/images-ppt/3462252851ed.jpg', zone:'chile-coquimbo', nota:'Ciudad colonial con playas y astronomía.' },
@@ -291,6 +343,30 @@ var chile_valparaisoPhotos = [
     { name:'San Antonio', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'Puerto exportador y caleta de pescadores.' },
     { name:'Los Andes', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'Camino a Argentina, valle del Aconcagua.' },
     { name:'La Ligua', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'Capital del tejido y valles productivos.' }
+,
+    { name:'Costanera Center', url:'https://drive.google.com/thumbnail?id=1nGUkO0nawN3gOwjW21hXCIDNYPFegMt0&sz=w400', zone:'chile-valparaiso', nota:'El futuro creciendo hacia el cielo.' },
+    { name:'Castillo Wulff', url:'https://drive.google.com/thumbnail?id=1yv2VBxXp9gu27IFAm5tN-IiumJ7sspBe&sz=w400', zone:'chile-valparaiso', nota:'Donde el mar abraza a la piedra.' },
+    { name:'Cerro San Cristobal', url:'https://drive.google.com/thumbnail?id=1HCxBgrT5lDyhSLe2otrp4w2ugBBDXSbX&sz=w400', zone:'chile-valparaiso', nota:'La ciudad entera a tus pies.' },
+    { name:'Cerro Santa Lucía', url:'https://drive.google.com/thumbnail?id=1R-r4Tt1TIc9A7VJ1_-_iXy2P2NpZfOsN&sz=w400', zone:'chile-valparaiso', nota:'Un jardín escondido en la urbe.' },
+    { name:'Cordillera de Los Andes', url:'https://drive.google.com/thumbnail?id=1Vy-KF3PCdLQTPg-9grzLVjyWTebzlCHb&sz=w400', zone:'chile-valparaiso', nota:'La espina dorsal del continente.' },
+    { name:'Atardecer Santiago', url:'https://drive.google.com/thumbnail?id=1PyuMXVS-J7z4Ch1u3mFt27E6wmkpEK5L&sz=w400', zone:'chile-valparaiso', nota:'El cielo ardiendo de despedida.' },
+    { name:'Embalse El Yeso', url:'https://drive.google.com/thumbnail?id=1Ay1YRncILC0rm0QZM_cEn2Vodu23cOCd&sz=w400', zone:'chile-valparaiso', nota:'Zafiro líquido entre montañas.' },
+    { name:'Centro de Santiago', url:'https://drive.google.com/thumbnail?id=1VqAz0OrJZ3kufu5_yj7M6zs1NgUy6Byw&sz=w400', zone:'chile-valparaiso', nota:'El corazón que nunca duerme.' },
+    { name:'Barrio Lastarria', url:'https://drive.google.com/thumbnail?id=16yL_2czoYeGo8Ps0yq2eAunMaMnx2e0F&sz=w400', zone:'chile-valparaiso', nota:'Donde el arte respira en cada esquina.' },
+    { name:'Viñedos', url:'https://drive.google.com/thumbnail?id=1xFEIBTub8gBh1W5KRq2_ZBiUNmrFFJnH&sz=w400', zone:'chile-valparaiso', nota:'La tierra ofrece su vino al sol.' },
+    { name:'Parque La Campana', url:'https://drive.google.com/thumbnail?id=1j6zc5a3Fs66WF4RNzL8CS0DxNrgeH9ll&sz=w400', zone:'chile-valparaiso', nota:'Bosques que el tiempo olvidó.' },
+    { name:'Caleta Horcón', url:'https://drive.google.com/thumbnail?id=1891kWifKa-U9pkBRtkPRtmpR09IRPpsm&sz=w400', zone:'chile-valparaiso', nota:'El mar entrega sus tesoros cada alba.' }
+,
+    { name:'Valpo 1', url:'https://drive.google.com/thumbnail?id=1WM5sd8aZyPDfeoyczNgYRKIRH2GToOJC&sz=w400', nota:'Un puerto que aún cuenta historias.' },
+    { name:'Valpo 2', url:'https://drive.google.com/thumbnail?id=1ZiwDZKB6TyV6vJvqMYeqGCdd5HSNL6nx&sz=w400', nota:'Cerros pintados con alegría.' },
+    { name:'Valpo 3', url:'https://drive.google.com/thumbnail?id=1eh776MPiWs6ry44Hd5BFxuZN4cqurNkF&sz=w400', nota:'Cada calle es un museo abierto.' },
+    { name:'Valpo 4', url:'https://drive.google.com/thumbnail?id=1EWM0KGofQJJ3VX6-iTMnT5K6RGMJwmzq&sz=w400', nota:'Murales que gritan versos al mar.' },
+    { name:'Valpo 5', url:'https://drive.google.com/thumbnail?id=1XzDDJ2_a7nHV_owPvLzVxBPax0Bd1OZj&sz=w400', nota:'Ascensores que suben al pasado.' },
+    { name:'Valpo 6', url:'https://drive.google.com/thumbnail?id=1Id4QQXiPgqSz0gbKoCTDdTzDP-KPC6Fo&sz=w400', nota:'Casas que se abrazan en la ladera.' },
+    { name:'Valpo 7', url:'https://drive.google.com/thumbnail?id=1Hn9Y4bxYWUqVifIbREzfnsrV40SOKJ9R&sz=w400', nota:'El puerto donde nació el canto.' },
+    { name:'Valpo 8', url:'https://drive.google.com/thumbnail?id=1_rqH51EFskHxRpzDIV8fXt9rZLuLem4l&sz=w400', nota:'Atardeceres que rompen el cielo.' },
+    { name:'Valpo 9', url:'https://drive.google.com/thumbnail?id=1Lq0s16e6S5reutW03wfY2bFaP5ZdLUmB&sz=w400', nota:'La joya del Pacífico Sur.' },
+    { name:'Valpo 10', url:'https://drive.google.com/thumbnail?id=1Oj8J0SWtItxwpAEcvaEUo04MlrGUiJcv&sz=w400', nota:'Escaleras que conducen al cielo.' }
 ];
 var chile_metropolitanaPhotos = [
     { name:'Santiago', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Corazón de Chile, entre la cordillera y el mar.' },
@@ -299,6 +375,19 @@ var chile_metropolitanaPhotos = [
     { name:'La Florida', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Barrio vibrante al sur de la capital.' },
     { name:'San Bernardo', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Tradición huasa y comercios en el sur de Santiago.' },
     { name:'Colina', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Termas de Colina y valle de Chicureo.' }
+,
+    { name:'Costanera Center', url:'https://drive.google.com/thumbnail?id=1nGUkO0nawN3gOwjW21hXCIDNYPFegMt0&sz=w400', zone:'chile-metropolitana', nota:'El futuro creciendo hacia el cielo.' },
+    { name:'Castillo Wulff', url:'https://drive.google.com/thumbnail?id=1yv2VBxXp9gu27IFAm5tN-IiumJ7sspBe&sz=w400', zone:'chile-metropolitana', nota:'Donde el mar abraza a la piedra.' },
+    { name:'Cerro San Cristobal', url:'https://drive.google.com/thumbnail?id=1HCxBgrT5lDyhSLe2otrp4w2ugBBDXSbX&sz=w400', zone:'chile-metropolitana', nota:'La ciudad entera a tus pies.' },
+    { name:'Cerro Santa Lucía', url:'https://drive.google.com/thumbnail?id=1R-r4Tt1TIc9A7VJ1_-_iXy2P2NpZfOsN&sz=w400', zone:'chile-metropolitana', nota:'Un jardín escondido en la urbe.' },
+    { name:'Cordillera de Los Andes', url:'https://drive.google.com/thumbnail?id=1Vy-KF3PCdLQTPg-9grzLVjyWTebzlCHb&sz=w400', zone:'chile-metropolitana', nota:'La espina dorsal del continente.' },
+    { name:'Atardecer Santiago', url:'https://drive.google.com/thumbnail?id=1PyuMXVS-J7z4Ch1u3mFt27E6wmkpEK5L&sz=w400', zone:'chile-metropolitana', nota:'El cielo ardiendo de despedida.' },
+    { name:'Embalse El Yeso', url:'https://drive.google.com/thumbnail?id=1Ay1YRncILC0rm0QZM_cEn2Vodu23cOCd&sz=w400', zone:'chile-metropolitana', nota:'Zafiro líquido entre montañas.' },
+    { name:'Centro de Santiago', url:'https://drive.google.com/thumbnail?id=1VqAz0OrJZ3kufu5_yj7M6zs1NgUy6Byw&sz=w400', zone:'chile-metropolitana', nota:'El corazón que nunca duerme.' },
+    { name:'Barrio Lastarria', url:'https://drive.google.com/thumbnail?id=16yL_2czoYeGo8Ps0yq2eAunMaMnx2e0F&sz=w400', zone:'chile-metropolitana', nota:'Donde el arte respira en cada esquina.' },
+    { name:'Viñedos', url:'https://drive.google.com/thumbnail?id=1xFEIBTub8gBh1W5KRq2_ZBiUNmrFFJnH&sz=w400', zone:'chile-metropolitana', nota:'La tierra ofrece su vino al sol.' },
+    { name:'Parque La Campana', url:'https://drive.google.com/thumbnail?id=1j6zc5a3Fs66WF4RNzL8CS0DxNrgeH9ll&sz=w400', zone:'chile-metropolitana', nota:'Bosques que el tiempo olvidó.' },
+    { name:'Caleta Horcón', url:'https://drive.google.com/thumbnail?id=1891kWifKa-U9pkBRtkPRtmpR09IRPpsm&sz=w400', zone:'chile-metropolitana', nota:'El mar entrega sus tesoros cada alba.' }
 ];
 var chile_ohigginsPhotos = [
     { name:'Rancagua', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Capital de O\'Higgins, tierra de minas y viñas.' },
@@ -306,6 +395,19 @@ var chile_ohigginsPhotos = [
     { name:'Pichilemu', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Capital chilena del surf, playas salvajes.' },
     { name:'Rengo', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Valle productivo al pie de la cordillera.' },
     { name:'Santa Cruz', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Capital del vino de Colchagua, museos y viñas.' }
+,
+    { name:'Costanera Center', url:'https://drive.google.com/thumbnail?id=1nGUkO0nawN3gOwjW21hXCIDNYPFegMt0&sz=w400', zone:'chile-ohiggins', nota:'El futuro creciendo hacia el cielo.' },
+    { name:'Castillo Wulff', url:'https://drive.google.com/thumbnail?id=1yv2VBxXp9gu27IFAm5tN-IiumJ7sspBe&sz=w400', zone:'chile-ohiggins', nota:'Donde el mar abraza a la piedra.' },
+    { name:'Cerro San Cristobal', url:'https://drive.google.com/thumbnail?id=1HCxBgrT5lDyhSLe2otrp4w2ugBBDXSbX&sz=w400', zone:'chile-ohiggins', nota:'La ciudad entera a tus pies.' },
+    { name:'Cerro Santa Lucía', url:'https://drive.google.com/thumbnail?id=1R-r4Tt1TIc9A7VJ1_-_iXy2P2NpZfOsN&sz=w400', zone:'chile-ohiggins', nota:'Un jardín escondido en la urbe.' },
+    { name:'Cordillera de Los Andes', url:'https://drive.google.com/thumbnail?id=1Vy-KF3PCdLQTPg-9grzLVjyWTebzlCHb&sz=w400', zone:'chile-ohiggins', nota:'La espina dorsal del continente.' },
+    { name:'Atardecer Santiago', url:'https://drive.google.com/thumbnail?id=1PyuMXVS-J7z4Ch1u3mFt27E6wmkpEK5L&sz=w400', zone:'chile-ohiggins', nota:'El cielo ardiendo de despedida.' },
+    { name:'Embalse El Yeso', url:'https://drive.google.com/thumbnail?id=1Ay1YRncILC0rm0QZM_cEn2Vodu23cOCd&sz=w400', zone:'chile-ohiggins', nota:'Zafiro líquido entre montañas.' },
+    { name:'Centro de Santiago', url:'https://drive.google.com/thumbnail?id=1VqAz0OrJZ3kufu5_yj7M6zs1NgUy6Byw&sz=w400', zone:'chile-ohiggins', nota:'El corazón que nunca duerme.' },
+    { name:'Barrio Lastarria', url:'https://drive.google.com/thumbnail?id=16yL_2czoYeGo8Ps0yq2eAunMaMnx2e0F&sz=w400', zone:'chile-ohiggins', nota:'Donde el arte respira en cada esquina.' },
+    { name:'Viñedos', url:'https://drive.google.com/thumbnail?id=1xFEIBTub8gBh1W5KRq2_ZBiUNmrFFJnH&sz=w400', zone:'chile-ohiggins', nota:'La tierra ofrece su vino al sol.' },
+    { name:'Parque La Campana', url:'https://drive.google.com/thumbnail?id=1j6zc5a3Fs66WF4RNzL8CS0DxNrgeH9ll&sz=w400', zone:'chile-ohiggins', nota:'Bosques que el tiempo olvidó.' },
+    { name:'Caleta Horcón', url:'https://drive.google.com/thumbnail?id=1891kWifKa-U9pkBRtkPRtmpR09IRPpsm&sz=w400', zone:'chile-ohiggins', nota:'El mar entrega sus tesoros cada alba.' }
 ];
 var chile_maulePhotos = [
     { name:'Talca', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-maule', nota:'Capital del Maule, puertas al valle central.' },
@@ -321,12 +423,38 @@ var chile_nublePhotos = [
     { name:'San Carlos', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-nuble', nota:'Pueblo ñublensino de agricultura y tradición.' },
     { name:'Bulnes', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-nuble', nota:'Pueblo histórico del valle central.' },
     { name:'Quirihue', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-nuble', nota:'Capital de Itata, cerros y costa cercana.' }
+,
+    { name:'Palafitos', url:'https://drive.google.com/thumbnail?id=1AmW36m9FQyk4YCmIIl4jT_pML24l5p8d&sz=w400', zone:'chile-nuble', nota:'Casas que bailan sobre el agua.' },
+    { name:'Rio Calle Calle', url:'https://drive.google.com/thumbnail?id=120O2TkWrtd-pJnsCqv6ktR3Z-kXZ_37i&sz=w400', zone:'chile-nuble', nota:'Aguas que susurran antiguas historias.' },
+    { name:'Volcán Villarrica', url:'https://drive.google.com/thumbnail?id=1X-7YtR48yGYGfRasz4mLOgnx8RsXPCPC&sz=w400', zone:'chile-nuble', nota:'Un gigante durmiente de fuego.' },
+    { name:'Río Tolten', url:'https://drive.google.com/thumbnail?id=1yR4_putOUKXtkjcFUp4j680VCMiZpB6b&sz=w400', zone:'chile-nuble', nota:'Camino de agua hacia el mar.' },
+    { name:'Selva valdiviana', url:'https://drive.google.com/thumbnail?id=1CfegotOgyuSQ_3LpVQRYUeFOgcepX8jB&sz=w400', zone:'chile-nuble', nota:'Verde eterno, humedad sagrada.' },
+    { name:'Volcán Osorno', url:'https://drive.google.com/thumbnail?id=1qHxn6xYIMKduZ55urTczocbY8pQo6fL0&sz=w400', zone:'chile-nuble', nota:'Guardián perfecto de los lagos.' },
+    { name:'Puerto Varas', url:'https://drive.google.com/thumbnail?id=1c8lbpmfV_tPnO7RFu_BJ4wWJMgIgAeue&sz=w400', zone:'chile-nuble', nota:'Donde los sueños se reflejan.' },
+    { name:'Mercado fluvial', url:'https://drive.google.com/thumbnail?id=1t0G1sHMmV0EfZFa3J2wlpW6qzb2Zexai&sz=w400', zone:'chile-nuble', nota:'Sabores frescos del río al plato.' },
+    { name:'Martin pescador', url:'https://drive.google.com/thumbnail?id=1MDDIDV3T6IOPgE5tXsF0TgP_ZBun-xhK&sz=w400', zone:'chile-nuble', nota:'Un destello azul entre los juncos.' },
+    { name:'Volcán Lonquimay', url:'https://drive.google.com/thumbnail?id=1Y1KoBuViE5kXhMI8jXs0NptFhYQcRlgS&sz=w400', zone:'chile-nuble', nota:'Nieve y fuego abrazándose.' },
+    { name:'Puente Bastidas', url:'https://drive.google.com/thumbnail?id=1uovAMwK7ud7r3byH3y31ESh2-_z6Uuup&sz=w400', zone:'chile-nuble', nota:'Un hilo entre dos orillas.' },
+    { name:'Viaducto del Malleco', url:'https://drive.google.com/thumbnail?id=15HOHLT2otsmj5AJ5pDmv5k8h3VtlzjSC&sz=w400', zone:'chile-nuble', nota:'Acero desafiando al vacío.' }
 ];
 var chile_biobioPhotos = [
     { name:'Concepción', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-biobio', nota:'Capital del Bío Bío, universidad y puerto.' },
     { name:'Talcahuano', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-biobio', nota:'Base naval y puerto industrial.' },
     { name:'Coronel', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-biobio', nota:'Puerto carbonífero con historia obrera.' },
     { name:'Lebu', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-biobio', nota:'Costa de Arauco, caleta y playas salvajes.' }
+,
+    { name:'Palafitos', url:'https://drive.google.com/thumbnail?id=1AmW36m9FQyk4YCmIIl4jT_pML24l5p8d&sz=w400', zone:'chile-biobio', nota:'Casas que bailan sobre el agua.' },
+    { name:'Rio Calle Calle', url:'https://drive.google.com/thumbnail?id=120O2TkWrtd-pJnsCqv6ktR3Z-kXZ_37i&sz=w400', zone:'chile-biobio', nota:'Aguas que susurran antiguas historias.' },
+    { name:'Volcán Villarrica', url:'https://drive.google.com/thumbnail?id=1X-7YtR48yGYGfRasz4mLOgnx8RsXPCPC&sz=w400', zone:'chile-biobio', nota:'Un gigante durmiente de fuego.' },
+    { name:'Río Tolten', url:'https://drive.google.com/thumbnail?id=1yR4_putOUKXtkjcFUp4j680VCMiZpB6b&sz=w400', zone:'chile-biobio', nota:'Camino de agua hacia el mar.' },
+    { name:'Selva valdiviana', url:'https://drive.google.com/thumbnail?id=1CfegotOgyuSQ_3LpVQRYUeFOgcepX8jB&sz=w400', zone:'chile-biobio', nota:'Verde eterno, humedad sagrada.' },
+    { name:'Volcán Osorno', url:'https://drive.google.com/thumbnail?id=1qHxn6xYIMKduZ55urTczocbY8pQo6fL0&sz=w400', zone:'chile-biobio', nota:'Guardián perfecto de los lagos.' },
+    { name:'Puerto Varas', url:'https://drive.google.com/thumbnail?id=1c8lbpmfV_tPnO7RFu_BJ4wWJMgIgAeue&sz=w400', zone:'chile-biobio', nota:'Donde los sueños se reflejan.' },
+    { name:'Mercado fluvial', url:'https://drive.google.com/thumbnail?id=1t0G1sHMmV0EfZFa3J2wlpW6qzb2Zexai&sz=w400', zone:'chile-biobio', nota:'Sabores frescos del río al plato.' },
+    { name:'Martin pescador', url:'https://drive.google.com/thumbnail?id=1MDDIDV3T6IOPgE5tXsF0TgP_ZBun-xhK&sz=w400', zone:'chile-biobio', nota:'Un destello azul entre los juncos.' },
+    { name:'Volcán Lonquimay', url:'https://drive.google.com/thumbnail?id=1Y1KoBuViE5kXhMI8jXs0NptFhYQcRlgS&sz=w400', zone:'chile-biobio', nota:'Nieve y fuego abrazándose.' },
+    { name:'Puente Bastidas', url:'https://drive.google.com/thumbnail?id=1uovAMwK7ud7r3byH3y31ESh2-_z6Uuup&sz=w400', zone:'chile-biobio', nota:'Un hilo entre dos orillas.' },
+    { name:'Viaducto del Malleco', url:'https://drive.google.com/thumbnail?id=15HOHLT2otsmj5AJ5pDmv5k8h3VtlzjSC&sz=w400', zone:'chile-biobio', nota:'Acero desafiando al vacío.' }
 ];
 var chile_araucaniaPhotos = [
     { name:'Temuco', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Capital de la Araucanía, corazón mapuche.' },
@@ -335,12 +463,48 @@ var chile_araucaniaPhotos = [
     { name:'Angol', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Tierra de fuertes y tradición mapuche.' },
     { name:'Victoria', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Puerta a Malleco y sus bosques.' },
     { name:'Padre Las Casas', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Cultura mapuche urbana junto a Temuco.' }
+,
+    { name:'Palafitos', url:'https://drive.google.com/thumbnail?id=1AmW36m9FQyk4YCmIIl4jT_pML24l5p8d&sz=w400', zone:'chile-araucania', nota:'Casas que bailan sobre el agua.' },
+    { name:'Rio Calle Calle', url:'https://drive.google.com/thumbnail?id=120O2TkWrtd-pJnsCqv6ktR3Z-kXZ_37i&sz=w400', zone:'chile-araucania', nota:'Aguas que susurran antiguas historias.' },
+    { name:'Volcán Villarrica', url:'https://drive.google.com/thumbnail?id=1X-7YtR48yGYGfRasz4mLOgnx8RsXPCPC&sz=w400', zone:'chile-araucania', nota:'Un gigante durmiente de fuego.' },
+    { name:'Río Tolten', url:'https://drive.google.com/thumbnail?id=1yR4_putOUKXtkjcFUp4j680VCMiZpB6b&sz=w400', zone:'chile-araucania', nota:'Camino de agua hacia el mar.' },
+    { name:'Selva valdiviana', url:'https://drive.google.com/thumbnail?id=1CfegotOgyuSQ_3LpVQRYUeFOgcepX8jB&sz=w400', zone:'chile-araucania', nota:'Verde eterno, humedad sagrada.' },
+    { name:'Volcán Osorno', url:'https://drive.google.com/thumbnail?id=1qHxn6xYIMKduZ55urTczocbY8pQo6fL0&sz=w400', zone:'chile-araucania', nota:'Guardián perfecto de los lagos.' },
+    { name:'Puerto Varas', url:'https://drive.google.com/thumbnail?id=1c8lbpmfV_tPnO7RFu_BJ4wWJMgIgAeue&sz=w400', zone:'chile-araucania', nota:'Donde los sueños se reflejan.' },
+    { name:'Mercado fluvial', url:'https://drive.google.com/thumbnail?id=1t0G1sHMmV0EfZFa3J2wlpW6qzb2Zexai&sz=w400', zone:'chile-araucania', nota:'Sabores frescos del río al plato.' },
+    { name:'Martin pescador', url:'https://drive.google.com/thumbnail?id=1MDDIDV3T6IOPgE5tXsF0TgP_ZBun-xhK&sz=w400', zone:'chile-araucania', nota:'Un destello azul entre los juncos.' },
+    { name:'Volcán Lonquimay', url:'https://drive.google.com/thumbnail?id=1Y1KoBuViE5kXhMI8jXs0NptFhYQcRlgS&sz=w400', zone:'chile-araucania', nota:'Nieve y fuego abrazándose.' },
+    { name:'Puente Bastidas', url:'https://drive.google.com/thumbnail?id=1uovAMwK7ud7r3byH3y31ESh2-_z6Uuup&sz=w400', zone:'chile-araucania', nota:'Un hilo entre dos orillas.' },
+    { name:'Viaducto del Malleco', url:'https://drive.google.com/thumbnail?id=15HOHLT2otsmj5AJ5pDmv5k8h3VtlzjSC&sz=w400', zone:'chile-araucania', nota:'Acero desafiando al vacío.' }
+,
+    { name:'Villarrica 1', url:'https://drive.google.com/thumbnail?id=1DtfuiaOzwwNuonJ__siHtNp5bkQrcdvy&sz=w400', nota:'El lago bebe el atardecer cada tarde.' },
+    { name:'Villarrica 2', url:'https://drive.google.com/thumbnail?id=13pgYQFfItKdMXM4I6Z2hTykbhyEqzHSb&sz=w400', nota:'El coloso vigila desde la altura.' },
+    { name:'Villarrica 3', url:'https://drive.google.com/thumbnail?id=1U7D4Or9FnEf4OwUpVVzl08Rp9o9JDrjs&sz=w400', nota:'Navegando frente al gigante dormido.' },
+    { name:'Villarrica 4', url:'https://drive.google.com/thumbnail?id=15IgWa1AsKjwk7tTRGEO2ro8DTlJbcj--&sz=w400', nota:'Bosques que respiran verde eterno.' },
+    { name:'Villarrica 5', url:'https://drive.google.com/thumbnail?id=1qysQ8h-YHQyh5Mg4opZzsTAmnDQIMG-t&sz=w400', nota:'El volcán ruge desde sus profundidades.' },
+    { name:'Villarrica 6', url:'https://drive.google.com/thumbnail?id=1LO2MAuNFcdTjhjDPxS5Ousw3HBnVkh-g&sz=w400', nota:'Aguas calientes abrazando el frío.' },
+    { name:'Villarrica 7', url:'https://drive.google.com/thumbnail?id=183L3Zri6qcm6leHek4j-LulR3hUVomfK&sz=w400', nota:'El amanecer besa al lago dormido.' },
+    { name:'Villarrica 8', url:'https://drive.google.com/thumbnail?id=1P7m6YU1U2hIQ6KT7jxfs9Smq7bKhnmmO&sz=w400', nota:'El volcán viste estrellas de noche.' },
+    { name:'Villarrica 9', url:'https://drive.google.com/thumbnail?id=1Z2-Sxmlpm9hihM-ZNmKUarB2nHyX_Ly9&sz=w400', nota:'Paisajes que roban el corazón.' }
 ];
 var chile_riosPhotos = [
     { name:'Valdivia', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-rios', nota:'Ríos, fuertes españoles y cerveza artesanal.' },
     { name:'La Unión', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-rios', nota:'Llanos y colinas, tradición ganadera.' },
     { name:'Río Bueno', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-rios', nota:'Río que cruza el pueblo, puente histórico.' },
     { name:'Panguipulli', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-rios', nota:'Lago esmeralda, puerta a los Siete Lagos.' }
+,
+    { name:'Palafitos', url:'https://drive.google.com/thumbnail?id=1AmW36m9FQyk4YCmIIl4jT_pML24l5p8d&sz=w400', zone:'chile-rios', nota:'Casas que bailan sobre el agua.' },
+    { name:'Rio Calle Calle', url:'https://drive.google.com/thumbnail?id=120O2TkWrtd-pJnsCqv6ktR3Z-kXZ_37i&sz=w400', zone:'chile-rios', nota:'Aguas que susurran antiguas historias.' },
+    { name:'Volcán Villarrica', url:'https://drive.google.com/thumbnail?id=1X-7YtR48yGYGfRasz4mLOgnx8RsXPCPC&sz=w400', zone:'chile-rios', nota:'Un gigante durmiente de fuego.' },
+    { name:'Río Tolten', url:'https://drive.google.com/thumbnail?id=1yR4_putOUKXtkjcFUp4j680VCMiZpB6b&sz=w400', zone:'chile-rios', nota:'Camino de agua hacia el mar.' },
+    { name:'Selva valdiviana', url:'https://drive.google.com/thumbnail?id=1CfegotOgyuSQ_3LpVQRYUeFOgcepX8jB&sz=w400', zone:'chile-rios', nota:'Verde eterno, humedad sagrada.' },
+    { name:'Volcán Osorno', url:'https://drive.google.com/thumbnail?id=1qHxn6xYIMKduZ55urTczocbY8pQo6fL0&sz=w400', zone:'chile-rios', nota:'Guardián perfecto de los lagos.' },
+    { name:'Puerto Varas', url:'https://drive.google.com/thumbnail?id=1c8lbpmfV_tPnO7RFu_BJ4wWJMgIgAeue&sz=w400', zone:'chile-rios', nota:'Donde los sueños se reflejan.' },
+    { name:'Mercado fluvial', url:'https://drive.google.com/thumbnail?id=1t0G1sHMmV0EfZFa3J2wlpW6qzb2Zexai&sz=w400', zone:'chile-rios', nota:'Sabores frescos del río al plato.' },
+    { name:'Martin pescador', url:'https://drive.google.com/thumbnail?id=1MDDIDV3T6IOPgE5tXsF0TgP_ZBun-xhK&sz=w400', zone:'chile-rios', nota:'Un destello azul entre los juncos.' },
+    { name:'Volcán Lonquimay', url:'https://drive.google.com/thumbnail?id=1Y1KoBuViE5kXhMI8jXs0NptFhYQcRlgS&sz=w400', zone:'chile-rios', nota:'Nieve y fuego abrazándose.' },
+    { name:'Puente Bastidas', url:'https://drive.google.com/thumbnail?id=1uovAMwK7ud7r3byH3y31ESh2-_z6Uuup&sz=w400', zone:'chile-rios', nota:'Un hilo entre dos orillas.' },
+    { name:'Viaducto del Malleco', url:'https://drive.google.com/thumbnail?id=15HOHLT2otsmj5AJ5pDmv5k8h3VtlzjSC&sz=w400', zone:'chile-rios', nota:'Acero desafiando al vacío.' }
 ];
 var chile_lagosPhotos = [
     { name:'Puerto Montt', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Puerta a la Patagonia, salmoneros y mar.' },
@@ -349,18 +513,67 @@ var chile_lagosPhotos = [
     { name:'Ancud', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Fuerte español en Chiloé, mitología y mar.' },
     { name:'Castro', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Palafitos coloridos, iglesias UNESCO.' },
     { name:'Chaitén', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Pueblo renacido tras la erupción volcánica.' }
+,
+    { name:'Palafitos', url:'https://drive.google.com/thumbnail?id=1AmW36m9FQyk4YCmIIl4jT_pML24l5p8d&sz=w400', zone:'chile-lagos', nota:'Casas que bailan sobre el agua.' },
+    { name:'Rio Calle Calle', url:'https://drive.google.com/thumbnail?id=120O2TkWrtd-pJnsCqv6ktR3Z-kXZ_37i&sz=w400', zone:'chile-lagos', nota:'Aguas que susurran antiguas historias.' },
+    { name:'Volcán Villarrica', url:'https://drive.google.com/thumbnail?id=1X-7YtR48yGYGfRasz4mLOgnx8RsXPCPC&sz=w400', zone:'chile-lagos', nota:'Un gigante durmiente de fuego.' },
+    { name:'Río Tolten', url:'https://drive.google.com/thumbnail?id=1yR4_putOUKXtkjcFUp4j680VCMiZpB6b&sz=w400', zone:'chile-lagos', nota:'Camino de agua hacia el mar.' },
+    { name:'Selva valdiviana', url:'https://drive.google.com/thumbnail?id=1CfegotOgyuSQ_3LpVQRYUeFOgcepX8jB&sz=w400', zone:'chile-lagos', nota:'Verde eterno, humedad sagrada.' },
+    { name:'Volcán Osorno', url:'https://drive.google.com/thumbnail?id=1qHxn6xYIMKduZ55urTczocbY8pQo6fL0&sz=w400', zone:'chile-lagos', nota:'Guardián perfecto de los lagos.' },
+    { name:'Puerto Varas', url:'https://drive.google.com/thumbnail?id=1c8lbpmfV_tPnO7RFu_BJ4wWJMgIgAeue&sz=w400', zone:'chile-lagos', nota:'Donde los sueños se reflejan.' },
+    { name:'Mercado fluvial', url:'https://drive.google.com/thumbnail?id=1t0G1sHMmV0EfZFa3J2wlpW6qzb2Zexai&sz=w400', zone:'chile-lagos', nota:'Sabores frescos del río al plato.' },
+    { name:'Martin pescador', url:'https://drive.google.com/thumbnail?id=1MDDIDV3T6IOPgE5tXsF0TgP_ZBun-xhK&sz=w400', zone:'chile-lagos', nota:'Un destello azul entre los juncos.' },
+    { name:'Volcán Lonquimay', url:'https://drive.google.com/thumbnail?id=1Y1KoBuViE5kXhMI8jXs0NptFhYQcRlgS&sz=w400', zone:'chile-lagos', nota:'Nieve y fuego abrazándose.' },
+    { name:'Puente Bastidas', url:'https://drive.google.com/thumbnail?id=1uovAMwK7ud7r3byH3y31ESh2-_z6Uuup&sz=w400', zone:'chile-lagos', nota:'Un hilo entre dos orillas.' },
+    { name:'Viaducto del Malleco', url:'https://drive.google.com/thumbnail?id=15HOHLT2otsmj5AJ5pDmv5k8h3VtlzjSC&sz=w400', zone:'chile-lagos', nota:'Acero desafiando al vacío.' }
+,
+    { name:'Villarrica 1', url:'https://drive.google.com/thumbnail?id=1DtfuiaOzwwNuonJ__siHtNp5bkQrcdvy&sz=w400', nota:'El lago bebe el atardecer cada tarde.' },
+    { name:'Villarrica 2', url:'https://drive.google.com/thumbnail?id=13pgYQFfItKdMXM4I6Z2hTykbhyEqzHSb&sz=w400', nota:'El coloso vigila desde la altura.' },
+    { name:'Villarrica 3', url:'https://drive.google.com/thumbnail?id=1U7D4Or9FnEf4OwUpVVzl08Rp9o9JDrjs&sz=w400', nota:'Navegando frente al gigante dormido.' },
+    { name:'Villarrica 4', url:'https://drive.google.com/thumbnail?id=15IgWa1AsKjwk7tTRGEO2ro8DTlJbcj--&sz=w400', nota:'Bosques que respiran verde eterno.' },
+    { name:'Villarrica 5', url:'https://drive.google.com/thumbnail?id=1qysQ8h-YHQyh5Mg4opZzsTAmnDQIMG-t&sz=w400', nota:'El volcán ruge desde sus profundidades.' },
+    { name:'Villarrica 6', url:'https://drive.google.com/thumbnail?id=1LO2MAuNFcdTjhjDPxS5Ousw3HBnVkh-g&sz=w400', nota:'Aguas calientes abrazando el frío.' },
+    { name:'Villarrica 7', url:'https://drive.google.com/thumbnail?id=183L3Zri6qcm6leHek4j-LulR3hUVomfK&sz=w400', nota:'El amanecer besa al lago dormido.' },
+    { name:'Villarrica 8', url:'https://drive.google.com/thumbnail?id=1P7m6YU1U2hIQ6KT7jxfs9Smq7bKhnmmO&sz=w400', nota:'El volcán viste estrellas de noche.' },
+    { name:'Villarrica 9', url:'https://drive.google.com/thumbnail?id=1Z2-Sxmlpm9hihM-ZNmKUarB2nHyX_Ly9&sz=w400', nota:'Paisajes que roban el corazón.' }
 ];
 var chile_aysenPhotos = [
     { name:'Coyhaique', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-aysen', nota:'Capital de Aysén, pioneros y montañas.' },
     { name:'Puerto Aysén', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-aysen', nota:'Río turbulento y puente colgante.' },
     { name:'Cochrane', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-aysen', nota:'Puerta a la Reserva Tamango, Patagonia profunda.' },
     { name:'Chile Chico', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-aysen', nota:'Lago General Carrera, microclima patagónico.' }
+,
+    { name:'Torres del Paine', url:'https://drive.google.com/thumbnail?id=15ax4Kz362p7z5yTjbgd8z9b98ha3HfTh&sz=w400', zone:'chile-aysen', nota:'Catedrales de roca del fin del mundo.' },
+    { name:'Punta Arenas', url:'https://drive.google.com/thumbnail?id=18bTBxQKTjcVHaBdkZpPh967esE5MD1PL&sz=w400', zone:'chile-aysen', nota:'Donde el viento cuenta leyendas.' },
+    { name:'Lago Grey', url:'https://drive.google.com/thumbnail?id=1-o2SJrZDqQE64vESRbYExBcEH1lzHaPW&sz=w400', zone:'chile-aysen', nota:'Hielo milenario navegando el agua.' },
+    { name:'Glaciar Grey', url:'https://drive.google.com/thumbnail?id=1_VLPDVx6WBuBiA4hEegwtLWGZJ285DMB&sz=w400', zone:'chile-aysen', nota:'Tiempo congelado en azul eterno.' },
+    { name:'Valle del Francés', url:'https://drive.google.com/thumbnail?id=1tVxHCA0R_4f4apJse_hvco32R0nVHc3R&sz=w400', zone:'chile-aysen', nota:'Un anfiteatro esculpido por glaciares.' },
+    { name:'Estancia Patagónica', url:'https://drive.google.com/thumbnail?id=1cY0MZt2mekm40M0lynkh6CypXNX4PZ-G&sz=w400', zone:'chile-aysen', nota:'La soledad más bella del planeta.' },
+    { name:'Lago Pehoé', url:'https://drive.google.com/thumbnail?id=1NpBgGLaGErifAqGG0m5cjJR2zfmB07x7&sz=w400', zone:'chile-aysen', nota:'Un zafiro al pie de las torres.' },
+    { name:'Canal Beagle', url:'https://drive.google.com/thumbnail?id=1Y--szySJeRA54gtRZgMWX2rXLoURu654&sz=w400', zone:'chile-aysen', nota:'Aguas que navegan hacia la nada.' },
+    { name:'Cabo de Hornos', url:'https://drive.google.com/thumbnail?id=1exOBlMQYYveF6J02irHIofpI2nUo9U7A&sz=w400', zone:'chile-aysen', nota:'El último suspiro del continente.' },
+    { name:'Isla Magdalena', url:'https://drive.google.com/thumbnail?id=1awWCm8OHQ2vUPdR1-1XVSyqBXKXDIopk&sz=w400', zone:'chile-aysen', nota:'Pingüinos dueños del viento.' },
+    { name:'Puerto Williams', url:'https://drive.google.com/thumbnail?id=1YUC001Cd2vKwxNyV1ri1nlcDcQY3yxip&sz=w400', zone:'chile-aysen', nota:'Tierra de gigantes y leyendas.' },
+    { name:'Ventisquero Colgante', url:'https://drive.google.com/thumbnail?id=1PQ9x8ocUO_H2l7QmCHguro8M0HJS4aPW&sz=w400', zone:'chile-aysen', nota:'Hielo suspendido en el aire.' }
 ];
 var chile_magallanesPhotos = [
     { name:'Punta Arenas', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-magallanes', nota:'La ciudad más austral, estrecho de Magallanes.' },
     { name:'Puerto Natales', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-magallanes', nota:'Puerta a Torres del Paine, fiordo de Última Esperanza.' },
     { name:'Porvenir', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-magallanes', nota:'Capital de Tierra del Fuego, estepa y mar.' },
     { name:'Torres del Paine', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-magallanes', nota:'Una de las maravillas naturales del mundo.' }
+,
+    { name:'Torres del Paine', url:'https://drive.google.com/thumbnail?id=15ax4Kz362p7z5yTjbgd8z9b98ha3HfTh&sz=w400', zone:'chile-magallanes', nota:'Catedrales de roca del fin del mundo.' },
+    { name:'Punta Arenas', url:'https://drive.google.com/thumbnail?id=18bTBxQKTjcVHaBdkZpPh967esE5MD1PL&sz=w400', zone:'chile-magallanes', nota:'Donde el viento cuenta leyendas.' },
+    { name:'Lago Grey', url:'https://drive.google.com/thumbnail?id=1-o2SJrZDqQE64vESRbYExBcEH1lzHaPW&sz=w400', zone:'chile-magallanes', nota:'Hielo milenario navegando el agua.' },
+    { name:'Glaciar Grey', url:'https://drive.google.com/thumbnail?id=1_VLPDVx6WBuBiA4hEegwtLWGZJ285DMB&sz=w400', zone:'chile-magallanes', nota:'Tiempo congelado en azul eterno.' },
+    { name:'Valle del Francés', url:'https://drive.google.com/thumbnail?id=1tVxHCA0R_4f4apJse_hvco32R0nVHc3R&sz=w400', zone:'chile-magallanes', nota:'Un anfiteatro esculpido por glaciares.' },
+    { name:'Estancia Patagónica', url:'https://drive.google.com/thumbnail?id=1cY0MZt2mekm40M0lynkh6CypXNX4PZ-G&sz=w400', zone:'chile-magallanes', nota:'La soledad más bella del planeta.' },
+    { name:'Lago Pehoé', url:'https://drive.google.com/thumbnail?id=1NpBgGLaGErifAqGG0m5cjJR2zfmB07x7&sz=w400', zone:'chile-magallanes', nota:'Un zafiro al pie de las torres.' },
+    { name:'Canal Beagle', url:'https://drive.google.com/thumbnail?id=1Y--szySJeRA54gtRZgMWX2rXLoURu654&sz=w400', zone:'chile-magallanes', nota:'Aguas que navegan hacia la nada.' },
+    { name:'Cabo de Hornos', url:'https://drive.google.com/thumbnail?id=1exOBlMQYYveF6J02irHIofpI2nUo9U7A&sz=w400', zone:'chile-magallanes', nota:'El último suspiro del continente.' },
+    { name:'Isla Magdalena', url:'https://drive.google.com/thumbnail?id=1awWCm8OHQ2vUPdR1-1XVSyqBXKXDIopk&sz=w400', zone:'chile-magallanes', nota:'Pingüinos dueños del viento.' },
+    { name:'Puerto Williams', url:'https://drive.google.com/thumbnail?id=1YUC001Cd2vKwxNyV1ri1nlcDcQY3yxip&sz=w400', zone:'chile-magallanes', nota:'Tierra de gigantes y leyendas.' },
+    { name:'Ventisquero Colgante', url:'https://drive.google.com/thumbnail?id=1PQ9x8ocUO_H2l7QmCHguro8M0HJS4aPW&sz=w400', zone:'chile-magallanes', nota:'Hielo suspendido en el aire.' }
 ];
 
 
@@ -439,22 +652,22 @@ var traditionalTiles = [
 ];
 
 var ZONES = [
-    { id:'chile-arica', name:'ARICA Y PARINACOTA', icon:'🏜️', country:'chile', photos:chile_aricaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-tarapaca', name:'TARAPACÁ', icon:'🌊', country:'chile', photos:chile_tarapacaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-antofagasta', name:'ANTOFAGASTA', icon:'⛏️', country:'chile', photos:chile_antofagastaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-atacama', name:'ATACAMA', icon:'🌸', country:'chile', photos:chile_atacamaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-coquimbo', name:'COQUIMBO', icon:'🏖️', country:'chile', photos:chile_coquimboPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-valparaiso', name:'VALPARAÍSO', icon:'🎨', country:'chile', photos:chile_valparaisoPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-metropolitana', name:'METROPOLITANA', icon:'🏙️', country:'chile', photos:chile_metropolitanaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-ohiggins', name:'O\'HIGGINS', icon:'🍷', country:'chile', photos:chile_ohigginsPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-maule', name:'MAULE', icon:'🌾', country:'chile', photos:chile_maulePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-nuble', name:'ÑUBLE', icon:'🌲', country:'chile', photos:chile_nublePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-biobio', name:'BÍO BÍO', icon:'🌋', country:'chile', photos:chile_biobioPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+    { id:'chile-arica', name:'ARICA Y PARINACOTA', icon:'🦙', country:'chile', photos:chile_aricaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-tarapaca', name:'TARAPACÁ', icon:'🏄', country:'chile', photos:chile_tarapacaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-antofagasta', name:'ANTOFAGASTA', icon:'🌌', country:'chile', photos:chile_antofagastaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-atacama', name:'ATACAMA', icon:'🌺', country:'chile', photos:chile_atacamaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-coquimbo', name:'COQUIMBO', icon:'🔭', country:'chile', photos:chile_coquimboPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-valparaiso', name:'VALPARAÍSO', icon:'⛵', country:'chile', photos:chile_valparaisoPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-metropolitana', name:'METROPOLITANA', icon:'🏔️', country:'chile', photos:chile_metropolitanaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-ohiggins', name:'O\'HIGGINS', icon:'🍇', country:'chile', photos:chile_ohigginsPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-maule', name:'MAULE', icon:'🚜', country:'chile', photos:chile_maulePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-nuble', name:'ÑUBLE', icon:'🌧️', country:'chile', photos:chile_nublePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-biobio', name:'BÍO BÍO', icon:'⚓', country:'chile', photos:chile_biobioPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
         { id:'chile-araucania', name:'ARAUCANÍA', icon:'🌳', country:'chile', photos:chile_araucaniaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-rios', name:'LOS RÍOS', icon:'🌊', country:'chile', photos:chile_riosPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-lagos', name:'LOS LAGOS', icon:'🏔️', country:'chile', photos:chile_lagosPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-aysen', name:'AYSÉN', icon:'🗻', country:'chile', photos:chile_aysenPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-        { id:'chile-magallanes', name:'MAGALLANES', icon:'🧊', country:'chile', photos:chile_magallanesPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-rios', name:'LOS RÍOS', icon:'🍺', country:'chile', photos:chile_riosPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-lagos', name:'LOS LAGOS', icon:'🐟', country:'chile', photos:chile_lagosPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-aysen', name:'AYSÉN', icon:'🛶', country:'chile', photos:chile_aysenPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-magallanes', name:'MAGALLANES', icon:'🐧', country:'chile', photos:chile_magallanesPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
     { id:'argentina-norte', name:'ARG NORTE', icon:'🏜️', country:'argentina', photos:argentinaNortePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
     { id:'argentina-centro', name:'ARG CENTRO', icon:'🏛️', country:'argentina', photos:argentinaCentroPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
     { id:'argentina-patagonia', name:'ARG PATAGONIA', icon:'🗻', country:'argentina', photos:argentinaPatagoniaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
