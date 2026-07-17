@@ -191,6 +191,179 @@ var valparaisoPhotos = [
     { name:'Valpo 10', url:'https://drive.google.com/thumbnail?id=1Oj8J0SWtItxwpAEcvaEUo04MlrGUiJcv&sz=w400', nota:'Escaleras que conducen al cielo.' },
 ];
 
+// ========== FOTOS DE BRASIL ==========
+var brasilAmazoniaPhotos = [
+    { name:'Selva Amazónica', url:'https://sfile.chatglm.cn/images-ppt/f494c076f277.jpg', zone:'brasil-amazonia', nota:'El pulmón del planeta, hogar de infinitas especies.' },
+    { name:'Río Amazonas', url:'https://sfile.chatglm.cn/images-ppt/d302bd05eacd.jpeg', zone:'brasil-amazonia', nota:'El río más caudaloso del mundo.' },
+    { name:'Teatro Amazonas', url:'https://sfile.chatglm.cn/images-ppt/21c48df9db98.jpg', zone:'brasil-amazonia', nota:'Ópera en medio de la selva, en Manaus.' },
+    { name:'Pantanal', url:'https://sfile.chatglm.cn/images-ppt/49a954beac7e.jpg', zone:'brasil-amazonia', nota:'La mayor llanura inundable del mundo.' },
+    { name:'Río Bonito', url:'https://sfile.chatglm.cn/images-ppt/aa6fab105daf.jpeg', zone:'brasil-amazonia', nota:'Aguas cristalinas en Mato Grosso do Sul.' },
+    { name:'Chapada dos Veadeiros', url:'https://sfile.chatglm.cn/images-ppt/099af500efa2.jpg', zone:'brasil-amazonia', nota:'Cerrado y cascadas en Goiás.' },
+    { name:'Encontro das Águas', url:'https://sfile.chatglm.cn/images-ppt/f494c076f277.jpg', zone:'brasil-amazonia', nota:'Donde el Río Negro y el Solimões se unen sin mezclarse.' },
+    { name:'Anavilhanas', url:'https://sfile.chatglm.cn/images-ppt/d302bd05eacd.jpeg', zone:'brasil-amazonia', nota:'Archipiélago de islas en el Amazonas.' },
+    { name:'Mamirauá', url:'https://sfile.chatglm.cn/images-ppt/49a954beac7e.jpg', zone:'brasil-amazonia', nota:'Reserva de desarrollo sostenible.' },
+    { name:'Parque Nacional Jaú', url:'https://sfile.chatglm.cn/images-ppt/099af500efa2.jpg', zone:'brasil-amazonia', nota:'El mayor parque nacional de Brasil.' },
+    { name:'Ilha de Marajó', url:'https://sfile.chatglm.cn/images-ppt/aa6fab105daf.jpeg', zone:'brasil-amazonia', nota:'La isla fluvial más grande del mundo.' },
+    { name:'Cachoeira do Buracão', url:'https://sfile.chatglm.cn/images-ppt/21c48df9db98.jpg', zone:'brasil-amazonia', nota:'Cascada espectacular en Bahía.' },
+];
+var brasilNordestePhotos = [
+    { name:'Pelourinho', url:'https://sfile.chatglm.cn/images-ppt/78fb3896ff0f.jpg', zone:'brasil-nordeste', nota:'Centro histórico colonial de Salvador, Bahía.' },
+    { name:'Olinda', url:'https://sfile.chatglm.cn/images-ppt/2209ac94e1af.jpg', zone:'brasil-nordeste', nota:'Ciudad colonial patrimonio de la humanidad.' },
+    { name:'Lençóis Maranhenses', url:'https://sfile.chatglm.cn/images-ppt/15c957bb92db.jpeg', zone:'brasil-nordeste', nota:'Dunas y lagunas de agua dulce en Maranhão.' },
+    { name:'Praia de Fortaleza', url:'https://sfile.chatglm.cn/images-ppt/2bfeb6a3395e.jpg', zone:'brasil-nordeste', nota:'Playas urbanas en Ceará.' },
+    { name:'Recife Antigo', url:'https://sfile.chatglm.cn/images-ppt/a9caca9b720d.png', zone:'brasil-nordeste', nota:'Centro histórico de Recife, Pernambuco.' },
+    { name:'Porto de Galinhas', url:'https://sfile.chatglm.cn/images-ppt/02eab4caf0f8.jpg', zone:'brasil-nordeste', nota:'Piscinas naturales en Pernambuco.' },
+    { name:'Chapada Diamantina', url:'https://sfile.chatglm.cn/images-ppt/78fb3896ff0f.jpg', zone:'brasil-nordeste', nota:'Sierra y cascadas en Bahía.' },
+    { name:'Maragogi', url:'https://sfile.chatglm.cn/images-ppt/2bfeb6a3395e.jpg', zone:'brasil-nordeste', nota:'Piscinas naturales en Alagoas.' },
+    { name:'São Luís', url:'https://sfile.chatglm.cn/images-ppt/2209ac94e1af.jpg', zone:'brasil-nordeste', nota:'Capital colonial de Maranhão.' },
+    { name:'Jericoacoara', url:'https://sfile.chatglm.cn/images-ppt/15c957bb92db.jpeg', zone:'brasil-nordeste', nota:'Paraíso de dunas en Ceará.' },
+    { name:'Fernando de Noronha', url:'https://sfile.chatglm.cn/images-ppt/02eab4caf0f8.jpg', zone:'brasil-nordeste', nota:'Archipiélago volcánico, paraíso marino.' },
+    { name:'Itacaré', url:'https://sfile.chatglm.cn/images-ppt/a9caca9b720d.png', zone:'brasil-nordeste', nota:'Playas salvajes en Bahía.' },
+];
+var brasilSudestePhotos = [
+    { name:'Cristo Redentor', url:'https://sfile.chatglm.cn/images-ppt/d89eb97a0d16.jpg', zone:'brasil-sudeste', nota:'Una de las siete maravillas del mundo moderno.' },
+    { name:'Pan de Azúcar', url:'https://sfile.chatglm.cn/images-ppt/f76aba7dee29.png', zone:'brasil-sudeste', nota:'Ícono de Río de Janeiro, vista 360°.' },
+    { name:'Copacabana', url:'https://sfile.chatglm.cn/images-ppt/4d19d9578fe1.jpg', zone:'brasil-sudeste', nota:'La playa más famosa del mundo.' },
+    { name:'São Paulo', url:'https://sfile.chatglm.cn/images-ppt/2f673a095a06.jpg', zone:'brasil-sudeste', nota:'La ciudad más grande de América del Sur.' },
+    { name:'Paraty', url:'https://sfile.chatglm.cn/images-ppt/1e8613fb5551.jpg', zone:'brasil-sudeste', nota:'Pueblo colonial entre montañas y mar.' },
+    { name:'Ouro Preto', url:'https://sfile.chatglm.cn/images-ppt/bd26d5c56ed3.jpg', zone:'brasil-sudeste', nota:'Ciudad colonial minera, patrimonio UNESCO.' },
+    { name:'Ipanema', url:'https://sfile.chatglm.cn/images-ppt/4d19d9578fe1.jpg', zone:'brasil-sudeste', nota:'Playa inmortalizada por la bossa nova.' },
+    { name:'Escadaria Selarón', url:'https://sfile.chatglm.cn/images-ppt/d89eb97a0d16.jpg', zone:'brasil-sudeste', nota:'Escaleras de azulejos en Lapa, Río.' },
+    { name:'Inhotim', url:'https://sfile.chatglm.cn/images-ppt/2f673a095a06.jpg', zone:'brasil-sudeste', nota:'Museo de arte contemporáneo al aire libre.' },
+    { name:'Ilha Grande', url:'https://sfile.chatglm.cn/images-ppt/f76aba7dee29.png', zone:'brasil-sudeste', nota:'Isla paradisíaca sin autos, en Río.' },
+    { name:'Tiradentes', url:'https://sfile.chatglm.cn/images-ppt/bd26d5c56ed3.jpg', zone:'brasil-sudeste', nota:'Pueblo colonial histórico en Minas Gerais.' },
+    { name:'Petrópolis', url:'https://sfile.chatglm.cn/images-ppt/1e8613fb5551.jpg', zone:'brasil-sudeste', nota:'Ciudad imperial en la sierra de Río.' },
+];
+var brasilSulPhotos = [
+    { name:'Cataratas del Iguazú', url:'https://sfile.chatglm.cn/images-ppt/bd26d5c56ed3.jpg', zone:'brasil-sul', nota:'Una de las maravillas naturales del mundo.' },
+    { name:'Florianópolis', url:'https://sfile.chatglm.cn/images-ppt/099af500efa2.jpg', zone:'brasil-sul', nota:'Isla mágica con 42 playas en Santa Catarina.' },
+    { name:'Gramado', url:'https://sfile.chatglm.cn/images-ppt/aa6fab105daf.jpeg', zone:'brasil-sul', nota:'Pueblo europeo en las sierras gaúchas.' },
+    { name:'Búzios', url:'https://sfile.chatglm.cn/images-ppt/2bfeb6a3395e.jpg', zone:'brasil-sul', nota:'Resort chic con playas cristalinas.' },
+    { name:'Serra Gaúcha', url:'https://sfile.chatglm.cn/images-ppt/099af500efa2.jpg', zone:'brasil-sul', nota:'Viñedos y paisajes europeos en Río Grande do Sul.' },
+    { name:'Ilha do Mel', url:'https://sfile.chatglm.cn/images-ppt/aa6fab105daf.jpeg', zone:'brasil-sul', nota:'Isla preservada en Paraná, sin autos.' },
+    { name:'Vila Velha', url:'https://sfile.chatglm.cn/images-ppt/2bfeb6a3395e.jpg', zone:'brasil-sul', nota:'Formaciones rocas en Paraná.' },
+    { name:'Canela', url:'https://sfile.chatglm.cn/images-ppt/099af500efa2.jpg', zone:'brasil-sul', nota:'Cascada Caracol en las sierras gaúchas.' },
+    { name:'Balneário Camboriú', url:'https://sfile.chatglm.cn/images-ppt/2bfeb6a3395e.jpg', zone:'brasil-sul', nota:'Playa urbana en Santa Catarina.' },
+    { name:'Curitiba', url:'https://sfile.chatglm.cn/images-ppt/aa6fab105daf.jpeg', zone:'brasil-sul', nota:'Capital ecológica de Brasil.' },
+    { name:'Antonina', url:'https://sfile.chatglm.cn/images-ppt/099af500efa2.jpg', zone:'brasil-sul', nota:'Bahía de Paranaguá, patrimonio histórico.' },
+    { name:'Morretes', url:'https://sfile.chatglm.cn/images-ppt/2bfeb6a3395e.jpg', zone:'brasil-sul', nota:'Pueblo colonial en la sierra del mar.' },
+];
+
+// ========== FOTOS DE CIUDADES DE CHILE (16 regiones) ==========
+var chile_aricaPhotos = [
+    { name:'Arica', url:'https://sfile.chatglm.cn/images-ppt/c3ec071acd6c.jpg', zone:'chile-arica', nota:'La ciudad de la eterna primavera, frontera norte de Chile.' },
+    { name:'Putre', url:'https://sfile.chatglm.cn/images-ppt/d331e465eec9.jpg', zone:'chile-arica', nota:'Portal del altiplano, a 3.500m sobre el mar.' },
+    { name:'Cuya', url:'https://sfile.chatglm.cn/images-ppt/237572c32e0e.jpg', zone:'chile-arica', nota:'Caleta pesquera en la costa del desierto.' },
+    { name:'General Lagos', url:'https://sfile.chatglm.cn/images-ppt/8bcf9d9eb5f4.jpg', zone:'chile-arica', nota:'Pueblo altiplánico en la frontera con Perú.' }
+];
+var chile_tarapacaPhotos = [
+    { name:'Iquique', url:'https://sfile.chatglm.cn/images-ppt/53030d57cc0b.jpg', zone:'chile-tarapaca', nota:'Playas doradas y olas perfectas en el norte.' },
+    { name:'Pozo Almonte', url:'https://sfile.chatglm.cn/images-ppt/9e8ccf233c4e.jpg', zone:'chile-tarapaca', nota:'Capital del salitre, corazón del desierto de Tarapacá.' },
+    { name:'Huara', url:'https://sfile.chatglm.cn/images-ppt/dc0812e4a75c.jpeg', zone:'chile-tarapaca', nota:'Cruce de caminos en la pampa del Tamarugal.' },
+    { name:'Pica', url:'https://sfile.chatglm.cn/images-ppt/d4309ca2718c.jpg', zone:'chile-tarapaca', nota:'Oasis con mangos y limones en medio del desierto.' }
+];
+var chile_antofagastaPhotos = [
+    { name:'Antofagasta', url:'https://sfile.chatglm.cn/images-ppt/9d75e9a6e4a1.jpg', zone:'chile-antofagasta', nota:'La perla del norte, puerto y puerta al desierto.' },
+    { name:'Calama', url:'https://sfile.chatglm.cn/images-ppt/3c7cd1a2b6f0.jpg', zone:'chile-antofagasta', nota:'Ciudad del cobre, puerta de entrada a San Pedro de Atacama.' },
+    { name:'Tocopilla', url:'https://sfile.chatglm.cn/images-ppt/2734c6c22a68.jpg', zone:'chile-antofagasta', nota:'Ciudad costera con historia salitrera.' },
+    { name:'Taltal', url:'https://sfile.chatglm.cn/images-ppt/266706fe2d4d.jpg', zone:'chile-antofagasta', nota:'Puerto pesquero entre el mar y el desierto.' },
+    { name:'Mejillones', url:'https://sfile.chatglm.cn/images-ppt/3eb01e38ae71.jpg', zone:'chile-antofagasta', nota:'Bahía protegida con aguas turquesa.' }
+];
+var chile_atacamaPhotos = [
+    { name:'Copiapó', url:'https://sfile.chatglm.cn/images-ppt/59e55d8edfd3.jpg', zone:'chile-atacama', nota:'Oasis en el desierto florido, capital de Atacama.' },
+    { name:'Vallenar', url:'https://sfile.chatglm.cn/images-ppt/ecc45fb28f54.jpeg', zone:'chile-atacama', nota:'Valle del Huasco, huertos y agricultura.' },
+    { name:'Caldera', url:'https://sfile.chatglm.cn/images-ppt/69aff8c745df.jpg', zone:'chile-atacama', nota:'Puerto histórico con playas de aguas tibias.' },
+    { name:'Chañaral', url:'https://sfile.chatglm.cn/images-ppt/300abf8c8135.jpg', zone:'chile-atacama', nota:'Puerto norteño, puerta a Pan de Azúcar.' },
+    { name:'Diego de Almagro', url:'https://sfile.chatglm.cn/images-ppt/6ec7aa00fbd1.jpg', zone:'chile-atacama', nota:'Cruce de rutas en el desierto de Atacama.' }
+];
+var chile_coquimboPhotos = [
+    { name:'La Serena', url:'https://sfile.chatglm.cn/images-ppt/3462252851ed.jpg', zone:'chile-coquimbo', nota:'Ciudad colonial con playas y astronomía.' },
+    { name:'Coquimbo', url:'https://sfile.chatglm.cn/images-ppt/9ab016908fca.jpg', zone:'chile-coquimbo', nota:'Puerto histórico con la Cruz del Tercer Milenio.' },
+    { name:'Ovalle', url:'https://sfile.chatglm.cn/images-ppt/1bb48f273c7d.jpg', zone:'chile-coquimbo', nota:'Valle de Limarí, viñedos y petroglifos.' },
+    { name:'Vicuña', url:'https://sfile.chatglm.cn/images-ppt/29a18ff7875e.jpg', zone:'chile-coquimbo', nota:'Cuna de Gabriela Mistral, cielo estrellado.' },
+    { name:'Combarbalá', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-coquimbo', nota:'Tierra de piedras únicas y observatorio.' },
+    { name:'Los Vilos', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-coquimbo', nota:'Caleta pesquera con playas tranquilas.' }
+];
+var chile_valparaisoPhotos = [
+    { name:'Valparaíso', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'Patrimonio UNESCO, cerros coloridos y poesía.' },
+    { name:'Viña del Mar', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'La ciudad jardín, playas y festival.' },
+    { name:'Quillota', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'Valle fértil, huertos y tradición agrícola.' },
+    { name:'San Antonio', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'Puerto exportador y caleta de pescadores.' },
+    { name:'Los Andes', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'Camino a Argentina, valle del Aconcagua.' },
+    { name:'La Ligua', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-valparaiso', nota:'Capital del tejido y valles productivos.' }
+];
+var chile_metropolitanaPhotos = [
+    { name:'Santiago', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Corazón de Chile, entre la cordillera y el mar.' },
+    { name:'Puente Alto', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'La comuna más poblada, puerta al Cajón del Maipo.' },
+    { name:'Maipú', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Historia y templo votivo al poniente de Santiago.' },
+    { name:'La Florida', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Barrio vibrante al sur de la capital.' },
+    { name:'San Bernardo', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Tradición huasa y comercios en el sur de Santiago.' },
+    { name:'Colina', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-metropolitana', nota:'Termas de Colina y valle de Chicureo.' }
+];
+var chile_ohigginsPhotos = [
+    { name:'Rancagua', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Capital de O\'Higgins, tierra de minas y viñas.' },
+    { name:'San Fernando', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Corazón de Colchagua, vinos y tradición.' },
+    { name:'Pichilemu', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Capital chilena del surf, playas salvajes.' },
+    { name:'Rengo', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Valle productivo al pie de la cordillera.' },
+    { name:'Santa Cruz', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-ohiggins', nota:'Capital del vino de Colchagua, museos y viñas.' }
+];
+var chile_maulePhotos = [
+    { name:'Talca', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-maule', nota:'Capital del Maule, puertas al valle central.' },
+    { name:'Curicó', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-maule', nota:'Fiesta de la Vendimia y viñedos centenarios.' },
+    { name:'Constitución', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-maule', nota:'Costa maule, río y mar, rocas imponentes.' },
+    { name:'Linares', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-maule', nota:'Tierra de agricultura y termas naturales.' },
+    { name:'Cauquenes', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-maule', nota:'Pueblo histórico entre bosques y cerros.' },
+    { name:'Parral', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-maule', nota:'Tierra de lagos y agricultura tradicional.' }
+];
+var chile_nublePhotos = [
+    { name:'Chillán', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-nuble', nota:'Cuna de Violeta Parra, termas y nieve.' },
+    { name:'Los Ángeles', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-nuble', nota:'Capital del Bío Bío, entre bosques y volcanes.' },
+    { name:'San Carlos', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-nuble', nota:'Pueblo ñublensino de agricultura y tradición.' },
+    { name:'Bulnes', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-nuble', nota:'Pueblo histórico del valle central.' },
+    { name:'Quirihue', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-nuble', nota:'Capital de Itata, cerros y costa cercana.' }
+];
+var chile_biobioPhotos = [
+    { name:'Concepción', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-biobio', nota:'Capital del Bío Bío, universidad y puerto.' },
+    { name:'Talcahuano', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-biobio', nota:'Base naval y puerto industrial.' },
+    { name:'Coronel', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-biobio', nota:'Puerto carbonífero con historia obrera.' },
+    { name:'Lebu', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-biobio', nota:'Costa de Arauco, caleta y playas salvajes.' }
+];
+var chile_araucaniaPhotos = [
+    { name:'Temuco', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Capital de la Araucanía, corazón mapuche.' },
+    { name:'Villarrica', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Lago y volcán, paraíso natural.' },
+    { name:'Pucón', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'El paraíso del sur, volcán y aventura.' },
+    { name:'Angol', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Tierra de fuertes y tradición mapuche.' },
+    { name:'Victoria', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Puerta a Malleco y sus bosques.' },
+    { name:'Padre Las Casas', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-araucania', nota:'Cultura mapuche urbana junto a Temuco.' }
+];
+var chile_riosPhotos = [
+    { name:'Valdivia', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-rios', nota:'Ríos, fuertes españoles y cerveza artesanal.' },
+    { name:'La Unión', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-rios', nota:'Llanos y colinas, tradición ganadera.' },
+    { name:'Río Bueno', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-rios', nota:'Río que cruza el pueblo, puente histórico.' },
+    { name:'Panguipulli', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-rios', nota:'Lago esmeralda, puerta a los Siete Lagos.' }
+];
+var chile_lagosPhotos = [
+    { name:'Puerto Montt', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Puerta a la Patagonia, salmoneros y mar.' },
+    { name:'Puerto Varas', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Lago Llanquihue, volcán Osorno, estilo alemán.' },
+    { name:'Osorno', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Ciudad pionera, volcanes y praderas.' },
+    { name:'Ancud', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Fuerte español en Chiloé, mitología y mar.' },
+    { name:'Castro', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Palafitos coloridos, iglesias UNESCO.' },
+    { name:'Chaitén', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-lagos', nota:'Pueblo renacido tras la erupción volcánica.' }
+];
+var chile_aysenPhotos = [
+    { name:'Coyhaique', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-aysen', nota:'Capital de Aysén, pioneros y montañas.' },
+    { name:'Puerto Aysén', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-aysen', nota:'Río turbulento y puente colgante.' },
+    { name:'Cochrane', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-aysen', nota:'Puerta a la Reserva Tamango, Patagonia profunda.' },
+    { name:'Chile Chico', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-aysen', nota:'Lago General Carrera, microclima patagónico.' }
+];
+var chile_magallanesPhotos = [
+    { name:'Punta Arenas', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-magallanes', nota:'La ciudad más austral, estrecho de Magallanes.' },
+    { name:'Puerto Natales', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-magallanes', nota:'Puerta a Torres del Paine, fiordo de Última Esperanza.' },
+    { name:'Porvenir', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-magallanes', nota:'Capital de Tierra del Fuego, estepa y mar.' },
+    { name:'Torres del Paine', url:'https://sfile.chatglm.cn/images-ppt/b34d97d8b747.jpg', zone:'chile-magallanes', nota:'Una de las maravillas naturales del mundo.' }
+];
+
+
 // [FASE 6] Fichas tradicionales + nuevos simbolos coloridos tipo Candy Crush.
 // Cada ficha tiene un "color" CSS para el simbolo.
 var traditionalTiles = [
@@ -266,10 +439,22 @@ var traditionalTiles = [
 ];
 
 var ZONES = [
-    { id:'norte', name:'NORTE', icon:'🏜️', country:'chile', photos:nortePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-    { id:'centro', name:'CENTRO', icon:'🏛️', country:'chile', photos:centroPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-    { id:'sur', name:'SUR', icon:'🌋', country:'chile', photos:surPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
-    { id:'austral', name:'AUSTRAL', icon:'🗻', country:'chile', photos:patagoniaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+    { id:'chile-arica', name:'ARICA Y PARINACOTA', icon:'🏜️', country:'chile', photos:chile_aricaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-tarapaca', name:'TARAPACÁ', icon:'🌊', country:'chile', photos:chile_tarapacaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-antofagasta', name:'ANTOFAGASTA', icon:'⛏️', country:'chile', photos:chile_antofagastaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-atacama', name:'ATACAMA', icon:'🌸', country:'chile', photos:chile_atacamaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-coquimbo', name:'COQUIMBO', icon:'🏖️', country:'chile', photos:chile_coquimboPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-valparaiso', name:'VALPARAÍSO', icon:'🎨', country:'chile', photos:chile_valparaisoPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-metropolitana', name:'METROPOLITANA', icon:'🏙️', country:'chile', photos:chile_metropolitanaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-ohiggins', name:'O\'HIGGINS', icon:'🍷', country:'chile', photos:chile_ohigginsPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-maule', name:'MAULE', icon:'🌾', country:'chile', photos:chile_maulePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-nuble', name:'ÑUBLE', icon:'🌲', country:'chile', photos:chile_nublePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-biobio', name:'BÍO BÍO', icon:'🌋', country:'chile', photos:chile_biobioPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-araucania', name:'ARAUCANÍA', icon:'🌳', country:'chile', photos:chile_araucaniaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-rios', name:'LOS RÍOS', icon:'🌊', country:'chile', photos:chile_riosPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-lagos', name:'LOS LAGOS', icon:'🏔️', country:'chile', photos:chile_lagosPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-aysen', name:'AYSÉN', icon:'🗻', country:'chile', photos:chile_aysenPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+        { id:'chile-magallanes', name:'MAGALLANES', icon:'🧊', country:'chile', photos:chile_magallanesPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
     { id:'argentina-norte', name:'ARG NORTE', icon:'🏜️', country:'argentina', photos:argentinaNortePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
     { id:'argentina-centro', name:'ARG CENTRO', icon:'🏛️', country:'argentina', photos:argentinaCentroPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
     { id:'argentina-patagonia', name:'ARG PATAGONIA', icon:'🗻', country:'argentina', photos:argentinaPatagoniaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
@@ -278,6 +463,11 @@ var ZONES = [
     { id:'mexico-centro', name:'MX CENTRO', icon:'🏛️', country:'mexico', photos:mexicoCentroPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
     { id:'mexico-sur', name:'MX SUR', icon:'🌋', country:'mexico', photos:mexicoSurPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
     { id:'mexico-caribe', name:'MX CARIBE', icon:'🌴', country:'mexico', photos:mexicoCaribePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+
+    { id:'brasil-amazonia', name:'BR AMAZONIA', icon:'🌴', country:'brasil', photos:brasilAmazoniaPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+    { id:'brasil-nordeste', name:'BR NORDESTE', icon:'🏖️', country:'brasil', photos:brasilNordestePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+    { id:'brasil-sudeste', name:'BR SUDESTE', icon:'雕像', country:'brasil', photos:brasilSudestePhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
+    { id:'brasil-sul', name:'BR SUR', icon:'🌊', country:'brasil', photos:brasilSulPhotos, levels:[ {num:1,pairs:10},{num:2,pairs:14},{num:3,pairs:18},{num:4,pairs:22},{num:5,pairs:28},{num:6,pairs:32},{num:7,pairs:38},{num:8,pairs:42},{num:9,pairs:46},{num:10,pairs:50} ] },
 ];
 
 // ========== TRIVIA CULTURAL (FASE 3) ==========
@@ -366,39 +556,74 @@ var TRIVIA = {
         { q: '¿En qué estado están las ruinas de Tulum frente al mar?', opts: ['Yucatán', 'Campeche', 'Quintana Roo', 'Tabasco'], correct: 2, exp: 'Tulum es la única ciudad maya amurallada junto al Caribe.' },
         { q: '¿Cuál es la "laguna de los 7 colores"?', opts: ['Bacalar', 'Nicolás', 'Chichen', 'Kaan'], correct: 0, exp: 'Bacalar, en Quintana Roo, es un paraíso turquesa.' },
         { q: '¿Qué ciudad amurallada está en Campeche?', opts: ['Mérida', 'Campeche', 'Villahermosa', 'Ciudad del Carmen'], correct: 1, exp: 'Campeche fue fortificada contra piratas en el siglo XVII.' }
-    ]
+    ],
+    'brasil-amazonia': [
+        { q: '¿Cuál es el río más caudaloso del mundo?', opts: ['Nilo', 'Amazonas', 'Yangtsé', 'Misisipi'], correct: 1, exp: 'El Amazonas transporta más agua que los siguientes 7 ríos juntos.' },
+        { q: '¿En qué ciudad está el Teatro Amazonas?', opts: ['Belém', 'Manaus', 'Santarém', 'Tefé'], correct: 1, exp: 'Manaus, en medio de la selva, tuvo la ópera más lujosa de Brasil.' },
+        { q: '¿Qué es el Pantanal?', opts: ['Un desierto', 'Una llanura inundable', 'Una montaña', 'Un volcán'], correct: 1, exp: 'Es la mayor llanura inundable tropical del mundo.' },
+        { q: '¿En qué estado está Bonito?', opts: ['Goiás', 'Mato Grosso', 'Mato Grosso do Sul', 'Tocantins'], correct: 2, exp: 'Bonito es famoso por sus ríos de aguas cristalinas.' },
+        { q: '¿Cuál es la isla fluvial más grande del mundo?', opts: ['Bananal', 'Marajó', 'Combu', 'Caviana'], correct: 1, exp: 'Marajó, en la desembocadura del Amazonas, es más grande que Suiza.' }
+    ],
+    'brasil-nordeste': [
+        { q: '¿Cuál es la capital de Bahía?', opts: ['Recife', 'Salvador', 'Fortaleza', 'Natal'], correct: 1, exp: 'Salvador fue la primera capital de Brasil.' },
+        { q: '¿Dónde están las dunas con lagunas de agua dulce?', opts: ['Jericoacoara', 'Lençóis Maranhenses', 'Genipabu', 'Cumbuco'], correct: 1, exp: 'Los Lençóis Maranhenses son únicos en el mundo.' },
+        { q: '¿En qué estado está Fernando de Noronha?', opts: ['Bahía', 'Ceará', 'Pernambuco', 'Río Grande do Norte'], correct: 2, exp: 'Noronha es un archipiélago volcánico en Pernambuco.' },
+        { q: '¿Qué es Pelourinho?', opts: ['Una playa', 'Un centro histórico', 'Un río', 'Un parque'], correct: 1, exp: 'El Pelourinho es el centro colonial de Salvador.' },
+        { q: '¿Cuál es el estado con más playas de Brasil?', opts: ['Bahía', 'Ceará', 'Río Grande do Norte', 'Pernambuco'], correct: 0, exp: 'Bahía tiene más de 500 km de playas.' }
+    ],
+    'brasil-sudeste': [
+        { q: '¿En qué ciudad está el Cristo Redentor?', opts: ['São Paulo', 'Río de Janeiro', 'Belo Horizonte', 'Vitória'], correct: 1, exp: 'El Cristo está a 700m sobre el nivel del mar en Río.' },
+        { q: '¿Cuál es la ciudad más poblada de América del Sur?', opts: ['Buenos Aires', 'Lima', 'São Paulo', 'Bogotá'], correct: 2, exp: 'São Paulo tiene más de 12 millones de habitantes.' },
+        { q: '¿En qué estado está Ouro Preto?', opts: ['Río de Janeiro', 'São Paulo', 'Minas Gerais', 'Espírito Santo'], correct: 2, exp: 'Ouro Preto es patrimonio UNESCO por su arquitectura colonial.' },
+        { q: '¿Cómo se llama la escalera de azulejos en Río?', opts: ['Selarón', 'Lapa', 'Santa Teresa', 'Cinelândia'], correct: 0, exp: 'La Escadaria Selarón tiene 215 escalones con azulejos de todo el mundo.' },
+        { q: '¿Qué es Inhotim?', opts: ['Un parque nacional', 'Un museo al aire libre', 'Una playa', 'Un volcán'], correct: 1, exp: 'Inhotim en Minas Gerais es el mayor museo de arte contemporáneo al aire libre.' }
+    ],
+    'brasil-sul': [
+        { q: '¿En qué estado están las Cataratas del Iguazú?', opts: ['Paraná', 'Santa Catarina', 'Río Grande do Sul', 'São Paulo'], correct: 0, exp: 'Las cataratas están en Foz do Iguaçu, Paraná.' },
+        { q: '¿Cuántas playas tiene Florianópolis?', opts: ['22', '32', '42', '52'], correct: 2, exp: 'La "Ilha da Magia" tiene 42 playas.' },
+        { q: '¿En qué estado está Gramado?', opts: ['Paraná', 'Santa Catarina', 'Río Grande do Sul', 'São Paulo'], correct: 2, exp: 'Gramado es conocida por su arquitectura europea y el Festival de Cine.' },
+        { q: '¿Qué es la Serra Gaúcha?', opts: ['Una playa', 'Una región de viñedos', 'Un desierto', 'Un volcán'], correct: 1, exp: 'La Serra Gaúcha produce los mejores vinos de Brasil.' },
+        { q: '¿Cuál es la capital ecológica de Brasil?', opts: ['Curitiba', 'Florianópolis', 'Porto Alegre', 'Londrina'], correct: 0, exp: 'Curitiba es modelo mundial en urbanismo sostenible.' }
+    ],
+
+    'brasil-amazonia-4': { name:'Trivia BR Amazonia', type:'trivia', icon:'🧠', zone:'brasil-amazonia' },
+    'brasil-amazonia-7': { name:'Memorice BR Amazonia', type:'memorice', icon:'🌴', photos: brasilAmazoniaPhotos },
+    'brasil-nordeste-4': { name:'Trivia BR Nordeste', type:'trivia', icon:'🧠', zone:'brasil-nordeste' },
+    'brasil-nordeste-7': { name:'Memorice BR Nordeste', type:'memorice', icon:'🏖️', photos: brasilNordestePhotos },
+    'brasil-sudeste-4': { name:'Trivia BR Sudeste', type:'trivia', icon:'🧠', zone:'brasil-sudeste' },
+    'brasil-sudeste-7': { name:'Memorice BR Sudeste', type:'memorice', icon:'🗿', photos: brasilSudestePhotos },
+    'brasil-sul-4': { name:'Trivia BR Sur', type:'trivia', icon:'🧠', zone:'brasil-sul' },
+    'brasil-sul-7': { name:'Memorice BR Sur', type:'memorice', icon:'🌊', photos: brasilSulPhotos },
 };
 
 // ========== MINIJUEGOS (FASE 3): 2 por zona = 24 en total ==========
 var MINIGAMES = {
-    // Nivel 3: Memorice especial (Valparaiso y Villarrica - originales del juego)
-    // Nivel 4: Trivia cultural (1er minijuego, accesible temprano)
-    // Nivel 5: Memorice especial (Villarrica - original del juego)
-    // Nivel 7: Memorice de la zona (2do minijuego, mid-game)
-    'norte-4': { name:'Trivia Norte', type:'trivia', icon:'🧠', zone:'norte' },
-    'norte-7': { name:'Memorice Norte', type:'memorice', icon:'🎨', photos: nortePhotos },
-    'centro-3': { name:'Memorice de Valparaíso', type:'memorice', icon:'🎨', photos: valparaisoPhotos },
-    'centro-4': { name:'Trivia Centro', type:'trivia', icon:'🧠', zone:'centro' },
-    'centro-7': { name:'Memorice Centro', type:'memorice', icon:'🎨', photos: centroPhotos },
-    'sur-5': { name:'Memorice de Villarrica', type:'memorice', icon:'🌋', photos: villarricaPhotos },
-    'sur-4': { name:'Trivia Sur', type:'trivia', icon:'🧠', zone:'sur' },
-    'sur-7': { name:'Memorice Sur', type:'memorice', icon:'🎨', photos: surPhotos },
-    'austral-4': { name:'Trivia Austral', type:'trivia', icon:'🧠', zone:'austral' },
-    'austral-7': { name:'Memorice Austral', type:'memorice', icon:'🎨', photos: patagoniaPhotos },
-    'argentina-norte-4': { name:'Trivia Arg Norte', type:'trivia', icon:'🧠', zone:'argentina-norte' },
-    'argentina-norte-7': { name:'Memorice Arg Norte', type:'memorice', icon:'🎨', photos: argentinaNortePhotos },
-    'argentina-centro-4': { name:'Trivia Arg Centro', type:'trivia', icon:'🧠', zone:'argentina-centro' },
-    'argentina-centro-7': { name:'Memorice Arg Centro', type:'memorice', icon:'🎨', photos: argentinaCentroPhotos },
-    'argentina-patagonia-4': { name:'Trivia Arg Patagonia', type:'trivia', icon:'🧠', zone:'argentina-patagonia' },
-    'argentina-patagonia-7': { name:'Memorice Arg Patagonia', type:'memorice', icon:'🎨', photos: argentinaPatagoniaPhotos },
-    'argentina-litoral-4': { name:'Trivia Arg Litoral', type:'trivia', icon:'🧠', zone:'argentina-litoral' },
-    'argentina-litoral-7': { name:'Memorice Arg Litoral', type:'memorice', icon:'🎨', photos: argentinaLitoralPhotos },
-    'mexico-norte-4': { name:'Trivia MX Norte', type:'trivia', icon:'🧠', zone:'mexico-norte' },
-    'mexico-norte-7': { name:'Memorice MX Norte', type:'memorice', icon:'🎨', photos: mexicoNortePhotos },
-    'mexico-centro-4': { name:'Trivia MX Centro', type:'trivia', icon:'🧠', zone:'mexico-centro' },
-    'mexico-centro-7': { name:'Memorice MX Centro', type:'memorice', icon:'🎨', photos: mexicoCentroPhotos },
-    'mexico-sur-4': { name:'Trivia MX Sur', type:'trivia', icon:'🧠', zone:'mexico-sur' },
-    'mexico-sur-7': { name:'Memorice MX Sur', type:'memorice', icon:'🎨', photos: mexicoSurPhotos },
-    'mexico-caribe-4': { name:'Trivia MX Caribe', type:'trivia', icon:'🧠', zone:'mexico-caribe' },
-    'mexico-caribe-7': { name:'Memorice MX Caribe', type:'memorice', icon:'🎨', photos: mexicoCaribePhotos }
+    'argentina-norte-4': { name:'Trivia ARG norte', type:'trivia', icon:'🧠', zone:'argentina-norte' },
+    'argentina-norte-7': { name:'Memorice ARG norte', type:'memorice', icon:'🎨', photos: argentinanortePhotos },
+    'argentina-centro-4': { name:'Trivia ARG centro', type:'trivia', icon:'🧠', zone:'argentina-centro' },
+    'argentina-centro-7': { name:'Memorice ARG centro', type:'memorice', icon:'🎨', photos: argentinacentroPhotos },
+    'argentina-patagonia-4': { name:'Trivia ARG patagonia', type:'trivia', icon:'🧠', zone:'argentina-patagonia' },
+    'argentina-patagonia-7': { name:'Memorice ARG patagonia', type:'memorice', icon:'🎨', photos: argentinapatagoniaPhotos },
+    'argentina-litoral-4': { name:'Trivia ARG litoral', type:'trivia', icon:'🧠', zone:'argentina-litoral' },
+    'argentina-litoral-7': { name:'Memorice ARG litoral', type:'memorice', icon:'🎨', photos: argentinalitoralPhotos },
+    'mexico-norte-4': { name:'Trivia MX norte', type:'trivia', icon:'🧠', zone:'mexico-norte' },
+    'mexico-norte-7': { name:'Memorice MX norte', type:'memorice', icon:'🎨', photos: mexiconortePhotos },
+    'mexico-centro-4': { name:'Trivia MX centro', type:'trivia', icon:'🧠', zone:'mexico-centro' },
+    'mexico-centro-7': { name:'Memorice MX centro', type:'memorice', icon:'🎨', photos: mexicocentroPhotos },
+    'mexico-sur-4': { name:'Trivia MX sur', type:'trivia', icon:'🧠', zone:'mexico-sur' },
+    'mexico-sur-7': { name:'Memorice MX sur', type:'memorice', icon:'🎨', photos: mexicosurPhotos },
+    'mexico-caribe-4': { name:'Trivia MX caribe', type:'trivia', icon:'🧠', zone:'mexico-caribe' },
+    'mexico-caribe-7': { name:'Memorice MX caribe', type:'memorice', icon:'🎨', photos: mexicocaribePhotos },
+    'brasil-amazonia-4': { name:'Trivia BR amazonia', type:'trivia', icon:'🧠', zone:'brasil-amazonia' },
+    'brasil-amazonia-7': { name:'Memorice BR amazonia', type:'memorice', icon:'🎨', photos: brasilamazoniaPhotos },
+    'brasil-nordeste-4': { name:'Trivia BR nordeste', type:'trivia', icon:'🧠', zone:'brasil-nordeste' },
+    'brasil-nordeste-7': { name:'Memorice BR nordeste', type:'memorice', icon:'🎨', photos: brasilnordestePhotos },
+    'brasil-sudeste-4': { name:'Trivia BR sudeste', type:'trivia', icon:'🧠', zone:'brasil-sudeste' },
+    'brasil-sudeste-7': { name:'Memorice BR sudeste', type:'memorice', icon:'🎨', photos: brasilsudestePhotos },
+    'brasil-sul-4': { name:'Trivia BR sul', type:'trivia', icon:'🧠', zone:'brasil-sul' },
+    'brasil-sul-7': { name:'Memorice BR sul', type:'memorice', icon:'🎨', photos: brasilsulPhotos },
+    'chile-arica-7': { name:'Memorice Sorpresa 🎁', type:'memorice', icon:'🎁', photos: chile_aricaPhotos },
+    'chile-nuble-3': { name:'Memorice Sorpresa 🎁', type:'memorice', icon:'🎁', photos: chile_nublePhotos },
+    'chile-lagos-3': { name:'Memorice Sorpresa 🎁', type:'memorice', icon:'🎁', photos: chile_lagosPhotos },
 };
+

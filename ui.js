@@ -205,7 +205,7 @@ var UI = (function() {
         var container = document.getElementById('appRoot');
         if (!container) return;
         // Quitar clases theme-* anteriores (sin tocar app-container).
-        var themes = ['theme-menu', 'theme-chile', 'theme-argentina', 'theme-mexico'];
+        var themes = ['theme-menu', 'theme-chile', 'theme-argentina', 'theme-mexico', 'theme-brasil'];
         themes.forEach(function(t) { container.classList.remove(t); });
         container.classList.add('theme-' + (country || 'menu'));
         // Reiniciar particulas de fondo.
@@ -222,7 +222,8 @@ var UI = (function() {
             menu: ['#f2ca50', '#ffd700'],
             chile: ['#ffffff', '#b8e0ec', '#5fa8c9'],
             argentina: ['#f0b070', '#ffd700', '#ff9f43'],
-            mexico: ['#f9c74f', '#ff6b9d', '#e85d4e']
+            mexico: ['#f9c74f', '#ff6b9d', '#e85d4e'],
+            brasil: ['#7fd957', '#ffd700', '#4ade80']
         };
         var palette = colors[country] || colors.menu;
         bgParticlesTimer = setInterval(function() {
@@ -575,7 +576,7 @@ var UI = (function() {
         if (currentZone && currentZone.country) applyTheme(currentZone.country);
         var totalStars = currentZone.levels.reduce(function(s, l) { return s + getStars(zid, l.num); }, 0);
         var maxStars = currentZone.levels.length * 3;
-        var backFn = currentZone.country === 'argentina' ? 'UI.showArgentineZones()' : currentZone.country === 'mexico' ? 'UI.showMexicanZones()' : 'UI.showChileZones()';
+        var backFn = currentZone.country === 'argentina' ? 'UI.showArgentineZones()' : currentZone.country === 'mexico' ? 'UI.showMexicanZones()' : currentZone.country === 'brasil' ? 'UI.showBrasilZones()' : 'UI.showChileZones()';
         var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">';
         html += '<button onclick="' + backFn + '" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
@@ -1086,7 +1087,8 @@ var UI = (function() {
         html += countryCard('🇨🇱','Chile',cpChile,'UI.showChileZones()');
         html += countryCard('🇦🇷','Argentina',cpArgentina,'UI.showArgentineZones()');
         html += countryCard('🇲🇽','Mexico',cpMexico,'UI.showMexicanZones()');
-        html += '<div style="border-radius:16px;overflow:hidden;border:1px dashed rgba(255,255,255,0.2);opacity:0.6;background:rgba(255,255,255,0.02);margin-bottom:12px;"><div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;filter:grayscale(1);">🇧🇷</span><div style="flex:1;"><h3 style="color:rgba(255,255,255,0.7);font-weight:bold;font-size:1.1em;">Brasil</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.5);">8 regiones - 80 niveles</p><p style="font-size:0.75em;color:rgba(255,255,255,0.4);">Proximamente</p></div><span style="color:rgba(255,255,255,0.2);font-size:1.5em;">🔜</span></div></div>';
+        var cpBrasil = Math.round((getTotalStarsForCountry('brasil') / 120) * 100);
+        html += countryCard('🇧🇷','Brasil',cpBrasil,'UI.showBrasilZones()');
         html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ALBUM DE VIAJES</button>';
         // [FASE 4] Boton de logros con contador.
         var logrosResumen = Logros.obtenerResumen();
@@ -1109,6 +1111,7 @@ var UI = (function() {
     function showChileZones() { showCountryZones('chile','🇨🇱 CHILE'); }
     function showArgentineZones() { showCountryZones('argentina','🇦🇷 ARGENTINA'); }
     function showMexicanZones() { showCountryZones('mexico','🇲🇽 MEXICO'); }
+    function showBrasilZones() { showCountryZones('brasil','🇧🇷 BRASIL'); }
 
     function showCountryZones(country, title) {
         var zones = ZONES.filter(function(z) { return z.country === country; });
@@ -1131,7 +1134,8 @@ var UI = (function() {
         var countries = [
             { flag:'🇨🇱', name:'Chile', zones:['norte','centro','sur','austral'] },
             { flag:'🇦🇷', name:'Argentina', zones:['argentina-norte','argentina-centro','argentina-patagonia','argentina-litoral'] },
-            { flag:'🇲🇽', name:'Mexico', zones:['mexico-norte','mexico-centro','mexico-sur','mexico-caribe'] }
+            { flag:'🇲🇽', name:'Mexico', zones:['mexico-norte','mexico-centro','mexico-sur','mexico-caribe'] },
+            { flag:'🇧🇷', name:'Brasil', zones:['brasil-amazonia','brasil-nordeste','brasil-sudeste','brasil-sul'] }
         ];
         countries.forEach(function(country) {
             html += '<div style="margin-bottom:16px;"><h3 style="color:white;font-weight:bold;font-size:1.1em;margin-bottom:8px;">' + country.flag + ' ' + country.name + '</h3><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">';
@@ -1183,7 +1187,7 @@ var UI = (function() {
     // [FASE 4] Calcula las estrellas totales por pais y actualiza los stats de logros.
     function actualizarStatsEstrellas() {
         var desbloqueados = [];
-        var chileTotal = 0, argTotal = 0, mxTotal = 0, grandTotal = 0;
+        var chileTotal = 0, argTotal = 0, mxTotal = 0, brTotal = 0, grandTotal = 0;
         ZONES.forEach(function(z) {
             var zoneTotal = 0;
             z.levels.forEach(function(l) {
@@ -1194,10 +1198,12 @@ var UI = (function() {
             if (z.country === 'chile') chileTotal += zoneTotal;
             else if (z.country === 'argentina') argTotal += zoneTotal;
             else if (z.country === 'mexico') mxTotal += zoneTotal;
+            else if (z.country === 'brasil') brTotal += zoneTotal;
         });
         desbloqueados = desbloqueados.concat(Logros.setStat('chileStars', chileTotal));
         desbloqueados = desbloqueados.concat(Logros.setStat('argentinaStars', argTotal));
         desbloqueados = desbloqueados.concat(Logros.setStat('mexicoStars', mxTotal));
+        desbloqueados = desbloqueados.concat(Logros.setStat('brasilStars', brTotal));
         desbloqueados = desbloqueados.concat(Logros.setStat('totalStars', grandTotal));
         return desbloqueados;
     }
@@ -1583,6 +1589,7 @@ var UI = (function() {
     return Object.freeze({
         showSplash: showSplash, showWorldMain: showWorldMain, showChileZones: showChileZones,
         showArgentineZones: showArgentineZones, showMexicanZones: showMexicanZones,
+        showBrasilZones: showBrasilZones,
         showZone: showZone, selectLevel: selectLevel, startGameWithDifficulty: startGameWithDifficulty,
         goBackFromGame: goBackFromGame, useShuffle: useShuffle, useHint: useHint, undoLastSelection: undoLastSelection,
         showTienda: showTienda, showAlbum: showAlbum,

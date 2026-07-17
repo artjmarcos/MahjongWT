@@ -7,10 +7,11 @@ var Logros = (function() {
     var LOGROS = [
         // ===== PROGRESION =====
         { id: 'primer_paso', nombre: 'Primer paso', desc: 'Completa tu primer nivel', icono: '🎯', cat: 'Progresión', recompensa: 5, tipo: 'hito', evento: 'levelComplete' },
-        { id: 'chile_completo', nombre: 'Conquistador de Chile', desc: 'Completa todas las zonas de Chile', icono: '🇨🇱', cat: 'Progresión', recompensa: 30, tipo: 'stat', stat: 'chileStars', objetivo: 120 },
+        { id: 'chile_completo', nombre: 'Conquistador de Chile', desc: 'Completa todas las regiones de Chile', icono: '🇨🇱', cat: 'Progresión', recompensa: 100, tipo: 'stat', stat: 'chileStars', objetivo: 480 },
         { id: 'argentina_completo', nombre: 'Bailarín de Tango', desc: 'Completa todas las zonas de Argentina', icono: '🇦🇷', cat: 'Progresión', recompensa: 30, tipo: 'stat', stat: 'argentinaStars', objetivo: 120 },
         { id: 'mexico_completo', nombre: 'Azteca de honor', desc: 'Completa todas las zonas de México', icono: '🇲🇽', cat: 'Progresión', recompensa: 30, tipo: 'stat', stat: 'mexicoStars', objetivo: 120 },
-        { id: 'america_completo', nombre: 'Conquistador de América', desc: 'Completa todos los niveles', icono: '🌎', cat: 'Progresión', recompensa: 100, tipo: 'stat', stat: 'totalStars', objetivo: 360 },
+        { id: 'brasil_completo', nombre: 'Rey del Carnaval', desc: 'Completa todas las zonas de Brasil', icono: '🇧🇷', cat: 'Progresión', recompensa: 30, tipo: 'stat', stat: 'brasilStars', objetivo: 120 },
+        { id: 'america_completo', nombre: 'Conquistador de América', desc: 'Completa todos los niveles', icono: '🌎', cat: 'Progresión', recompensa: 100, tipo: 'stat', stat: 'totalStars', objetivo: 480 },
 
         // ===== COMBOS =====
         { id: 'combo_x2', nombre: 'En racha', desc: 'Alcanza un combo x2', icono: '🔥', cat: 'Combos', recompensa: 5, tipo: 'stat', stat: 'maxCombo', objetivo: 2 },
@@ -143,41 +144,59 @@ var Logros = (function() {
             if (!cats[l.cat]) cats[l.cat] = [];
             cats[l.cat].push(l);
         });
-        var html = '<div style="height:100%;display:flex;flex-direction:column;background:#0b1512;padding:16px;overflow-y:auto;padding-bottom:70px;">';
-        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">';
-        html += '<button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button>';
-        html += '<span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🏆 Logros</span>';
-        html += '<span style="margin-left:auto;color:rgba(242,202,80,0.8);font-size:0.9em;">' + resumen.desbloqueados + '/' + resumen.total + '</span>';
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        // Header estilo Vita
+        html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px;background:linear-gradient(135deg,rgba(242,202,80,0.15),rgba(255,159,67,0.08));border-radius:12px;border:1px solid rgba(242,202,80,0.3);">';
+        html += '<button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.3em;cursor:pointer;padding:4px;">←</button>';
+        html += '<span style="font-size:1.15em;font-weight:bold;color:#f2ca50;letter-spacing:0.02em;">🏆 Logros</span>';
+        html += '<span style="margin-left:auto;color:rgba(242,202,80,0.9);font-size:0.85em;font-weight:bold;background:rgba(242,202,80,0.15);padding:4px 10px;border-radius:12px;">' + resumen.desbloqueados + '/' + resumen.total + '</span>';
         html += '</div>';
-        // Barra de progreso global
-        html += '<div style="height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin-bottom:20px;">';
-        html += '<div style="height:100%;width:' + resumen.pct + '%;background:linear-gradient(to right,#f2ca50,#ff9f43);border-radius:3px;transition:width 0.6s;"></div>';
+        // Barra de progreso global estilo Vita
+        html += '<div style="margin-bottom:20px;padding:10px 14px;background:rgba(0,0,0,0.25);border-radius:10px;border:1px solid rgba(242,202,80,0.15);">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+        html += '<span style="color:rgba(242,202,80,0.7);font-size:0.7em;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;">Progreso total</span>';
+        html += '<span style="color:#f2ca50;font-size:0.85em;font-weight:bold;">' + resumen.pct + '%</span>';
         html += '</div>';
-        // Logros por categoria
+        html += '<div style="height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;">';
+        html += '<div style="height:100%;width:' + resumen.pct + '%;background:linear-gradient(to right,#f2ca50,#ff9f43);border-radius:4px;transition:width 0.6s;box-shadow:0 0 8px rgba(242,202,80,0.4);"></div>';
+        html += '</div></div>';
+        // Logros por categoria en "estanterias" (grid de 3 medallas por fila)
         Object.keys(cats).forEach(function(cat) {
-            html += '<div style="margin-bottom:20px;">';
-            html += '<h3 style="color:rgba(242,202,80,0.7);font-size:0.8em;font-weight:bold;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;">' + cat + '</h3>';
+            html += '<div style="margin-bottom:24px;">';
+            // Header de categoria estilo estanteria
+            html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 14px;background:linear-gradient(90deg,rgba(139,105,20,0.3),rgba(139,105,20,0.1));border-radius:8px;border-left:3px solid #f2ca50;">';
+            html += '<span style="color:#f2ca50;font-size:0.85em;">+</span>';
+            html += '<span style="color:#f2ca50;font-size:0.85em;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;">' + cat + '</span>';
+            var catDesbloq = cats[cat].filter(function(l) { return l.desbloqueado; }).length;
+            html += '<span style="margin-left:auto;color:rgba(242,202,80,0.6);font-size:0.7em;">' + catDesbloq + '/' + cats[cat].length + '</span>';
+            html += '</div>';
+            // Grid de medallas (3 por fila)
+            html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px;background:rgba(0,0,0,0.15);border-radius:10px;">';
             cats[cat].forEach(function(l) {
                 var pct = l.objetivo > 0 ? Math.round(l.progreso / l.objetivo * 100) : 0;
-                html += '<div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.04);border-radius:12px;margin-bottom:8px;border:1px solid ' + (l.desbloqueado ? 'rgba(242,202,80,0.4)' : 'rgba(255,255,255,0.05)') + ';"' + (l.desbloqueado ? '' : ' style="opacity:0.85;"') + '>';
-                html += '<div style="font-size:1.8em;' + (l.desbloqueado ? '' : 'filter:grayscale(1);opacity:0.5;') + '">' + l.icono + '</div>';
-                html += '<div style="flex:1;">';
-                html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">';
-                html += '<span style="color:' + (l.desbloqueado ? '#f2ca50' : 'white') + ';font-weight:bold;font-size:0.9em;">' + l.nombre + (l.desbloqueado ? ' ✓' : '') + '</span>';
-                html += '<span style="color:#4ade80;font-size:0.75em;font-weight:bold;">+' + l.recompensa + ' 🪙</span>';
-                html += '</div>';
-                html += '<p style="color:rgba(255,255,255,0.6);font-size:0.75em;margin-bottom:6px;">' + l.desc + '</p>';
+                // Medalla circular
+                var medalBg = l.desbloqueado
+                    ? 'background:linear-gradient(145deg,#f2ca50,#d4af37);box-shadow:0 4px 12px rgba(242,202,80,0.4),inset 0 2px 4px rgba(255,255,255,0.3);'
+                    : 'background:linear-gradient(145deg,#3a3a3a,#2a2a2a);box-shadow:0 2px 6px rgba(0,0,0,0.4);';
+                html += '<div style="display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:10px;' + (l.desbloqueado ? '' : 'opacity:0.7;') + '">';
+                // Circulo de la medalla
+                html += '<div style="width:52px;height:52px;border-radius:50%;' + medalBg + 'display:flex;align-items:center;justify-content:center;font-size:1.6em;margin-bottom:6px;' + (l.desbloqueado ? '' : 'filter:grayscale(1);') + '">' + l.icono + '</div>';
+                // Nombre
+                html += '<span style="color:' + (l.desbloqueado ? '#f2ca50' : 'rgba(255,255,255,0.6)') + ';font-size:0.65em;font-weight:bold;text-align:center;line-height:1.2;margin-bottom:3px;">' + l.nombre + '</span>';
+                // Recompensa
+                html += '<span style="color:#4ade80;font-size:0.6em;font-weight:bold;">+' + l.recompensa + '🪙</span>';
+                // Progreso (si no esta desbloqueado y es stat)
                 if (!l.desbloqueado && l.tipo === 'stat') {
-                    html += '<div style="display:flex;align-items:center;gap:8px;">';
-                    html += '<div style="flex:1;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">';
+                    html += '<div style="width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;margin-top:4px;">';
                     html += '<div style="height:100%;width:' + pct + '%;background:linear-gradient(to right,#f2ca50,#ff9f43);border-radius:2px;"></div>';
                     html += '</div>';
-                    html += '<span style="color:rgba(255,255,255,0.5);font-size:0.7em;">' + l.progreso + '/' + l.objetivo + '</span>';
-                    html += '</div>';
+                    html += '<span style="color:rgba(255,255,255,0.4);font-size:0.55em;margin-top:2px;">' + l.progreso + '/' + l.objetivo + '</span>';
+                } else if (l.desbloqueado) {
+                    html += '<span style="color:#4ade80;font-size:0.55em;margin-top:2px;">✓</span>';
                 }
-                html += '</div></div>';
+                html += '</div>';
             });
-            html += '</div>';
+            html += '</div></div>';
         });
         html += '</div>';
         return html;
