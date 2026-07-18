@@ -199,29 +199,17 @@ var UI = (function() {
         return 'menu';
     }
 
-    // [FASE 7] Aplica el tema de color segun pais o region especifica de Chile.
+    // [FASE 6] Aplica el tema de color segun el pais. Transicion suave de 1s.
     var bgParticlesTimer = null;
-    function applyTheme(country, zoneId) {
+    function applyTheme(country) {
         var container = document.getElementById('appRoot');
         if (!container) return;
-        // Quitar todas las clases theme-* anteriores.
-        var themes = ['theme-menu', 'theme-chile', 'theme-argentina', 'theme-mexico', 'theme-brasil',
-            'theme-chile-arica', 'theme-chile-tarapaca', 'theme-chile-antofagasta', 'theme-chile-atacama',
-            'theme-chile-coquimbo', 'theme-chile-valparaiso', 'theme-chile-metropolitana',
-            'theme-chile-ohiggins', 'theme-chile-maule', 'theme-chile-nuble', 'theme-chile-biobio',
-            'theme-chile-araucania', 'theme-chile-rios', 'theme-chile-lagos', 'theme-chile-aysen',
-            'theme-chile-magallanes'];
+        // Quitar clases theme-* anteriores (sin tocar app-container).
+        var themes = ['theme-menu', 'theme-chile', 'theme-argentina', 'theme-mexico', 'theme-brasil'];
         themes.forEach(function(t) { container.classList.remove(t); });
-        // [FASE 7] Si es Chile y hay zoneId especifico, usar tema de region.
-        var themeName;
-        if (country === 'chile' && zoneId && zoneId.indexOf('chile-') === 0) {
-            themeName = zoneId;  // ej: 'chile-arica' → theme-chile-arica
-        } else {
-            themeName = country || 'menu';
-        }
-        container.classList.add('theme-' + themeName);
-        // Particulas con colores de la region.
-        spawnBgParticles(themeName);
+        container.classList.add('theme-' + (country || 'menu'));
+        // Reiniciar particulas de fondo.
+        spawnBgParticles(country);
     }
 
     // [FASE 6] Genera particulas decorativas de fondo segun el pais.
@@ -235,24 +223,7 @@ var UI = (function() {
             chile: ['#ffffff', '#b8e0ec', '#5fa8c9'],
             argentina: ['#f0b070', '#ffd700', '#ff9f43'],
             mexico: ['#f9c74f', '#ff6b9d', '#e85d4e'],
-            brasil: ['#7fd957', '#ffd700', '#4ade80'],
-            // [FASE 7] Colores por region de Chile
-            'chile-arica': ['#f0d870', '#c8a840', '#8a7020'],
-            'chile-tarapaca': ['#5a9ade', '#2a5a9e', '#1a3a6e'],
-            'chile-antofagasta': ['#d89048', '#a06830', '#6e4020'],
-            'chile-atacama': ['#f078a8', '#c84878', '#8a2848'],
-            'chile-coquimbo': ['#5ad8d0', '#2aa8a0', '#1a6e68'],
-            'chile-valparaiso': ['#f8a040', '#d87020', '#8a4810'],
-            'chile-metropolitana': ['#6a6a72', '#4a4a52', '#2e2e38'],
-            'chile-ohiggins': ['#b84058', '#8a2a48', '#5a1a30'],
-            'chile-maule': ['#8aba50', '#5a8a30', '#3a5a20'],
-            'chile-nuble': ['#4a8a4a', '#2a5a2a', '#1a3a1a'],
-            'chile-biobio': ['#2a4a8a', '#1a2a5a', '#0a1a3a'],
-            'chile-araucania': ['#4aaa50', '#2a7a30', '#1a4a20'],
-            'chile-rios': ['#5abade', '#2a8aae', '#1a5a6e'],
-            'chile-lagos': ['#2a4aae', '#1a2a7e', '#0a1a4e'],
-            'chile-aysen': ['#5a9aca', '#2a6a9a', '#1a3a5a'],
-            'chile-magallanes': ['#7a7a9a', '#4a4a6a', '#2e2e4a']
+            brasil: ['#7fd957', '#ffd700', '#4ade80']
         };
         var palette = colors[country] || colors.menu;
         bgParticlesTimer = setInterval(function() {
@@ -601,8 +572,8 @@ var UI = (function() {
         currentZone = ZONES.find(function(z) { return z.id === zid; });
         // [FASE 5] Cambiar musica segun el pais de la zona.
         if (currentZone && currentZone.country) Musica.play(currentZone.country);
-        // [FASE 7] Aplicar tema de color: region especifica si es Chile, sino por pais.
-        if (currentZone && currentZone.country) applyTheme(currentZone.country, currentZone.id);
+        // [FASE 6] Aplicar tema de color del pais.
+        if (currentZone && currentZone.country) applyTheme(currentZone.country);
         var totalStars = currentZone.levels.reduce(function(s, l) { return s + getStars(zid, l.num); }, 0);
         var maxStars = currentZone.levels.length * 3;
         var backFn = currentZone.country === 'argentina' ? 'UI.showArgentineZones()' : currentZone.country === 'mexico' ? 'UI.showMexicanZones()' : currentZone.country === 'brasil' ? 'UI.showBrasilZones()' : 'UI.showChileZones()';
@@ -673,8 +644,8 @@ var UI = (function() {
 
     function startGame(config) {
         GameEngine.init(config, currentZone.photos, traditionalTiles);
-        // [FASE 7] Mantener tema de la region durante el juego.
-        if (currentZone && currentZone.country) applyTheme(currentZone.country, currentZone.id);
+        // [FASE 6] Mantener tema del pais durante el juego.
+        if (currentZone && currentZone.country) applyTheme(currentZone.country);
         var timeLeft = GameEngine.getTimeLeft(), pu = GameEngine.getPowerUps();
         // [FASE 6] Layout compacto: padding y margenes reducidos para que entren los power-ups.
         var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:8px;">';
@@ -707,7 +678,7 @@ var UI = (function() {
         if (tutorialActive) showTutorialOverlay();
     }
 
-    function goBackFromGame() { GameEngine.stopTimer(); Musica.play(currentZone ? currentZone.country : 'menu'); if (currentZone) applyTheme(currentZone.country, currentZone.id); showZone(currentZone.id); }
+    function goBackFromGame() { GameEngine.stopTimer(); Musica.play(currentZone ? currentZone.country : 'menu'); showZone(currentZone.id); }
 
     // [FASE 5] Doble recompensa: ver rewarded video para duplicar las monedas ganadas en la victoria.
     function dobleRecompensaVictoria() {
@@ -1101,13 +1072,9 @@ var UI = (function() {
         // [FASE 6] Tema de color del menu.
         applyTheme('menu');
         var ts = ZONES.reduce(function(s, z) { return s + z.levels.reduce(function(ss, l) { return ss + getStars(z.id, l.num); }, 0); }, 0);
-        // [FASE 7] Calcular maximo de estrellas dinamicamente por pais.
-        function maxStarsForCountry(country) {
-            return ZONES.filter(function(z) { return z.country === country; }).reduce(function(s, z) { return s + z.levels.length * 3; }, 0);
-        }
-        var cpChile = Math.round((getTotalStarsForCountry('chile') / maxStarsForCountry('chile')) * 100);
-        var cpArgentina = Math.round((getTotalStarsForCountry('argentina') / maxStarsForCountry('argentina')) * 100);
-        var cpMexico = Math.round((getTotalStarsForCountry('mexico') / maxStarsForCountry('mexico')) * 100);
+        var cpChile = Math.round((getTotalStarsForCountry('chile') / 120) * 100);
+        var cpArgentina = Math.round((getTotalStarsForCountry('argentina') / 120) * 100);
+        var cpMexico = Math.round((getTotalStarsForCountry('mexico') / 120) * 100);
         var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;overflow-y:auto;padding-bottom:70px;">';
         html += '<div style="height:192px;overflow:hidden;position:relative;background:linear-gradient(to bottom, transparent, #0b1512), url(https://drive.google.com/thumbnail?id=1hsx1UaDia9i7oOLdeslGtGLwl0tqUP71&sz=w800) center/cover no-repeat;">';
         html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">';
@@ -1120,7 +1087,7 @@ var UI = (function() {
         html += countryCard('🇨🇱','Chile',cpChile,'UI.showChileZones()');
         html += countryCard('🇦🇷','Argentina',cpArgentina,'UI.showArgentineZones()');
         html += countryCard('🇲🇽','Mexico',cpMexico,'UI.showMexicanZones()');
-        var cpBrasil = Math.round((getTotalStarsForCountry('brasil') / maxStarsForCountry('brasil')) * 100);
+        var cpBrasil = Math.round((getTotalStarsForCountry('brasil') / 120) * 100);
         html += countryCard('🇧🇷','Brasil',cpBrasil,'UI.showBrasilZones()');
         html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ALBUM DE VIAJES</button>';
         // [FASE 4] Boton de logros con contador.
@@ -1137,13 +1104,8 @@ var UI = (function() {
     }
 
     function countryCard(flag, name, progress, onclick) {
-        // [FASE 7] Contar zonas y niveles dinamicamente segun el pais.
-        var country = name === 'Chile' ? 'chile' : name === 'Argentina' ? 'argentina' : name === 'Mexico' ? 'mexico' : 'brasil';
-        var zones = ZONES.filter(function(z) { return z.country === country; });
-        var zoneCount = zones.length;
-        var levelCount = zones.reduce(function(s, z) { return s + z.levels.length; }, 0);
         return '<div onclick="' + onclick + '" style="border-radius:16px;overflow:hidden;border:2px solid rgba(242,202,80,0.3);background:linear-gradient(135deg, rgba(242,202,80,0.1), rgba(11,21,18,0.9));margin-bottom:12px;cursor:pointer;">' +
-            '<div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;">' + flag + '</span><div style="flex:1;"><h3 style="color:white;font-weight:bold;font-size:1.1em;">' + name + '</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.7);">' + zoneCount + ' regiones - ' + levelCount + ' niveles</p><div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden;"><div style="height:100%;background:linear-gradient(to right, #f2ca50, #ff9f43);border-radius:2px;width:' + progress + '%;"></div></div><p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-top:4px;">' + progress + '% completado</p></div><span style="color:rgba(255,255,255,0.3);font-size:1.5em;">→</span></div></div>';
+            '<div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;">' + flag + '</span><div style="flex:1;"><h3 style="color:white;font-weight:bold;font-size:1.1em;">' + name + '</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.7);">4 regiones - 40 niveles</p><div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden;"><div style="height:100%;background:linear-gradient(to right, #f2ca50, #ff9f43);border-radius:2px;width:' + progress + '%;"></div></div><p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-top:4px;">' + progress + '% completado</p></div><span style="color:rgba(255,255,255,0.3);font-size:1.5em;">→</span></div></div>';
     }
 
     function showChileZones() { showCountryZones('chile','🇨🇱 CHILE'); }

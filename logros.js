@@ -7,7 +7,7 @@ var Logros = (function() {
     var LOGROS = [
         // ===== PROGRESION =====
         { id: 'primer_paso', nombre: 'Primer paso', desc: 'Completa tu primer nivel', icono: '🎯', cat: 'Progresión', recompensa: 5, tipo: 'hito', evento: 'levelComplete' },
-        { id: 'chile_completo', nombre: 'Conquistador de Chile', desc: 'Completa todas las regiones de Chile', icono: '🇨🇱', cat: 'Progresión', recompensa: 100, tipo: 'stat', stat: 'chileStars', objetivo: 480 },
+        { id: 'chile_completo', nombre: 'Conquistador de Chile', desc: 'Completa todas las zonas de Chile', icono: '🇨🇱', cat: 'Progresión', recompensa: 30, tipo: 'stat', stat: 'chileStars', objetivo: 120 },
         { id: 'argentina_completo', nombre: 'Bailarín de Tango', desc: 'Completa todas las zonas de Argentina', icono: '🇦🇷', cat: 'Progresión', recompensa: 30, tipo: 'stat', stat: 'argentinaStars', objetivo: 120 },
         { id: 'mexico_completo', nombre: 'Azteca de honor', desc: 'Completa todas las zonas de México', icono: '🇲🇽', cat: 'Progresión', recompensa: 30, tipo: 'stat', stat: 'mexicoStars', objetivo: 120 },
         { id: 'brasil_completo', nombre: 'Rey del Carnaval', desc: 'Completa todas las zonas de Brasil', icono: '🇧🇷', cat: 'Progresión', recompensa: 30, tipo: 'stat', stat: 'brasilStars', objetivo: 120 },
