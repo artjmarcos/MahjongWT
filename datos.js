@@ -193,9 +193,9 @@ var valparaisoPhotos = [
 
 // ========== FOTOS DE BRASIL ==========
 var brasilAmazoniaPhotos = [
-    { name:'Selva Amazónica', url:'https://drive.google.com/thumbnail?id=1pbUeBLk-EkI7NH9AdPCyBLLX012OzjdX&sz=w400', zone:'brasil-amazonia', nota:'El pulmón del planeta, hogar de infinitas especies.' },
+    { name:'Selva Amazónica', url:'https://drive.google.com/thumbnail?id=1hy1CBmhhXdTsic976CstOPck0oyRjcTt&sz=w400', zone:'brasil-amazonia', nota:'El pulmón del planeta, hogar de infinitas especies.' },
     { name:'Río Amazonas', url:'https://drive.google.com/thumbnail?id=1LgCZ2wpJKGP9smMDqV5xjC3McUoRdRor&sz=w400', zone:'brasil-amazonia', nota:'El río más caudaloso del mundo.' },
-    { name:'Teatro Amazonas', url:'https://drive.google.com/thumbnail?id=1hy1CBmhhXdTsic976CstOPck0oyRjcTt&sz=w400', zone:'brasil-amazonia', nota:'Ópera en medio de la selva, en Manaus.' },
+    { name:'Teatro Amazonas', url:'https://drive.google.com/thumbnail?id=1pbUeBLk-EkI7NH9AdPCyBLLX012OzjdX&sz=w400', zone:'brasil-amazonia', nota:'Ópera en medio de la selva, en Manaus.' },
     { name:'Pantanal', url:'https://drive.google.com/thumbnail?id=1D40w-bhdyG3WysjImhoGaugichQ0zcvL&sz=w400', zone:'brasil-amazonia', nota:'La mayor llanura inundable del mundo.' },
     { name:'Río Bonito', url:'https://drive.google.com/thumbnail?id=1vI7wBdrYfnzB_djEWHDYnW3MK6S2s3fF&sz=w400', zone:'brasil-amazonia', nota:'Aguas cristalinas en Mato Grosso do Sul.' },
     { name:'Chapada dos Veadeiros', url:'https://drive.google.com/thumbnail?id=1h5kWrbsKdHwBSnJLzNoin0qtG8MRz8Aj&sz=w400', zone:'brasil-amazonia', nota:'Cerrado y cascadas en Goiás.' },
@@ -235,18 +235,18 @@ var brasilSudestePhotos = [
     { name:'Petrópolis', url:'https://drive.google.com/thumbnail?id=1GjD4DVym5xulZBVscc8X1fOX1arMrhcx&sz=w400', zone:'brasil-sudeste', nota:'Ciudad imperial en la sierra de Río.' },
 ];
 var brasilSulPhotos = [
-    { name:'Cataratas del Iguazú', url:'https://drive.google.com/thumbnail?id=1w-Ex5waHljv4z9wvKjKpVKRTJ13SEBLC&sz=w400', zone:'brasil-sul', nota:'Una de las maravillas naturales del mundo.' },
-    { name:'Florianópolis', url:'https://drive.google.com/thumbnail?id=1VM3QCTn6ldukiK9ca_d7jtm3o5I5ZqJN&sz=w400', zone:'brasil-sul', nota:'Isla mágica con 42 playas en Santa Catarina.' },
-    { name:'Gramado', url:'https://drive.google.com/thumbnail?id=1WhREqQcRszymRXFTGGH9S1v4lqiJs7gp&sz=w400', zone:'brasil-sul', nota:'Pueblo europeo en las sierras gaúchas.' },
-    { name:'Búzios', url:'https://drive.google.com/thumbnail?id=1tp8-UlBNkzoeCVJPDLrSoIVTvva-Nxy-&sz=w400', zone:'brasil-sul', nota:'Resort chic con playas cristalinas.' },
-    { name:'Serra Gaúcha', url:'https://drive.google.com/thumbnail?id=1ZkinbO3qDTD7j_0S8YPvavQrxLgnu97_&sz=w400', zone:'brasil-sul', nota:'Viñedos y paisajes europeos en Río Grande do Sul.' },
-    { name:'Ilha do Mel', url:'https://drive.google.com/thumbnail?id=1oToEg2isEH-tYX2hqN1JnGmLu5dWHg-C&sz=w400', zone:'brasil-sul', nota:'Isla preservada en Paraná, sin autos.' },
-    { name:'Vila Velha', url:'https://drive.google.com/thumbnail?id=17ugPTP1eKhVslSMVz5KE1hjqxPFdwTeC&sz=w400', zone:'brasil-sul', nota:'Formaciones rocas en Paraná.' },
-    { name:'Canela', url:'https://drive.google.com/thumbnail?id=1672QZbUo_e-46TEXFkuvPRXM0csC1yiP&sz=w400', zone:'brasil-sul', nota:'Cascada Caracol en las sierras gaúchas.' },
-    { name:'Balneário Camboriú', url:'https://drive.google.com/thumbnail?id=1SSHVZxSjWJwk4ys4UVD_B5gtvBvRJe7G&sz=w400', zone:'brasil-sul', nota:'Playa urbana en Santa Catarina.' },
-    { name:'Curitiba', url:'https://drive.google.com/thumbnail?id=1Z1Hza_k7Tv6oXI5Ez8KpWyEXxeKgf_T0&sz=w400', zone:'brasil-sul', nota:'Capital ecológica de Brasil.' },
-    { name:'Antonina', url:'https://drive.google.com/thumbnail?id=1xZbVDbd1m7EMsMr0to2gtv_HsSWC9UUi&sz=w400', zone:'brasil-sul', nota:'Bahía de Paranaguá, patrimonio histórico.' },
-    { name:'Morretes', url:'https://drive.google.com/thumbnail?id=1c5Io-gnp5_Z5oXwnTRW7oqmqAUtQBUcn&sz=w400', zone:'brasil-sul', nota:'Pueblo colonial en la sierra del mar.' },
+    { name:'Cataratas del Iguazú', url:'https://drive.google.com/thumbnail?id=1ZkinbO3qDTD7j_0S8YPvavQrxLgnu97_&sz=w400', zone:'brasil-sul', nota:'Una de las maravillas naturales del mundo.' },
+    { name:'Florianópolis', url:'https://drive.google.com/thumbnail?id=17ugPTP1eKhVslSMVz5KE1hjqxPFdwTeC&sz=w400', zone:'brasil-sul', nota:'Isla mágica con 42 playas en Santa Catarina.' },
+    { name:'Gramado', url:'https://drive.google.com/thumbnail?id=1672QZbUo_e-46TEXFkuvPRXM0csC1yiP&sz=w400', zone:'brasil-sul', nota:'Pueblo europeo en las sierras gaúchas.' },
+    { name:'Búzios', url:'https://drive.google.com/thumbnail?id=1WhREqQcRszymRXFTGGH9S1v4lqiJs7gp&sz=w400', zone:'brasil-sul', nota:'Resort chic con playas cristalinas.' },
+    { name:'Serra Gaúcha', url:'https://drive.google.com/thumbnail?id=1xZbVDbd1m7EMsMr0to2gtv_HsSWC9UUi&sz=w400', zone:'brasil-sul', nota:'Viñedos y paisajes europeos en Río Grande do Sul.' },
+    { name:'Ilha do Mel', url:'https://drive.google.com/thumbnail?id=1SSHVZxSjWJwk4ys4UVD_B5gtvBvRJe7G&sz=w400', zone:'brasil-sul', nota:'Isla preservada en Paraná, sin autos.' },
+    { name:'Vila Velha', url:'https://drive.google.com/thumbnail?id=1c5Io-gnp5_Z5oXwnTRW7oqmqAUtQBUcn&sz=w400', zone:'brasil-sul', nota:'Formaciones rocas en Paraná.' },
+    { name:'Canela', url:'https://drive.google.com/thumbnail?id=1tp8-UlBNkzoeCVJPDLrSoIVTvva-Nxy-&sz=w400', zone:'brasil-sul', nota:'Cascada Caracol en las sierras gaúchas.' },
+    { name:'Balneário Camboriú', url:'https://drive.google.com/thumbnail?id=1VM3QCTn6ldukiK9ca_d7jtm3o5I5ZqJN&sz=w400', zone:'brasil-sul', nota:'Playa urbana en Santa Catarina.' },
+    { name:'Curitiba', url:'https://drive.google.com/thumbnail?id=1oToEg2isEH-tYX2hqN1JnGmLu5dWHg-C&sz=w400', zone:'brasil-sul', nota:'Capital ecológica de Brasil.' },
+    { name:'Antonina', url:'https://drive.google.com/thumbnail?id=1w-Ex5waHljv4z9wvKjKpVKRTJ13SEBLC&sz=w400', zone:'brasil-sul', nota:'Bahía de Paranaguá, patrimonio histórico.' },
+    { name:'Morretes', url:'https://drive.google.com/thumbnail?id=1Z1Hza_k7Tv6oXI5Ez8KpWyEXxeKgf_T0&sz=w400', zone:'brasil-sul', nota:'Pueblo colonial en la sierra del mar.' },
 ];
 
 // [FASE 6] Fichas tradicionales + nuevos simbolos coloridos tipo Candy Crush.
