@@ -1,9 +1,10 @@
-var CACHE_NAME = 'mahjong-tour-v8';
+var CACHE_NAME = 'mahjong-tour-v10';
 var urlsToCache = [
     './',
     'index.html',
     'juego.js',
     'datos.js',
+    'i18n.js',
     'misiones.js',
     'logros.js',
     'musica.js',
@@ -13,7 +14,8 @@ var urlsToCache = [
     'icon-512.png',
     'Cumbres_bajo_el_Sol.mp3',
     'Cortes_de_Medianoche.mp3',
-    'La_Senda_del_Honor.mp3'
+    'La_Senda_del_Honor.mp3',
+    'Shadows_in_the_Palms.mp3'
 ];
 
 self.addEventListener('install', function(event) {

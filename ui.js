@@ -84,7 +84,7 @@ var UI = (function() {
         }
         else if (event === 'slotsfull') showMessage('Slots llenos: usa ↩️ Deshacer o 🔀 Mezclar');  // [FIX BUG #6]
         else if (event === 'timer') { var el = document.getElementById('timerDisplay'); if (el) el.textContent = data.timeLeft + 's'; }
-        else if (event === 'timeout') { showMessage('Tiempo agotado'); setTimeout(function() { showZone(currentZone.id); }, 1500); }
+        else if (event === 'timeout') { showMessage(I18n.t('msg.tiempo')); setTimeout(function() { showZone(currentZone.id); }, 1500); }
         else if (event === 'victory') {
             var stars = data.score >= 2000 ? 3 : data.score >= 1000 ? 2 : 1;
             setStars(currentZone.id, currentLevel.num, stars);
@@ -97,7 +97,11 @@ var UI = (function() {
             var drBtn = document.getElementById('dobleRecompensaBtn');
             if (drBtn) { drBtn.style.display = ''; drBtn.disabled = false; drBtn.style.opacity = '1'; }
             document.getElementById('victoryIcon').textContent = '🏆';
-            document.getElementById('victoryName').textContent = currentZone.name + ' Nivel ' + currentLevel.num;
+            var vt = document.getElementById('victoryTitle'); if (vt) vt.textContent = I18n.t('victoria.titulo');
+            var vdr = document.getElementById('dobleRecompensaLabel'); if (vdr) vdr.textContent = I18n.t('victoria.doble');
+            var vbs = document.getElementById('btnSiguienteNivel'); if (vbs) vbs.textContent = I18n.t('victoria.siguiente');
+            var vbv = document.getElementById('btnVolver'); if (vbv) vbv.textContent = I18n.t('victoria.volver');
+            document.getElementById('victoryName').textContent = currentZone.name + ' · ' + I18n.t('game.nivel') + ' ' + currentLevel.num;
             document.getElementById('starsDisplay').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
             // [FIX BUG #3] Forzar z-index alto para asegurar visibilidad encima de cualquier overlay residual.
             var vm = document.getElementById('victoryModal');
@@ -1080,7 +1084,7 @@ var UI = (function() {
         html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">';
         html += '<span style="font-size:3em;">🌎</span>';
         html += '<h1 class="text-glow" style="font-size:1.5em;font-weight:bold;color:#f2ca50;">WORLD TOUR</h1>';
-        html += '<div style="background:rgba(242,202,80,0.1);padding:4px 12px;border-radius:16px;margin-top:8px;"><span style="color:#f2ca50;font-size:0.9em;font-weight:bold;">⭐ ' + ts + ' estrellas</span></div>';
+        html += '<div style="background:rgba(242,202,80,0.1);padding:4px 12px;border-radius:16px;margin-top:8px;"><span style="color:#f2ca50;font-size:0.9em;font-weight:bold;">⭐ ' + ts + ' ' + I18n.t('menu.stars') + '</span></div>';
         html += '</div></div><div style="padding:16px;">';
         // [FASE 2] Panel de misiones diarias + streak.
         html += Misiones.renderPanel();
@@ -1089,23 +1093,23 @@ var UI = (function() {
         html += countryCard('🇲🇽','Mexico',cpMexico,'UI.showMexicanZones()');
         var cpBrasil = Math.round((getTotalStarsForCountry('brasil') / 120) * 100);
         html += countryCard('🇧🇷','Brasil',cpBrasil,'UI.showBrasilZones()');
-        html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ALBUM DE VIAJES</button>';
+        html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ' + I18n.t('menu.album') + '</button>';
         // [FASE 4] Boton de logros con contador.
         var logrosResumen = Logros.obtenerResumen();
         html += '<button onclick="UI.showLogros()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(242,202,80,0.15),rgba(255,159,67,0.1));border:1px solid rgba(242,202,80,0.3);color:#f2ca50;font-weight:bold;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">' +
-            '<span>🏆 LOGROS</span>' +
+            '<span>🏆 ' + I18n.t('menu.logros') + '</span>' +
             '<span style="font-size:0.8em;color:rgba(242,202,80,0.7);">' + logrosResumen.desbloqueados + '/' + logrosResumen.total + '</span>' +
             '</button>';
-        html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">🛒 TIENDA</button>';
-        html += '<button onclick="UI.showAjustes()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">⚙️ AJUSTES</button>';
-        html += '<button onclick="UI.despedida()" style="width:100%;padding:12px;border-radius:12px;background:rgba(242,202,80,0.1);border:1px solid rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;">👋 SALIR</button>';
+        html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">🛒 ' + I18n.t('menu.tienda') + '</button>';
+        html += '<button onclick="UI.showAjustes()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">⚙️ ' + I18n.t('menu.ajustes') + '</button>';
+        html += '<button onclick="UI.despedida()" style="width:100%;padding:12px;border-radius:12px;background:rgba(242,202,80,0.1);border:1px solid rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;">👋 ' + I18n.t('menu.salir') + '</button>';
         html += '</div></div>';
         document.getElementById('appContent').innerHTML = html;
     }
 
     function countryCard(flag, name, progress, onclick) {
         return '<div onclick="' + onclick + '" style="border-radius:16px;overflow:hidden;border:2px solid rgba(242,202,80,0.3);background:linear-gradient(135deg, rgba(242,202,80,0.1), rgba(11,21,18,0.9));margin-bottom:12px;cursor:pointer;">' +
-            '<div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;">' + flag + '</span><div style="flex:1;"><h3 style="color:white;font-weight:bold;font-size:1.1em;">' + name + '</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.7);">4 regiones - 40 niveles</p><div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden;"><div style="height:100%;background:linear-gradient(to right, #f2ca50, #ff9f43);border-radius:2px;width:' + progress + '%;"></div></div><p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-top:4px;">' + progress + '% completado</p></div><span style="color:rgba(255,255,255,0.3);font-size:1.5em;">→</span></div></div>';
+            '<div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;">' + flag + '</span><div style="flex:1;"><h3 style="color:white;font-weight:bold;font-size:1.1em;">' + name + '</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.7);">' + I18n.t('menu.regiones_niveles') + '</p><div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden;"><div style="height:100%;background:linear-gradient(to right, #f2ca50, #ff9f43);border-radius:2px;width:' + progress + '%;"></div></div><p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-top:4px;">' + progress + '% ' + I18n.t('menu.completado') + '</p></div><span style="color:rgba(255,255,255,0.3);font-size:1.5em;">→</span></div></div>';
     }
 
     function showChileZones() { showCountryZones('chile','🇨🇱 CHILE'); }
@@ -1130,7 +1134,7 @@ var UI = (function() {
 
     function showAlbum() {
         var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
-        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🌎 Album de Viajes</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
+        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + I18n.t('album.titulo') + '</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
         var countries = [
             { flag:'🇨🇱', name:'Chile', zones:['norte','centro','sur','austral'] },
             { flag:'🇦🇷', name:'Argentina', zones:['argentina-norte','argentina-centro','argentina-patagonia','argentina-litoral'] },
@@ -1158,14 +1162,14 @@ var UI = (function() {
 
     function showTienda() {
         document.getElementById('appContent').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
-            '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🛒 Tienda</span><span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">💰 ' + coins + ' monedas</span><button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>' +
-            '<p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">Compra power-ups para ayudarte.</p>' +
-            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">💡 Pista extra</span></div><button onclick="UI.comprarPowerUp(\'hint\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
-            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">🔀 Mezclar extra</span></div><button onclick="UI.comprarPowerUp(\'shuffle\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
-            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;"><div><span style="color:white;font-weight:bold;">↩️ Deshacer extra</span></div><button onclick="UI.comprarPowerUp(\'undo\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div></div>';
+            '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + I18n.t('tienda.titulo') + '</span><span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">💰 ' + coins + ' ' + I18n.t('tienda.monedas') + '</span><button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>' +
+            '<p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">' + I18n.t('tienda.ayuda') + '</p>' +
+            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">' + I18n.t('tienda.pista') + '</span></div><button onclick="UI.comprarPowerUp(\'hint\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
+            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">' + I18n.t('tienda.mezclar') + '</span></div><button onclick="UI.comprarPowerUp(\'shuffle\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
+            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;"><div><span style="color:white;font-weight:bold;">' + I18n.t('tienda.deshacer') + '</span></div><button onclick="UI.comprarPowerUp(\'undo\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div></div>';
     }
 
-    function comprarPowerUp(tipo) { if (coins < 10) { showMessage('Monedas insuficientes'); return; } coins -= 10; localStorage.setItem('coins', coins); GameEngine.addPowerUp(tipo, 1); showTienda(); }
+    function comprarPowerUp(tipo) { if (coins < 10) { showMessage(I18n.t('msg.monedas_insuf')); return; } coins -= 10; localStorage.setItem('coins', coins); GameEngine.addPowerUp(tipo, 1); showTienda(); }
 
     // [FASE 2] Muestra un toast por cada mision completada.
     function mostrarMisionesCompletadas(completadas) {
@@ -1248,43 +1252,78 @@ var UI = (function() {
         // Header
         html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:12px;background:linear-gradient(135deg,rgba(242,202,80,0.15),rgba(255,159,67,0.08));border-radius:12px;border:1px solid rgba(242,202,80,0.3);">';
         html += '<button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.3em;cursor:pointer;padding:4px;">←</button>';
-        html += '<span style="font-size:1.15em;font-weight:bold;color:#f2ca50;">⚙️ Ajustes</span>';
+        html += '<span style="font-size:1.15em;font-weight:bold;color:#f2ca50;">' + I18n.t('ajustes.titulo') + '</span>';
         html += '</div>';
         // Seccion de audio
         html += '<div style="margin-bottom:16px;padding:14px;background:rgba(0,0,0,0.25);border-radius:12px;border:1px solid rgba(242,202,80,0.15);">';
-        html += '<h3 style="color:rgba(242,202,80,0.7);font-size:0.7em;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">🔊 Audio</h3>';
+        html += '<h3 style="color:rgba(242,202,80,0.7);font-size:0.7em;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">' + I18n.t('ajustes.audio') + '</h3>';
         // Toggle musica
-        html += renderToggle('🎵', 'Música', 'musicaEnabled', 'UI.toggleMusica()');
+        html += renderToggle('🎵', I18n.t('ajustes.musica'), 'musicaEnabled', 'UI.toggleMusica()');
         // Toggle sonido (efectos)
-        html += renderToggle('🔊', 'Efectos de sonido', 'sonidoEnabled', 'UI.toggleSonido()');
+        html += renderToggle('🔊', I18n.t('ajustes.efectos'), 'sonidoEnabled', 'UI.toggleSonido()');
         // Toggle vibracion
-        html += renderToggle('📳', 'Vibración', 'hapticEnabled', 'UI.toggleHaptic()');
+        html += renderToggle('📳', I18n.t('ajustes.vibracion'), 'hapticEnabled', 'UI.toggleHaptic()');
         html += '</div>';
         // Seccion de preferencias
         html += '<div style="margin-bottom:16px;padding:14px;background:rgba(0,0,0,0.25);border-radius:12px;border:1px solid rgba(242,202,80,0.15);">';
-        html += '<h3 style="color:rgba(242,202,80,0.7);font-size:0.7em;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">📋 Preferencias</h3>';
-        // Idioma
-        html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">';
-        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">🌐 Idioma</span>';
-        html += '<span style="color:rgba(242,202,80,0.8);font-size:0.85em;background:rgba(242,202,80,0.1);padding:4px 12px;border-radius:8px;">Español</span>';
+        html += '<h3 style="color:rgba(242,202,80,0.7);font-size:0.7em;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">' + I18n.t('ajustes.prefencias') + '</h3>';
+        // Idioma - AHORA INTERACTIVO
+        html += '<div onclick="UI.showIdiomas()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;">';
+        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">' + I18n.t('ajustes.idioma') + '</span>';
+        html += '<span style="color:rgba(242,202,80,0.8);font-size:0.85em;background:rgba(242,202,80,0.1);padding:4px 12px;border-radius:8px;display:flex;align-items:center;gap:6px;">' + I18n.getCurrentLabel() + ' <span style="color:rgba(255,255,255,0.4);">›</span></span>';
         html += '</div>';
         // Acerca de
         html += '<div onclick="UI.showAcercaDe()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;">';
-        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">ℹ️ Acerca de</span>';
+        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">' + I18n.t('ajustes.acerca') + '</span>';
         html += '<span style="color:rgba(255,255,255,0.4);font-size:1em;">›</span>';
         html += '</div>';
         // Compartir
         html += '<div onclick="UI.compartirJuego()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;cursor:pointer;">';
-        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">📤 Compartir con amigos</span>';
+        html += '<span style="color:white;font-size:0.9em;display:flex;align-items:center;gap:10px;">' + I18n.t('ajustes.compartir') + '</span>';
         html += '<span style="color:rgba(255,255,255,0.4);font-size:1em;">›</span>';
         html += '</div>';
         html += '</div>';
         // Boton reset progreso
-        html += '<button onclick="UI.resetProgreso()" style="width:100%;padding:12px;border-radius:12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#ef4444;font-weight:bold;font-size:0.9em;cursor:pointer;margin-top:8px;">🗑️ Reiniciar progreso</button>';
+        html += '<button onclick="UI.resetProgreso()" style="width:100%;padding:12px;border-radius:12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#ef4444;font-weight:bold;font-size:0.9em;cursor:pointer;margin-top:8px;">' + I18n.t('ajustes.reset') + '</button>';
         // Footer con version
-        html += '<p style="text-align:center;color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:24px;">Mahjong World Tour v7.0<br>Hecho con cariño desde Chile 🇨🇱</p>';
+        html += '<p style="text-align:center;color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:24px;">Mahjong World Tour v7.0<br>' + I18n.t('ajustes.version') + '</p>';
         html += '</div>';
         document.getElementById('appContent').innerHTML = html;
+    }
+
+    // [i18n] Modal selector de idioma.
+    function showIdiomas() {
+        var modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;';
+        var current = I18n.getCurrent();
+        var optionsHTML = '';
+        I18n.getSupported().forEach(function(lang) {
+            var selected = lang.code === current;
+            var bg = selected ? 'background:linear-gradient(135deg,rgba(242,202,80,0.25),rgba(255,159,67,0.15));border:1px solid rgba(242,202,80,0.6);' : 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);';
+            var checkMark = selected ? '<span style="color:#4ade80;font-size:1.2em;">✓</span>' : '<span style="color:rgba(255,255,255,0.3);font-size:1em;">›</span>';
+            optionsHTML += '<div onclick="UI.seleccionarIdioma(\'' + lang.code + '\')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:12px;' + bg + 'margin-bottom:10px;cursor:pointer;transition:transform 0.15s;">' +
+                '<span style="color:white;font-size:1em;display:flex;align-items:center;gap:12px;"><span style="font-size:1.5em;">' + lang.flag + '</span>' + lang.label + '</span>' +
+                checkMark +
+                '</div>';
+        });
+        modal.innerHTML = '<div style="background:linear-gradient(145deg,rgba(23,34,30,0.95),rgba(11,21,18,0.95));padding:24px;border-radius:20px;border:1px solid rgba(242,202,80,0.3);max-width:340px;width:100%;">' +
+            '<h2 style="color:#f2ca50;font-size:1.2em;font-weight:bold;margin-bottom:6px;text-align:center;">' + I18n.t('idioma.titulo') + '</h2>' +
+            '<p style="color:rgba(255,255,255,0.5);font-size:0.7em;text-align:center;margin-bottom:20px;line-height:1.4;">' + I18n.t('idioma.nota') + '</p>' +
+            optionsHTML +
+            '<button onclick="this.parentElement.parentElement.remove()" class="btn-primary" style="width:100%;padding:10px;border-radius:12px;font-size:1em;margin-top:8px;">' + I18n.t('acerca.cerrar') + '</button>' +
+            '</div>';
+        document.body.appendChild(modal);
+    }
+
+    // [i18n] Cambia el idioma y refresca ajustes.
+    function seleccionarIdioma(code) {
+        I18n.setLang(code);
+        // Cerrar modal (busca cualquier modal z-index 600 abierto)
+        var modals = document.querySelectorAll('div[style*="z-index:600"]');
+        modals.forEach(function(m) { if (m.parentNode) m.parentNode.removeChild(m); });
+        // Refrescar pantalla de ajustes para mostrar nuevo idioma
+        showAjustes();
+        if (navigator.vibrate) navigator.vibrate(20);
     }
 
     // [FASE 6] Renderiza un toggle switch estilo Vita.
@@ -1320,11 +1359,11 @@ var UI = (function() {
         modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;';
         modal.innerHTML = '<div style="background:linear-gradient(145deg,rgba(23,34,30,0.95),rgba(11,21,18,0.95));padding:32px;border-radius:20px;text-align:center;border:1px solid rgba(242,202,80,0.3);max-width:320px;">' +
             '<div style="font-size:3em;margin-bottom:12px;">🌎</div>' +
-            '<h2 style="color:#f2ca50;font-size:1.4em;font-weight:bold;margin-bottom:8px;">Descubre América</h2>' +
+            '<h2 style="color:#f2ca50;font-size:1.4em;font-weight:bold;margin-bottom:8px;">' + I18n.t('acerca.titulo') + '</h2>' +
             '<p style="color:rgba(242,202,80,0.6);font-size:0.8em;letter-spacing:0.2em;margin-bottom:16px;">WORLD TOUR</p>' +
-            '<p style="color:white;font-size:0.9em;line-height:1.6;margin-bottom:16px;">Un viaje meditativo por Chile, Argentina y México a través del Mahjong. Descubre rincones mágicos, supera desafíos y conviértete en Maestro Mahjong.</p>' +
-            '<p style="color:rgba(242,202,80,0.5);font-size:0.75em;margin-bottom:20px;">Versión 7.0 · Hecho con cariño desde Chile 🇨🇱</p>' +
-            '<button onclick="this.parentElement.parentElement.remove()" class="btn-primary" style="width:100%;padding:10px;border-radius:12px;font-size:1em;">Cerrar</button>' +
+            '<p style="color:white;font-size:0.9em;line-height:1.6;margin-bottom:16px;">' + I18n.t('acerca.desc') + '</p>' +
+            '<p style="color:rgba(242,202,80,0.5);font-size:0.75em;margin-bottom:20px;">' + I18n.t('acerca.version') + ' 7.0 · ' + I18n.t('ajustes.version') + '</p>' +
+            '<button onclick="this.parentElement.parentElement.remove()" class="btn-primary" style="width:100%;padding:10px;border-radius:12px;font-size:1em;">' + I18n.t('acerca.cerrar') + '</button>' +
             '</div>';
         document.body.appendChild(modal);
     }
@@ -1332,13 +1371,13 @@ var UI = (function() {
     // [FASE 6] Compartir juego (Web Share API).
     function compartirJuego() {
         if (navigator.share) {
-            navigator.share({ title: 'Descubre América · Mahjong World Tour', text: '¡Juega Mahjong viajando por Chile, Argentina y México!', url: window.location.href })
-                .catch(function() { showMessage('No se pudo compartir'); });
+            navigator.share({ title: 'Descubre América · Mahjong World Tour', text: '¡Juega Mahjong viajando por Chile, Argentina, México y Brasil!', url: window.location.href })
+                .catch(function() { showMessage(I18n.t('msg.compartir_no')); });
         } else {
             // Fallback: copiar URL
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(window.location.href);
-                showMessage('📋 Enlace copiado');
+                showMessage(I18n.t('msg.enlace_copiado'));
             } else {
                 showMessage('Comparte: ' + window.location.href);
             }
@@ -1347,7 +1386,7 @@ var UI = (function() {
 
     // [FASE 6] Reiniciar progreso (con confirmacion).
     function resetProgreso() {
-        if (!confirm('¿Estás seguro de que quieres reiniciar todo tu progreso? Esta acción no se puede deshacer.')) return;
+        if (!confirm(I18n.t('msg.reset_confirma'))) return;
         localStorage.removeItem('coins');
         localStorage.removeItem('tutorialCompleted');
         localStorage.removeItem('misiones_state');
@@ -1363,15 +1402,16 @@ var UI = (function() {
 
     // [FASE 6] Saludo de despedida con frase aleatoria.
     function despedida() {
-        var frase = DESPEDIDA_FRASES[Math.floor(Math.random() * DESPEDIDA_FRASES.length)];
+        // Usar las frases traducidas (primeras 4) + fallback a las originales en español.
+        var frase = I18n.t('despedida.' + (Math.floor(Math.random() * 4) + 1));
         var overlay = document.createElement('div');
         overlay.id = 'despedidaOverlay';
         overlay.style.cssText = 'position:fixed;inset:0;background:radial-gradient(ellipse at center,#0d2018 0%,#050a08 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;animation:despedidaFade 0.8s ease-out;';
         overlay.innerHTML = '<div style="font-size:4em;margin-bottom:20px;animation:despedidaWave 2s ease-in-out infinite;">🫶</div>' +
             '<p style="color:#f2ca50;font-size:1.5em;font-weight:bold;text-align:center;max-width:320px;line-height:1.4;text-shadow:0 0 24px rgba(242,202,80,0.5);">' + frase + '</p>' +
             '<div style="margin-top:24px;width:80px;height:2px;background:linear-gradient(to right,transparent,#f2ca50,transparent);"></div>' +
-            '<p style="color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:20px;letter-spacing:0.25em;">DESCUBRE AMÉRICA · WORLD TOUR</p>' +
-            '<p style="color:rgba(242,202,80,0.3);font-size:0.6em;margin-top:8px;">Hecho con cariño desde Chile 🇨🇱</p>' +
+            '<p style="color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:20px;letter-spacing:0.25em;">' + I18n.t('despedida.footer') + '</p>' +
+            '<p style="color:rgba(242,202,80,0.3);font-size:0.6em;margin-top:8px;">' + I18n.t('ajustes.version') + '</p>' +
             '<button onclick="document.getElementById(\'despedidaOverlay\').remove()" style="margin-top:32px;padding:10px 28px;border-radius:12px;background:rgba(242,202,80,0.15);border:1px solid rgba(242,202,80,0.3);color:#f2ca50;font-weight:bold;cursor:pointer;font-size:0.9em;">← Seguir jugando</button>';
         document.body.appendChild(overlay);
         haptic([20, 40, 20]);
@@ -1436,15 +1476,16 @@ var UI = (function() {
         }
         splash.innerHTML = '<div style="position:absolute;inset:0;pointer-events:none;">' + starsHTML + '</div>';
 
-        // Mapa SVG: avion parte en Mexico (arriba), va a Argentina (este), baja a Chile centro,
-        // y termina en la Patagonia chilena (abajo). La parada en Chile es mas larga para destacarlo.
+        // Mapa SVG: avion parte en Mexico, baja a Brasil (noreste), Argentina (este),
+        // cruza a Chile centro (cuna del proyecto, destacado) y termina en la Patagonia.
+        // La parada en Chile es mas larga para destacarlo como origen del juego.
         var svgMap = '' +
             '<svg viewBox="0 0 300 440" style="width:280px;height:auto;max-width:80vw;filter:drop-shadow(0 0 20px rgba(242,202,80,0.2));">' +
                 '<path d="M 80 30 Q 100 20 130 35 Q 160 25 180 45 Q 200 60 195 90 Q 210 110 200 140 Q 215 170 200 200 Q 210 230 195 260 Q 200 290 180 320 Q 170 360 150 400 Q 130 420 110 410 Q 90 390 85 360 Q 70 330 80 300 Q 65 270 75 240 Q 60 210 70 180 Q 55 150 70 120 Q 60 90 75 60 Q 70 40 80 30 Z" ' +
                     'fill="none" stroke="rgba(242,202,80,0.15)" stroke-width="1.5" stroke-dasharray="2 4"/>' +
-                '<path id="flightPath" d="M 130 55 Q 175 130 175 210 Q 140 240 95 260 Q 100 330 130 400" ' +
+                '<path id="flightPath" d="M 130 55 Q 200 80 220 130 Q 200 170 175 210 Q 140 240 95 260 Q 100 330 130 400" ' +
                     'fill="none" stroke="url(#trailGrad)" stroke-width="2.5" stroke-linecap="round" ' +
-                    'stroke-dasharray="700" stroke-dashoffset="700" class="splash-trail"/>' +
+                    'stroke-dasharray="900" stroke-dashoffset="900" class="splash-trail"/>' +
                 '<defs>' +
                     '<linearGradient id="trailGrad" x1="0%" y1="0%" x2="0%" y2="100%">' +
                         '<stop offset="0%" stop-color="#f2ca50" stop-opacity="0.15"/>' +
@@ -1456,26 +1497,38 @@ var UI = (function() {
                         '<stop offset="0%" stop-color="#f2ca50" stop-opacity="1"/>' +
                         '<stop offset="100%" stop-color="#f2ca50" stop-opacity="0"/>' +
                     '</radialGradient>' +
+                    '<radialGradient id="brasilGlow">' +
+                        '<stop offset="0%" stop-color="#7fd957" stop-opacity="1"/>' +
+                        '<stop offset="100%" stop-color="#7fd957" stop-opacity="0"/>' +
+                    '</radialGradient>' +
                     '<radialGradient id="chileGlow">' +
                         '<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>' +
                         '<stop offset="40%" stop-color="#f2ca50" stop-opacity="0.95"/>' +
                         '<stop offset="100%" stop-color="#f2ca50" stop-opacity="0"/>' +
                     '</radialGradient>' +
                 '</defs>' +
+                // Mexico (inicio)
                 '<circle cx="130" cy="55" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:0.3s;"/>' +
                 '<circle cx="130" cy="55" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:0.3s;"/>' +
                 '<text x="130" y="42" class="splash-label" style="animation-delay:0.5s;" text-anchor="middle">Mexico</text>' +
-                '<circle cx="175" cy="210" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:1.4s;"/>' +
-                '<circle cx="175" cy="210" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:1.4s;"/>' +
-                '<text x="195" y="214" class="splash-label" style="animation-delay:1.6s;" text-anchor="start">Argentina</text>' +
-                '<circle cx="95" cy="260" r="7" fill="url(#chileGlow)" class="splash-city-chile-pulse" style="animation-delay:2.4s;"/>' +
-                '<circle cx="95" cy="260" r="6" fill="#ffffff" class="splash-city-chile" style="animation-delay:2.4s;"/>' +
-                '<circle cx="95" cy="260" r="14" fill="url(#chileGlow)" class="splash-city-chile-aura" style="animation-delay:2.4s;"/>' +
-                '<text x="95" y="285" class="splash-label-chile" style="animation-delay:2.7s;" text-anchor="middle">CHILE</text>' +
-                '<text x="95" y="300" class="splash-label-sub" style="animation-delay:2.9s;" text-anchor="middle">Cuna del proyecto</text>' +
-                '<circle cx="130" cy="400" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:4.0s;"/>' +
-                '<circle cx="130" cy="400" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:4.0s;"/>' +
-                '<text x="130" y="420" class="splash-label" style="animation-delay:4.2s;" text-anchor="middle">Patagonia</text>' +
+                // Brasil (noreste) - verde caracteristico
+                '<circle cx="220" cy="130" r="4" fill="#7fd957" class="splash-city" style="animation-delay:1.6s;"/>' +
+                '<circle cx="220" cy="130" r="10" fill="url(#brasilGlow)" class="splash-city-pulse" style="animation-delay:1.6s;"/>' +
+                '<text x="240" y="134" class="splash-label" style="animation-delay:1.8s;" text-anchor="start">Brasil</text>' +
+                // Argentina
+                '<circle cx="175" cy="210" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:2.9s;"/>' +
+                '<circle cx="175" cy="210" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:2.9s;"/>' +
+                '<text x="195" y="214" class="splash-label" style="animation-delay:3.1s;" text-anchor="start">Argentina</text>' +
+                // Chile (destacado, cuna del proyecto)
+                '<circle cx="95" cy="260" r="7" fill="url(#chileGlow)" class="splash-city-chile-pulse" style="animation-delay:4.0s;"/>' +
+                '<circle cx="95" cy="260" r="6" fill="#ffffff" class="splash-city-chile" style="animation-delay:4.0s;"/>' +
+                '<circle cx="95" cy="260" r="14" fill="url(#chileGlow)" class="splash-city-chile-aura" style="animation-delay:4.0s;"/>' +
+                '<text x="95" y="285" class="splash-label-chile" style="animation-delay:4.2s;" text-anchor="middle">CHILE</text>' +
+                '<text x="95" y="300" class="splash-label-sub" style="animation-delay:4.4s;" text-anchor="middle">' + I18n.t('splash.cuna') + '</text>' +
+                // Patagonia (final austral)
+                '<circle cx="130" cy="400" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:5.8s;"/>' +
+                '<circle cx="130" cy="400" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:5.8s;"/>' +
+                '<text x="130" y="420" class="splash-label" style="animation-delay:6.0s;" text-anchor="middle">Patagonia</text>' +
                 '<g class="splash-plane">' +
                     '<g transform="translate(-8,-8)">' +
                         '<path d="M 8 0 L 14 6 L 14 10 L 9 8 L 7 14 L 5 14 L 6 8 L 1 10 L 1 7 L 6 4 Z" ' +
@@ -1486,12 +1539,12 @@ var UI = (function() {
         splash.innerHTML += '<div style="position:relative;z-index:2;">' + svgMap + '</div>';
 
         splash.innerHTML += '<div style="position:relative;z-index:2;margin-top:20px;">' +
-            '<span class="splash-text-outfit" style="display:block;font-size:0.85em;color:rgba(242,202,80,0.7);letter-spacing:0.35em;margin-bottom:8px;">OUTFIT</span>' +
-            '<h1 class="splash-title text-glow" style="font-size:2.6em;font-weight:700;color:#f2ca50;line-height:1.1;letter-spacing:0.02em;">Descubre<br>America</h1>' +
+            '<span class="splash-text-outfit" style="display:block;font-size:0.85em;color:rgba(242,202,80,0.7);letter-spacing:0.35em;margin-bottom:8px;">' + I18n.t('splash.outfit') + '</span>' +
+            '<h1 class="splash-title text-glow" style="font-size:2.6em;font-weight:700;color:#f2ca50;line-height:1.1;letter-spacing:0.02em;">' + I18n.t('splash.title') + '</h1>' +
             '<div class="splash-divider"></div>' +
-            '<p class="splash-subtitle" style="font-size:0.9em;color:rgba(255,255,255,0.55);letter-spacing:0.4em;font-weight:300;">WORLD TOUR</p>' +
-            '<p class="splash-tagline" style="font-size:0.7em;color:rgba(242,202,80,0.5);margin-top:18px;letter-spacing:0.15em;">Viaje Meditativo</p>' +
-            '<p class="splash-made" style="font-size:0.65em;color:rgba(242,202,80,0.45);margin-top:10px;letter-spacing:0.1em;">Hecho con cariño desde Chile 🇨🇱</p>' +
+            '<p class="splash-subtitle" style="font-size:0.9em;color:rgba(255,255,255,0.55);letter-spacing:0.4em;font-weight:300;">' + I18n.t('splash.subtitle') + '</p>' +
+            '<p class="splash-tagline" style="font-size:0.7em;color:rgba(242,202,80,0.5);margin-top:18px;letter-spacing:0.15em;">' + I18n.t('splash.tagline') + '</p>' +
+            '<p class="splash-made" style="font-size:0.65em;color:rgba(242,202,80,0.45);margin-top:10px;letter-spacing:0.1em;">' + I18n.t('splash.made') + '</p>' +
             '</div>';
 
         document.body.appendChild(splash);
@@ -1500,14 +1553,17 @@ var UI = (function() {
         var pathEl = splash.querySelector('#flightPath');
         if (plane && pathEl) {
             var animateMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
-            animateMotion.setAttribute('dur', '4.5s');
+            // [Brasil splash] Duracion aumentada a 5.5s para acomodar 5 ciudades (Mexico, Brasil, Argentina, Chile, Patagonia).
+            animateMotion.setAttribute('dur', '5.5s');
             animateMotion.setAttribute('fill', 'freeze');
             animateMotion.setAttribute('rotate', 'auto');
             animateMotion.setAttribute('begin', '0.3s');
-            animateMotion.setAttribute('keyPoints', '0;0.33;0.55;0.55;1');
-            animateMotion.setAttribute('keyTimes', '0;0.3;0.5;0.65;1');
+            // keyPoints: 0 (Mexico) -> 0.22 (Brasil) -> 0.45 (Argentina) -> 0.65 (Chile) -> 0.65 (hover Chile) -> 1.0 (Patagonia)
+            animateMotion.setAttribute('keyPoints', '0;0.22;0.45;0.65;0.65;1');
+            animateMotion.setAttribute('keyTimes',  '0;0.22;0.45;0.65;0.78;1');
             animateMotion.setAttribute('calcMode', 'spline');
-            animateMotion.setAttribute('keySplines', '0.4 0 0.6 1; 0.4 0 0.6 1; 0 0 1 1; 0.4 0 0.6 1');
+            // 5 splines para 6 puntos (el 4to es "0 0 1 1" = lineal para el hover en Chile).
+            animateMotion.setAttribute('keySplines', '0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0 0 1 1; 0.4 0 0.6 1');
             var mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
             mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#flightPath');
             animateMotion.appendChild(mpath);
@@ -1515,6 +1571,7 @@ var UI = (function() {
         }
 
         // [FASE 5] Al terminar el splash del avion, mostrar segunda pantalla con frase inspiradora rotativa.
+        // Tiempo total ampliado a 6.5s para que el avion (5.5s + 0.3s inicio) termine y se lea la ultima etiqueta.
         setTimeout(function() {
             splash.style.transition = 'opacity 0.5s ease';
             splash.style.opacity = '0';
@@ -1522,19 +1579,19 @@ var UI = (function() {
                 if (splash.parentNode) splash.parentNode.removeChild(splash);
                 showSplashFrase();
             }, 500);
-        }, 5400);
+        }, 6500);
     }
 
     // [FASE 5] Segunda pantalla splash: frase inspiradora grande rotativa (estilo hashtag).
     var SPLASH_FRASES = [
-        '#Viaja por América y conviértete en Maestro Mahjong',
-        '#Descubre los rincones más mágicos del continente',
-        '#Cada ficha cuenta una historia milenaria',
-        '#Conecta con la cultura de tres países',
-        '#Donde la calma se vuelve juego',
-        '#Mahjong: un viaje, mil destinos',
-        '#Tu aventura comienza en Chile 🇨🇱',
-        '#Relaja tu mente, despierta tu espíritu viajero'
+        I18n.t('splash.frase.1'),
+        I18n.t('splash.frase.2'),
+        I18n.t('splash.frase.3'),
+        I18n.t('splash.frase.4'),
+        I18n.t('splash.frase.5'),
+        I18n.t('splash.frase.6'),
+        I18n.t('splash.frase.7'),
+        I18n.t('splash.frase.8')
     ];
     function showSplashFrase() {
         var splash = document.createElement('div');
@@ -1595,6 +1652,7 @@ var UI = (function() {
         showTienda: showTienda, showAlbum: showAlbum,
         showLogros: showLogros,
         showAjustes: showAjustes, showAcercaDe: showAcercaDe,
+        showIdiomas: showIdiomas, seleccionarIdioma: seleccionarIdioma,
         toggleSonido: toggleSonido, compartirJuego: compartirJuego,
         resetProgreso: resetProgreso, despedida: despedida,
         showRewardedVideo: showRewardedVideo, closeRewardModal: closeRewardModal,
@@ -1631,14 +1689,14 @@ var DESPEDIDA_FRASES = [
 window.addEventListener('beforeunload', function(e) {
     // Solo mostrar despedida si el usuario estuvo jugando (no en splash inicial).
     if (document.getElementById('appContent') && document.getElementById('appContent').innerHTML.length > 100) {
-        var frase = DESPEDIDA_FRASES[Math.floor(Math.random() * DESPEDIDA_FRASES.length)];
+        var frase = I18n.t('despedida.' + (Math.floor(Math.random() * 4) + 1));
         // Crear overlay de despedida.
         var overlay = document.createElement('div');
         overlay.style.cssText = 'position:fixed;inset:0;background:radial-gradient(ellipse at center,#0d2018 0%,#050a08 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;';
         overlay.innerHTML = '<div style="font-size:3em;margin-bottom:16px;">🫶</div>' +
             '<p style="color:#f2ca50;font-size:1.3em;font-weight:bold;text-align:center;max-width:300px;line-height:1.4;text-shadow:0 0 20px rgba(242,202,80,0.4);">' + frase + '</p>' +
             '<div style="margin-top:20px;width:60px;height:2px;background:linear-gradient(to right,transparent,#f2ca50,transparent);"></div>' +
-            '<p style="color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:16px;letter-spacing:0.2em;">DESCUBRE AMÉRICA · WORLD TOUR</p>';
+            '<p style="color:rgba(242,202,80,0.4);font-size:0.7em;margin-top:16px;letter-spacing:0.2em;">' + I18n.t('despedida.footer') + '</p>';
         document.body.appendChild(overlay);
     }
 });

@@ -11,7 +11,8 @@ var Musica = (function() {
         menu: { file: 'Cumbres_bajo_el_Sol.mp3', nombre: 'Cumbres bajo el Sol' },
         chile: { file: 'Cumbres_bajo_el_Sol.mp3', nombre: 'Cumbres bajo el Sol' },
         argentina: { file: 'Cortes_de_Medianoche.mp3', nombre: 'Cortes de Medianoche' },
-        mexico: { file: 'La_Senda_del_Honor.mp3', nombre: 'La Senda del Honor' }
+        mexico: { file: 'La_Senda_del_Honor.mp3', nombre: 'La Senda del Honor' },
+        brasil: { file: 'Shadows_in_the_Palms.mp3', nombre: 'Shadows in the Palms' }
     };
 
     // Pre-carga los elementos de audio.

@@ -400,13 +400,13 @@
     <div id="victoryModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:500;justify-content:center;align-items:center;">
         <div style="background:linear-gradient(145deg,rgba(23,34,30,0.9),rgba(11,21,18,0.95));padding:24px;border-radius:24px;text-align:center;border:1px solid rgba(242,202,80,0.3);max-width:320px;">
             <div style="font-size:4em;" id="victoryIcon">🏆</div>
-            <h2 class="text-glow" style="color:#f2ca50;font-size:1.5em;font-weight:bold;">¡Nivel Completado!</h2>
+            <h2 class="text-glow" style="color:#f2ca50;font-size:1.5em;font-weight:bold;" id="victoryTitle">¡Nivel Completado!</h2>
             <p style="color:white;" id="victoryName"></p>
             <div style="font-size:2em;margin:16px 0;" id="starsDisplay"></div>
             <!-- [FASE 5] Boton doble recompensa (rewarded video) -->
-            <button id="dobleRecompensaBtn" onclick="UI.dobleRecompensaVictoria()" class="btn-reward" style="width:100%;padding:10px;border-radius:12px;font-size:0.95em;margin-bottom:8px;">🎬 Doble recompensa (+<span id="dobleRecompensaStars">1</span> 🪙)</button>
-            <button onclick="UI.nextLevel()" class="btn-next" style="width:100%;padding:12px;border-radius:12px;font-size:1.1em;margin-bottom:8px;">SIGUIENTE NIVEL ▶</button>
-            <button onclick="UI.closeVictory()" class="btn-primary" style="width:100%;padding:12px;border-radius:12px;font-size:1.1em;">VOLVER</button>
+            <button id="dobleRecompensaBtn" onclick="UI.dobleRecompensaVictoria()" class="btn-reward" style="width:100%;padding:10px;border-radius:12px;font-size:0.95em;margin-bottom:8px;"><span id="dobleRecompensaLabel">🎬 Doble recompensa</span> (+<span id="dobleRecompensaStars">1</span> 🪙)</button>
+            <button onclick="UI.nextLevel()" class="btn-next" style="width:100%;padding:12px;border-radius:12px;font-size:1.1em;margin-bottom:8px;" id="btnSiguienteNivel">SIGUIENTE NIVEL ▶</button>
+            <button onclick="UI.closeVictory()" class="btn-primary" style="width:100%;padding:12px;border-radius:12px;font-size:1.1em;" id="btnVolver">VOLVER</button>
         </div>
     </div>
     <div id="rewardModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:350;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;">
@@ -419,6 +419,7 @@
     </div>
     <script src="juego.js"></script>
     <script src="datos.js"></script>
+    <script src="i18n.js"></script>
     <script src="misiones.js"></script>
     <script src="logros.js"></script>
     <script src="musica.js"></script>
