@@ -170,19 +170,30 @@ var Logros = (function() {
             var catDesbloq = cats[cat].filter(function(l) { return l.desbloqueado; }).length;
             html += '<span style="margin-left:auto;color:rgba(242,202,80,0.6);font-size:0.7em;">' + catDesbloq + '/' + cats[cat].length + '</span>';
             html += '</div>';
-            // Grid de medallas (3 por fila)
-            html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px;background:rgba(0,0,0,0.15);border-radius:10px;">';
+            // Grid de medallas (3 por fila) - POMP version
+            html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:14px;background:rgba(0,0,0,0.15);border-radius:10px;">';
             cats[cat].forEach(function(l) {
                 var pct = l.objetivo > 0 ? Math.round(l.progreso / l.objetivo * 100) : 0;
-                // Medalla circular
+                // [POMP] Medalla circular mas grande con efecto 3D y ribbon
                 var medalBg = l.desbloqueado
-                    ? 'background:linear-gradient(145deg,#f2ca50,#d4af37);box-shadow:0 4px 12px rgba(242,202,80,0.4),inset 0 2px 4px rgba(255,255,255,0.3);'
-                    : 'background:linear-gradient(145deg,#3a3a3a,#2a2a2a);box-shadow:0 2px 6px rgba(0,0,0,0.4);';
-                html += '<div style="display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:10px;' + (l.desbloqueado ? '' : 'opacity:0.7;') + '">';
+                    ? 'background:radial-gradient(circle at 30% 30%,#fff5d0,#f2ca50 50%,#d4af37 80%,#8b6914);box-shadow:0 6px 20px rgba(242,202,80,0.6),inset 0 3px 6px rgba(255,255,255,0.5),inset 0 -3px 6px rgba(139,105,20,0.4);'
+                    : 'background:radial-gradient(circle at 30% 30%,#4a4a4a,#3a3a3a 50%,#2a2a2a 80%,#1a1a1a);box-shadow:0 3px 10px rgba(0,0,0,0.5),inset 0 2px 4px rgba(255,255,255,0.05);';
+                html += '<div style="display:flex;flex-direction:column;align-items:center;padding:10px 4px 14px;border-radius:12px;' + (l.desbloqueado ? '' : 'opacity:0.65;') + '">';
+                // [POMP] Container con efecto spin + pulse para desbloqueados
+                html += '<div class="medal-container ' + (l.desbloqueado ? 'unlocked' : '') + '" style="position:relative;width:64px;height:64px;margin-bottom:8px;">';
+                // Borde dorado decorativo (anillo)
+                if (l.desbloqueado) {
+                    html += '<div style="position:absolute;inset:-3px;border-radius:50%;border:2px dashed rgba(242,202,80,0.7);animation:medalSpin 8s linear infinite;"></div>';
+                }
                 // Circulo de la medalla
-                html += '<div style="width:52px;height:52px;border-radius:50%;' + medalBg + 'display:flex;align-items:center;justify-content:center;font-size:1.6em;margin-bottom:6px;' + (l.desbloqueado ? '' : 'filter:grayscale(1);') + '">' + l.icono + '</div>';
+                html += '<div style="width:64px;height:64px;border-radius:50%;' + medalBg + 'display:flex;align-items:center;justify-content:center;font-size:2em;' + (l.desbloqueado ? '' : 'filter:grayscale(1);') + 'position:relative;z-index:2;">' + l.icono + '</div>';
+                // [POMP] Ribbon bajo la medalla si esta desbloqueada
+                if (l.desbloqueado) {
+                    html += '<div class="medal-ribbon"></div>';
+                }
+                html += '</div>';
                 // Nombre
-                html += '<span style="color:' + (l.desbloqueado ? '#f2ca50' : 'rgba(255,255,255,0.6)') + ';font-size:0.65em;font-weight:bold;text-align:center;line-height:1.2;margin-bottom:3px;">' + l.nombre + '</span>';
+                html += '<span style="color:' + (l.desbloqueado ? '#f2ca50' : 'rgba(255,255,255,0.6)') + ';font-size:0.65em;font-weight:bold;text-align:center;line-height:1.2;margin-bottom:3px;text-shadow:' + (l.desbloqueado ? '0 0 4px rgba(242,202,80,0.5)' : 'none') + ';">' + l.nombre + '</span>';
                 // Recompensa
                 html += '<span style="color:#4ade80;font-size:0.6em;font-weight:bold;">+' + l.recompensa + '🪙</span>';
                 // Progreso (si no esta desbloqueado y es stat)
@@ -192,7 +203,7 @@ var Logros = (function() {
                     html += '</div>';
                     html += '<span style="color:rgba(255,255,255,0.4);font-size:0.55em;margin-top:2px;">' + l.progreso + '/' + l.objetivo + '</span>';
                 } else if (l.desbloqueado) {
-                    html += '<span style="color:#4ade80;font-size:0.55em;margin-top:2px;">✓</span>';
+                    html += '<span style="color:#4ade80;font-size:0.55em;margin-top:2px;font-weight:bold;">✓ DESBLOQUEADO</span>';
                 }
                 html += '</div>';
             });

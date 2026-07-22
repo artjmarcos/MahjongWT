@@ -487,12 +487,38 @@ var UI = (function() {
                 }
                 // [FASE 6] Si la ficha esta boca abajo, PRIMERO revelarla (no mandar al slot).
                 // El segundo click (ya revelada) recien la manda al slot.
+                // [FEATURE DOBLE TILE] Si hay una ficha seleccionada en el ultimo slot y
+                // la ficha boca abajo recien revelada resulta ser su pareja, ambas suben juntas.
                 if (t.faceDown && !t.revealed) {
                     t.revealed = true;
                     haptic(15);
                     GameEngine.playRevealSound();
                     // Animar el volteo y actualizar el contenido de la ficha.
                     flipTileVisual(el, t);
+                    // [FEATURE DOBLE TILE] Verificar si la ultima ficha en slots es la pareja.
+                    var currentSlots = GameEngine.getSlots();
+                    if (currentSlots.length > 0) {
+                        var lastSlot = currentSlots[currentSlots.length - 1];
+                        // Si la ficha recien revelada es la pareja de la ultima en slot,
+                        // enviarla automaticamente al slot (ambas suben juntas).
+                        if (lastSlot.pid === t.pid && !t.inSlot && !t.matched) {
+                            // Pequena pausa para que se vea el flip, luego subir al slot.
+                            setTimeout(function() {
+                                // Re-verificar que siga disponible (pudo haber cambiado).
+                                if (!t.inSlot && !t.matched && !t.blocked) {
+                                    // Efecto visual extra: brillo antes de subir.
+                                    el.style.boxShadow = '0 0 30px rgba(74,222,128,0.9), 0 0 60px rgba(74,222,128,0.5)';
+                                    el.style.transform = 'scale(1.15)';
+                                    setTimeout(function() {
+                                        el.style.boxShadow = '';
+                                        el.style.transform = '';
+                                        GameEngine.onTileClick(idx);
+                                        haptic([20, 40, 20]);
+                                    }, 250);
+                                }
+                            }, 400);
+                        }
+                    }
                     return;
                 }
                 GameEngine.onTileClick(idx);
@@ -1220,25 +1246,50 @@ var UI = (function() {
                 spawnFloatingAchievementToast(l);
                 // Sumar monedas de recompensa.
                 addCoins(l.recompensa);
-            }, idx * 800 + 200);  // delay mayor que misiones para no pisarlas
+            }, idx * 1000 + 200);  // delay mayor para que se vea bien cada logro
         });
     }
     function spawnFloatingAchievementToast(logro) {
         var el = document.createElement('div');
         el.className = 'achievement-toast';
+        el.style.position = 'relative';
+
+        // [POMP] Generar confetti (12 piezas en direcciones aleatorias)
+        var confettiHTML = '<div class="achievement-confetti">';
+        var colors = ['#f2ca50', '#ff9f43', '#4ade80', '#ff6b6b', '#c084fc', '#60a5fa'];
+        for (var i = 0; i < 14; i++) {
+            var angle = (i / 14) * Math.PI * 2;
+            var dist = 80 + Math.random() * 80;
+            var tx = Math.cos(angle) * dist + 'px';
+            var ty = Math.sin(angle) * dist + 'px';
+            var rot = (Math.random() * 720 - 360) + 'deg';
+            var color = colors[i % colors.length];
+            var delay = (Math.random() * 0.2) + 's';
+            confettiHTML += '<div class="confetti-piece" style="background:' + color + ';--tx:' + tx + ';--ty:' + ty + ';--rot:' + rot + ';animation-delay:' + delay + ';border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';"></div>';
+        }
+        confettiHTML += '</div>';
+
         el.innerHTML =
-            '<div style="display:flex;align-items:center;gap:12px;">' +
-                '<div style="font-size:2em;">' + logro.icono + '</div>' +
+            '<div class="achievement-rays"></div>' +
+            confettiHTML +
+            '<div style="display:flex;align-items:center;gap:14px;position:relative;z-index:2;">' +
+                '<div style="font-size:2.8em;filter:drop-shadow(0 0 8px rgba(242,202,80,0.8));animation:pompRays 1.5s ease-in-out infinite;">' + logro.icono + '</div>' +
                 '<div>' +
-                    '<div style="font-size:0.7em;color:#f2ca50;letter-spacing:0.15em;text-transform:uppercase;">Logro desbloqueado</div>' +
-                    '<div style="font-size:1em;font-weight:bold;color:white;margin-top:2px;">' + logro.nombre + '</div>' +
-                    '<div style="font-size:0.75em;color:#4ade80;margin-top:2px;">+' + logro.recompensa + ' 🪙</div>' +
+                    '<div style="font-size:0.7em;color:#f2ca50;letter-spacing:0.2em;text-transform:uppercase;font-weight:bold;">✦ Logro desbloqueado ✦</div>' +
+                    '<div style="font-size:1.15em;font-weight:bold;color:white;margin-top:4px;text-shadow:0 0 8px rgba(242,202,80,0.6);">' + logro.nombre + '</div>' +
+                    '<div style="font-size:0.7em;color:rgba(255,255,255,0.7);margin-top:2px;font-style:italic;">' + logro.desc + '</div>' +
+                    '<div style="font-size:0.85em;color:#4ade80;margin-top:6px;font-weight:bold;">+ ' + logro.recompensa + ' 🪙</div>' +
                 '</div>' +
             '</div>';
         document.body.appendChild(el);
-        // Haptic especial para logros.
-        haptic([30, 50, 30, 50, 80]);
-        setTimeout(function() { if (el.parentNode) el.remove(); }, 3500);
+        // Haptic triunfal para logros.
+        haptic([40, 60, 40, 80, 40, 100]);
+        // [POMP] Flash dorado de pantalla completa por 200ms
+        var flash = document.createElement('div');
+        flash.style.cssText = 'position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,rgba(242,202,80,0.35),transparent 60%);z-index:659;pointer-events:none;animation:achievementSlide 0.6s ease-out forwards;';
+        document.body.appendChild(flash);
+        setTimeout(function() { if (flash.parentNode) flash.remove(); }, 700);
+        setTimeout(function() { if (el.parentNode) el.remove(); }, 4000);
     }
 
     // [FASE 4] Pantalla de logros.

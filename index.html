@@ -292,22 +292,91 @@
             100% { opacity: 0; transform: translate(-50%, -20px) scale(0.95); }
         }
 
-        /* [FASE 4] Toast de logro desbloqueado (mas grande y dorado) */
+        /* [POMP] Toast de logro desbloqueado (mas grande, dorado y pomposo) */
         .achievement-toast {
-            position: fixed; top: 25%; left: 50%; transform: translateX(-50%);
+            position: fixed; top: 22%; left: 50%; transform: translateX(-50%);
             z-index: 660; pointer-events: none;
-            background: linear-gradient(145deg, rgba(40,30,5,0.97), rgba(20,15,2,0.97));
-            border: 1px solid #f2ca50; border-radius: 14px; padding: 14px 22px;
-            color: white;
-            box-shadow: 0 8px 40px rgba(242,202,80,0.4), 0 0 0 1px rgba(242,202,80,0.2);
-            animation: achievementSlide 3.5s ease-out forwards;
+            background: linear-gradient(145deg, rgba(40,30,5,0.98), rgba(20,15,2,0.98));
+            border: 2px solid #f2ca50; border-radius: 18px; padding: 18px 28px;
+            color: white; min-width: 280px; max-width: 90vw;
+            box-shadow: 0 12px 60px rgba(242,202,80,0.6), 0 0 0 2px rgba(242,202,80,0.3), inset 0 0 30px rgba(242,202,80,0.1);
+            animation: achievementSlide 4s ease-out forwards;
         }
         @keyframes achievementSlide {
-            0%   { opacity: 0; transform: translate(-50%, -40px) scale(0.7); }
-            8%   { opacity: 1; transform: translate(-50%, 0) scale(1.1); }
-            12%  { transform: translate(-50%, 0) scale(1); }
-            88%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -30px) scale(0.95); }
+            0%   { opacity: 0; transform: translate(-50%, -60px) scale(0.4) rotate(-8deg); }
+            10%  { opacity: 1; transform: translate(-50%, 0) scale(1.15) rotate(2deg); }
+            15%  { transform: translate(-50%, 0) scale(1) rotate(0deg); }
+            88%  { opacity: 1; transform: translate(-50%, 0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(-50%, -30px) scale(0.9) rotate(0deg); }
+        }
+
+        /* [POMP] Brillo dorado pulsante alrededor del toast */
+        .achievement-toast::before {
+            content: ''; position: absolute; inset: -4px; border-radius: 18px;
+            background: linear-gradient(45deg, #f2ca50, transparent, #ff9f43, transparent, #f2ca50);
+            background-size: 400% 400%; z-index: -1;
+            animation: pompShimmer 2s linear infinite;
+            filter: blur(8px); opacity: 0.7;
+        }
+        @keyframes pompShimmer {
+            0%   { background-position: 0% 0%; }
+            100% { background-position: 400% 0%; }
+        }
+
+        /* [POMP] Rays/sparks detras del icono */
+        .achievement-rays {
+            position: absolute; top: 50%; left: 30px; transform: translate(-50%, -50%);
+            width: 80px; height: 80px; pointer-events: none;
+            background: radial-gradient(circle, rgba(242,202,80,0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pompRays 1.5s ease-out infinite;
+        }
+        @keyframes pompRays {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.4); opacity: 0.9; }
+        }
+
+        /* [POMP] Confetti container */
+        .achievement-confetti {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; overflow: visible; z-index: 661;
+        }
+        .confetti-piece {
+            position: absolute; width: 8px; height: 8px; top: 50%; left: 50%;
+            animation: confettiBurst 1.5s ease-out forwards;
+        }
+        @keyframes confettiBurst {
+            0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rot)); opacity: 0; }
+        }
+
+        /* [POMP] Medalla del panel de logros - efecto 3D mas dramatico */
+        .medal-container {
+            position: relative; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .medal-container:hover { transform: scale(1.15) rotate(-5deg); }
+        .medal-container.unlocked::before {
+            content: ''; position: absolute; inset: -8px; border-radius: 50%;
+            background: conic-gradient(from 0deg, #f2ca50, #ff9f43, #f2ca50, transparent, #f2ca50);
+            animation: medalSpin 3s linear infinite; z-index: -1; opacity: 0.6;
+        }
+        @keyframes medalSpin { to { transform: rotate(360deg); } }
+        .medal-container.unlocked::after {
+            content: ''; position: absolute; inset: 0; border-radius: 50%;
+            box-shadow: 0 0 25px rgba(242,202,80,0.7), 0 0 50px rgba(242,202,80,0.4);
+            animation: medalPulse 2s ease-in-out infinite;
+        }
+        @keyframes medalPulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50%      { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* [POMP] Ribbon decorativo bajo cada medalla desbloqueada */
+        .medal-ribbon {
+            position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+            width: 18px; height: 22px; z-index: -1;
+            background: linear-gradient(180deg, #d4af37, #8b6914);
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
         }
 
         /* [FASE 4] Splash animado */
