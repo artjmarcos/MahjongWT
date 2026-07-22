@@ -101,7 +101,6 @@ var argentinaLitoralPhotos = [
     { name:'Cataratas del Iguazú', url:'https://drive.google.com/thumbnail?id=1ZkinbO3qDTD7j_0S8YPvavQrxLgnu97_&sz=w400', zone:'argentina-litoral', nota:'Rugido de agua que estremece el alma.' },
     { name:'Parque Talampaya', url:'https://drive.google.com/thumbnail?id=1uxxaHlPhEaU4bAl4uVUL9rmHlm79ZMmh&sz=w400', zone:'argentina-litoral', nota:'Cañones rojos de otro planeta.' },
     { name:'Ruinas de San Ignacio', url:'https://drive.google.com/thumbnail?id=1jRCowaPfltVWht7n-v_6PdEhua3YpFXt&sz=w400', zone:'argentina-litoral', nota:'Piedras rojas que aún predican.' },
-    { name:'Puerto Iguazú', url:'https://drive.google.com/thumbnail?id=1ZkinbO3qDTD7j_0S8YPvavQrxLgnu97_&sz=w400', zone:'argentina-litoral', nota:'Donde tres fronteras se abrazan.' },
     { name:'Costanera de Rosario', url:'https://drive.google.com/thumbnail?id=1OeE1B0kFzgggFyWevpQyIF_IdHGV_dSV&sz=w400', zone:'argentina-litoral', nota:'El río murmura al atardecer.' },
     { name:'Parque El Palmar', url:'https://drive.google.com/thumbnail?id=1s_E0F1wrwNBEHaIcjt7L0dO1P6tcXraM&sz=w400', zone:'argentina-litoral', nota:'Palmeras que saludan al viento.' },
     { name:'Termas de Colón', url:'https://drive.google.com/thumbnail?id=1WWCbcu93lI3lUlXRJQdsoWIEL9oUP74i&sz=w400', zone:'argentina-litoral', nota:'Aguas que abrazan el cansancio.' },
