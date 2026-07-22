@@ -1,40 +1,73 @@
 {
-  "name": "Mahjong Tour",
-  "short_name": "Mahjong Tour",
-  "description": "Viaja por América resolviendo puzzles de mahjong",
-  "start_url": "/MahjongWT/",
-  "scope": "/MahjongWT/",
-  "id": "/MahjongWT/",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#0b1512",
-  "theme_color": "#f2ca50",
-  "lang": "es",
-  "dir": "ltr",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ]
+    "name": "Mahjong World Tour · Descubre América",
+    "short_name": "Mahjong Tour",
+    "description": "Viaja por Chile, Argentina, México y Brasil resolviendo puzzles de Mahjong. 160 niveles meditativos con cultura latinoamericana.",
+    "start_url": "/MahjongWT/",
+    "scope": "/MahjongWT/",
+    "id": "/MahjongWT/",
+    "display": "standalone",
+    "display_override": ["standalone", "minimal-ui"],
+    "orientation": "portrait",
+    "background_color": "#0b1512",
+    "theme_color": "#f2ca50",
+    "lang": "es",
+    "dir": "ltr",
+    "categories": ["games", "puzzle", "entertainment", "travel"],
+    "icons": [
+        {
+            "src": "icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "🇨🇱 Chile",
+            "short_name": "Chile",
+            "description": "Juega las zonas de Chile",
+            "url": "/MahjongWT/?country=chile",
+            "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "🇦🇷 Argentina",
+            "short_name": "Argentina",
+            "description": "Juega las zonas de Argentina",
+            "url": "/MahjongWT/?country=argentina",
+            "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "🇧🇷 Brasil",
+            "short_name": "Brasil",
+            "description": "Juega las zonas de Brasil",
+            "url": "/MahjongWT/?country=brasil",
+            "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "🇲🇽 México",
+            "short_name": "México",
+            "description": "Juega las zonas de México",
+            "url": "/MahjongWT/?country=mexico",
+            "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+        }
+    ],
+    "prefer_related_applications": false
 }

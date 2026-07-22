@@ -98,10 +98,10 @@ var argentinaPatagoniaPhotos = [
     { name:'Punta Tombo', url:'https://drive.google.com/thumbnail?id=1EVi3-6eyImqmdGu_11bBBEg42XC4Fs61&sz=w400', zone:'argentina-patagonia', nota:'Mil pingüinos desfilando al mar.' },
 ];
 var argentinaLitoralPhotos = [
-    { name:'Cataratas del Iguazú', url:'https://drive.google.com/thumbnail?id=1w-Ex5waHljv4z9wvKjKpVKRTJ13SEBLC&sz=w400', zone:'argentina-litoral', nota:'Rugido de agua que estremece el alma.' },
+    { name:'Cataratas del Iguazú', url:'https://drive.google.com/thumbnail?id=1ZkinbO3qDTD7j_0S8YPvavQrxLgnu97_&sz=w400', zone:'argentina-litoral', nota:'Rugido de agua que estremece el alma.' },
     { name:'Parque Talampaya', url:'https://drive.google.com/thumbnail?id=1uxxaHlPhEaU4bAl4uVUL9rmHlm79ZMmh&sz=w400', zone:'argentina-litoral', nota:'Cañones rojos de otro planeta.' },
     { name:'Ruinas de San Ignacio', url:'https://drive.google.com/thumbnail?id=1jRCowaPfltVWht7n-v_6PdEhua3YpFXt&sz=w400', zone:'argentina-litoral', nota:'Piedras rojas que aún predican.' },
-    { name:'Puerto Iguazú', url:'https://drive.google.com/thumbnail?id=1Frz-zvaqu72Jzw3s6Y687JtVCrVclEz2&sz=w400', zone:'argentina-litoral', nota:'Donde tres fronteras se abrazan.' },
+    { name:'Puerto Iguazú', url:'https://drive.google.com/thumbnail?id=1ZkinbO3qDTD7j_0S8YPvavQrxLgnu97_&sz=w400', zone:'argentina-litoral', nota:'Donde tres fronteras se abrazan.' },
     { name:'Costanera de Rosario', url:'https://drive.google.com/thumbnail?id=1OeE1B0kFzgggFyWevpQyIF_IdHGV_dSV&sz=w400', zone:'argentina-litoral', nota:'El río murmura al atardecer.' },
     { name:'Parque El Palmar', url:'https://drive.google.com/thumbnail?id=1s_E0F1wrwNBEHaIcjt7L0dO1P6tcXraM&sz=w400', zone:'argentina-litoral', nota:'Palmeras que saludan al viento.' },
     { name:'Termas de Colón', url:'https://drive.google.com/thumbnail?id=1WWCbcu93lI3lUlXRJQdsoWIEL9oUP74i&sz=w400', zone:'argentina-litoral', nota:'Aguas que abrazan el cansancio.' },
@@ -112,18 +112,18 @@ var argentinaLitoralPhotos = [
     { name:'Mina Wanda', url:'https://drive.google.com/thumbnail?id=1ZZNrOEqdcVIT_sbdr57FkeeEnOZJcls6&sz=w400', zone:'argentina-litoral', nota:'Tesoros de cristal bajo la tierra.' },
 ];
 var mexicoNortePhotos = [
-    { name:'Cañón del Cobre', url:'https://drive.google.com/thumbnail?id=11iYN2ZNRxF6jSGqL2kq5euBNLniu_Qqw&sz=w400', zone:'mexico-norte', nota:'Abismos que retumban en silencio.' },
-    { name:'Dunas de Samalayuca', url:'https://drive.google.com/thumbnail?id=1dAzA4IjDqVzn4X5VdGXgmfywYmHS5ntk&sz=w400', zone:'mexico-norte', nota:'Un desierto de oro móvil.' },
-    { name:'Cascada Basaseachi', url:'https://drive.google.com/thumbnail?id=1EgLFXZgc_J8vbapy49cnMxEzhxyph3lF&sz=w400', zone:'mexico-norte', nota:'Agua que salta al vacío libre.' },
-    { name:'Sierra del Carmen', url:'https://drive.google.com/thumbnail?id=1z0lvQo__xxUZIiUDJVTOV7Pqoto3EFJd&sz=w400', zone:'mexico-norte', nota:'Montañas que custodian el norte.' },
-    { name:'Cumbres de Monterrey', url:'https://drive.google.com/thumbnail?id=17v9d89qxcwarJt1KnjlSN4MQ-Oa3xbx-&sz=w400', zone:'mexico-norte', nota:'Picos que rasguñan las nubes.' },
-    { name:'Grutas de García', url:'https://drive.google.com/thumbnail?id=1GNOu7WhWT21V2Nmbb5NGODSdVQ3OBah9&sz=w400', zone:'mexico-norte', nota:'Catedrales secretas bajo la montaña.' },
-    { name:'Valle Fantasmas', url:'https://drive.google.com/thumbnail?id=1IIPmf-hcvKGmKeB8Uq6p6n38DSR5EI_Z&sz=w400', zone:'mexico-norte', nota:'Piedras que parecen tener alma.' },
-    { name:'Zona del Silencio', url:'https://drive.google.com/thumbnail?id=1CNLEvaIPuMohelHfZPR2bZ0JaJuxvv6Z&sz=w400', zone:'mexico-norte', nota:'Donde las agujas se vuelven locas.' },
-    { name:'Puente Baluarte', url:'https://drive.google.com/thumbnail?id=17743PcwVJF8hXz-Kjqcwx1DWDR-C0PnA&sz=w400', zone:'mexico-norte', nota:'Acero desafiando barrancas.' },
-    { name:'Isla Tiburón', url:'https://drive.google.com/thumbnail?id=16YR-PBB-Mlovp-T6UCpsGrUM3aeHOSRw&sz=w400', zone:'mexico-norte', nota:'Tierra sagrada del desierto y mar.' },
-    { name:'Desierto de Altar', url:'https://drive.google.com/thumbnail?id=1aNchwj76SLEtXEteKqItWqtLFI70pTLX&sz=w400', zone:'mexico-norte', nota:'Arena que cambia de forma cada día.' },
-    { name:'Creel', url:'https://drive.google.com/thumbnail?id=1hfZpv99DoeOXjtvyOVrfs6BZrZMQcVoL&sz=w400', zone:'mexico-norte', nota:'Un pueblo mecido por los pinos.' },
+    { name:'Cañón del Cobre', url:'https://drive.google.com/thumbnail?id=11iYN2ZNRxF6jSGqL2kq5euBNLniu_Qqw&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Abismos que retumban en silencio.' },
+    { name:'Dunas de Samalayuca', url:'https://drive.google.com/thumbnail?id=1dAzA4IjDqVzn4X5VdGXgmfywYmHS5ntk&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Un desierto de oro móvil.' },
+    { name:'Cascada Basaseachi', url:'https://drive.google.com/thumbnail?id=1EgLFXZgc_J8vbapy49cnMxEzhxyph3lF&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Agua que salta al vacío libre.' },
+    { name:'Sierra del Carmen', url:'https://drive.google.com/thumbnail?id=1z0lvQo__xxUZIiUDJVTOV7Pqoto3EFJd&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Montañas que custodian el norte.' },
+    { name:'Cumbres de Monterrey', url:'https://drive.google.com/thumbnail?id=17v9d89qxcwarJt1KnjlSN4MQ-Oa3xbx-&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Picos que rasguñan las nubes.' },
+    { name:'Grutas de García', url:'https://drive.google.com/thumbnail?id=1icLaDYv51h5y_zrvOTXEv9vbj9mJfFRd&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Catedrales secretas bajo la montaña.' },
+    { name:'Valle Fantasmas', url:'https://drive.google.com/thumbnail?id=1IIPmf-hcvKGmKeB8Uq6p6n38DSR5EI_Z&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Piedras que parecen tener alma.' },
+    { name:'Zona del Silencio', url:'https://drive.google.com/thumbnail?id=1CNLEvaIPuMohelHfZPR2bZ0JaJuxvv6Z&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Donde las agujas se vuelven locas.' },
+    { name:'Puente Baluarte', url:'https://drive.google.com/thumbnail?id=17743PcwVJF8hXz-Kjqcwx1DWDR-C0PnA&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Acero desafiando barrancas.' },
+    { name:'Isla Tiburón', url:'https://drive.google.com/thumbnail?id=16YR-PBB-Mlovp-T6UCpsGrUM3aeHOSRw&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Tierra sagrada del desierto y mar.' },
+    { name:'Desierto de Altar', url:'https://drive.google.com/thumbnail?id=1aNchwj76SLEtXEteKqItWqtLFI70pTLX&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Arena que cambia de forma cada día.' },
+    { name:'Creel', url:'https://drive.google.com/thumbnail?id=1hfZpv99DoeOXjtvyOVrfs6BZrZMQcVoL&sz=w400&v=mxn2', zone:'mexico-norte', nota:'Un pueblo mecido por los pinos.' },
 ];
 var mexicoCentroPhotos = [
     { name:'Zócalo CDMX', url:'https://drive.google.com/thumbnail?id=1C8XZ_N5u8Ajtpl6i9kQ0zr3zycifaGN7&sz=w400', zone:'mexico-centro', nota:'El corazón latiendo de México.' },
@@ -235,7 +235,7 @@ var brasilSudestePhotos = [
     { name:'Petrópolis', url:'https://drive.google.com/thumbnail?id=1GjD4DVym5xulZBVscc8X1fOX1arMrhcx&sz=w400', zone:'brasil-sudeste', nota:'Ciudad imperial en la sierra de Río.' },
 ];
 var brasilSulPhotos = [
-    { name:'Cataratas del Iguazú', url:'https://drive.google.com/thumbnail?id=1ZkinbO3qDTD7j_0S8YPvavQrxLgnu97_&sz=w400', zone:'brasil-sul', nota:'Una de las maravillas naturales del mundo.' },
+    { name:'Cataratas del Iguazú', url:'https://drive.google.com/thumbnail?id=1Frz-zvaqu72Jzw3s6Y687JtVCrVclEz2&sz=w400', zone:'brasil-sul', nota:'Una de las maravillas naturales del mundo.' },
     { name:'Florianópolis', url:'https://drive.google.com/thumbnail?id=17ugPTP1eKhVslSMVz5KE1hjqxPFdwTeC&sz=w400', zone:'brasil-sul', nota:'Isla mágica con 42 playas en Santa Catarina.' },
     { name:'Gramado', url:'https://drive.google.com/thumbnail?id=1672QZbUo_e-46TEXFkuvPRXM0csC1yiP&sz=w400', zone:'brasil-sul', nota:'Pueblo europeo en las sierras gaúchas.' },
     { name:'Búzios', url:'https://drive.google.com/thumbnail?id=1WhREqQcRszymRXFTGGH9S1v4lqiJs7gp&sz=w400', zone:'brasil-sul', nota:'Resort chic con playas cristalinas.' },

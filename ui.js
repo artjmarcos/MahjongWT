@@ -1673,6 +1673,30 @@ var UI = (function() {
 
 UI.showSplash();
 
+// [PWA Shortcuts] Si el usuario abrio la app desde un shortcut (?country=xxx),
+// navegar directamente a esa pantalla despues del splash.
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var country = params.get('country');
+    if (country) {
+        // Esperar a que termine el splash (6.5s) y splashFrase (3.5s) = ~10s
+        setTimeout(function() {
+            try {
+                var valid = ['chile', 'argentina', 'mexico', 'brasil'];
+                if (valid.indexOf(country) !== -1) {
+                    var map = {
+                        chile: 'showChileZones',
+                        argentina: 'showArgentineZones',
+                        mexico: 'showMexicanZones',
+                        brasil: 'showBrasilZones'
+                    };
+                    UI[map[country]]();
+                }
+            } catch (e) { console.warn('Shortcut navigation failed:', e); }
+        }, 10500);
+    }
+})();
+
 // [FASE 6] Saludo de despedida al salir del juego.
 var DESPEDIDA_FRASES = [
     '¡Hasta pronto, viajero! 🌎',

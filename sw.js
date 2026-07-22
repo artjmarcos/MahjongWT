@@ -1,4 +1,4 @@
-var CACHE_NAME = 'mahjong-tour-v10';
+var CACHE_NAME = 'mahjong-tour-v13';
 var urlsToCache = [
     './',
     'index.html',
@@ -12,6 +12,8 @@ var urlsToCache = [
     'manifest.json',
     'icon-192.png',
     'icon-512.png',
+    'apple-touch-icon.png',
+    'favicon-32.png',
     'Cumbres_bajo_el_Sol.mp3',
     'Cortes_de_Medianoche.mp3',
     'La_Senda_del_Honor.mp3',
