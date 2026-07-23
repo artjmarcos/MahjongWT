@@ -622,7 +622,7 @@ var UI = (function() {
                 if (u) {
                     html += '<div style="padding:14px;border-radius:12px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(168,85,247,0.15),rgba(168,85,247,0.05));border:1px solid rgba(168,85,247,0.35);">';
                     html += '<div><span style="color:white;font-weight:bold;font-size:0.95em;">' + mini.icon + ' ' + mini.name + '</span><p style="font-size:0.7em;color:rgba(168,85,247,0.8);margin-top:2px;">🎮 Minijuego especial</p></div>';
-                    html += '<button onclick="event.stopPropagation();UI.showRewardedVideo(function(){UI.startMinigame(\'' + zid + '\',' + l.num + ');})" class="btn-video" style="padding:8px 16px;border-radius:12px;font-size:0.85em;">🎬 Jugar</button>';
+                    html += '<button onclick="event.stopPropagation();UI.startMinigame(\'' + zid + '\',' + l.num + ')" class="btn-video" style="padding:8px 16px;border-radius:12px;font-size:0.85em;">🎮 Jugar</button>';
                     html += '</div>';
                 } else {
                     // Minijuego bloqueado.
@@ -946,8 +946,12 @@ var UI = (function() {
 
     // [FASE 6] Memorice mejorado: 8 parejas, 3D flip, contador, pantalla de finalizacion.
     var memoriceAttempts = 0;
+    var memoriceCurrentZoneId = null, memoriceCurrentLevelNum = null;
     function startMemoriceMinigame(zoneId, levelNum) {
         var mini = MINIGAMES[zoneId + '-' + levelNum]; if (!mini || !mini.photos) return;
+        // [FIX MEMORICE] Guardar zoneId/levelNum para que renderMemoriceBoard pueda encontrar el icono correcto.
+        memoriceCurrentZoneId = zoneId;
+        memoriceCurrentLevelNum = levelNum;
         var shuffled = mini.photos.slice().sort(function() { return Math.random() - 0.5; });
         // 8 parejas si hay suficientes fotos, sino 6.
         var numPairs = shuffled.length >= 8 ? 8 : 6;
@@ -989,8 +993,9 @@ var UI = (function() {
 
     function renderMemoriceBoard() {
         var board = document.getElementById('memoriceBoard'); if (!board) return; board.innerHTML = '';
-        // Determinar el icono del reverso segun la zona.
-        var mini = currentZone ? MINIGAMES[currentZone.id + '-' + (currentLevel ? currentLevel.num : '')] : null;
+        // [FIX MEMORICE] Usar las variables guardadas en startMemoriceMinigame en vez de currentZone/currentLevel
+        // que pueden no estar correctamente seteadas.
+        var mini = (memoriceCurrentZoneId && memoriceCurrentLevelNum) ? MINIGAMES[memoriceCurrentZoneId + '-' + memoriceCurrentLevelNum] : null;
         var backIcon = (mini && mini.icon) ? mini.icon : '🪭';
         memoriceCards.forEach(function(card, index) {
             var el = document.createElement('div'); el.className = 'memorice-card';
@@ -1017,7 +1022,12 @@ var UI = (function() {
     }
 
     function flipMemoriceCard(index) {
-        if (memoriceLocked || memoriceFlipped.indexOf(index) !== -1 || memoriceCards[index].matched) return;
+        // [FIX MEMORICE] Verificacion defensiva: ignorar clicks si ya hay 2 cartas volteadas
+        // o si la carta ya esta volteada/matched o si el tablero esta bloqueado.
+        if (memoriceLocked) return;
+        if (memoriceFlipped.length >= 2) return;  // ya hay 2 cartas esperando
+        if (memoriceFlipped.indexOf(index) !== -1) return;  // misma carta
+        if (memoriceCards[index].matched) return;  // ya matched
         memoriceFlipped.push(index);
         GameEngine.playRevealSound();  // sonido de flip
         haptic(10);
