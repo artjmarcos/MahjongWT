@@ -1112,21 +1112,37 @@ var UI = (function() {
         html += '<h1 class="text-glow" style="font-size:1.5em;font-weight:bold;color:#f2ca50;">WORLD TOUR</h1>';
         html += '<div style="background:rgba(242,202,80,0.1);padding:4px 12px;border-radius:16px;margin-top:8px;"><span style="color:#f2ca50;font-size:0.9em;font-weight:bold;">⭐ ' + ts + ' ' + I18n.t('menu.stars') + '</span></div>';
         html += '</div></div><div style="padding:16px;">';
-        // [FASE 2] Panel de misiones diarias + streak.
-        html += Misiones.renderPanel();
+        // [UX Progressive Disclosure] Misiones y botones secundarios solo despues del primer nivel completado.
+        var haJugado = ZONES.some(function(z) {
+            return z.levels.some(function(l) { return getStars(z.id, l.num) > 0; });
+        });
+        if (haJugado) {
+            // [FASE 2] Panel de misiones diarias + streak.
+            html += Misiones.renderPanel();
+        } else {
+            // [UX] Mensaje motivacional para nuevos jugadores en vez del panel de misiones.
+            html += '<div style="margin-bottom:16px;padding:14px;background:linear-gradient(135deg,rgba(242,202,80,0.12),rgba(255,159,67,0.06));border-radius:12px;border:1px solid rgba(242,202,80,0.25);text-align:center;">' +
+                '<div style="font-size:1.8em;margin-bottom:6px;">✨</div>' +
+                '<p style="color:#f2ca50;font-size:0.9em;font-weight:bold;margin-bottom:4px;">¡Comienza tu viaje!</p>' +
+                '<p style="color:rgba(255,255,255,0.6);font-size:0.75em;line-height:1.3;">Elige un país y descubre sus paisajes resolviendo puzzles de Mahjong.</p>' +
+                '</div>';
+        }
         html += countryCard('🇨🇱','Chile',cpChile,'UI.showChileZones()');
         html += countryCard('🇦🇷','Argentina',cpArgentina,'UI.showArgentineZones()');
         html += countryCard('🇲🇽','Mexico',cpMexico,'UI.showMexicanZones()');
         var cpBrasil = Math.round((getTotalStarsForCountry('brasil') / 120) * 100);
         html += countryCard('🇧🇷','Brasil',cpBrasil,'UI.showBrasilZones()');
-        html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ' + I18n.t('menu.album') + '</button>';
-        // [FASE 4] Boton de logros con contador.
-        var logrosResumen = Logros.obtenerResumen();
-        html += '<button onclick="UI.showLogros()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(242,202,80,0.15),rgba(255,159,67,0.1));border:1px solid rgba(242,202,80,0.3);color:#f2ca50;font-weight:bold;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">' +
-            '<span>🏆 ' + I18n.t('menu.logros') + '</span>' +
-            '<span style="font-size:0.8em;color:rgba(242,202,80,0.7);">' + logrosResumen.desbloqueados + '/' + logrosResumen.total + '</span>' +
-            '</button>';
-        html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">🛒 ' + I18n.t('menu.tienda') + '</button>';
+        // [UX Progressive Disclosure] Botones secundarios solo si el jugador ya completo algun nivel.
+        if (haJugado) {
+            html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ' + I18n.t('menu.album') + '</button>';
+            // [FASE 4] Boton de logros con contador.
+            var logrosResumen = Logros.obtenerResumen();
+            html += '<button onclick="UI.showLogros()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(242,202,80,0.15),rgba(255,159,67,0.1));border:1px solid rgba(242,202,80,0.3);color:#f2ca50;font-weight:bold;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">' +
+                '<span>🏆 ' + I18n.t('menu.logros') + '</span>' +
+                '<span style="font-size:0.8em;color:rgba(242,202,80,0.7);">' + logrosResumen.desbloqueados + '/' + logrosResumen.total + '</span>' +
+                '</button>';
+            html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">🛒 ' + I18n.t('menu.tienda') + '</button>';
+        }
         html += '<button onclick="UI.showAjustes()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">⚙️ ' + I18n.t('menu.ajustes') + '</button>';
         html += '<button onclick="UI.despedida()" style="width:100%;padding:12px;border-radius:12px;background:rgba(242,202,80,0.1);border:1px solid rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;">👋 ' + I18n.t('menu.salir') + '</button>';
         html += '</div></div>';
@@ -1604,11 +1620,12 @@ var UI = (function() {
         var pathEl = splash.querySelector('#flightPath');
         if (plane && pathEl) {
             var animateMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
-            // [Brasil splash] Duracion aumentada a 5.5s para acomodar 5 ciudades (Mexico, Brasil, Argentina, Chile, Patagonia).
-            animateMotion.setAttribute('dur', '5.5s');
+            // [UX] Duracion reducida a 2.5s para que el jugador llegue al menu en menos de 5s.
+            // Recorre las 5 ciudades mas rapido pero aun se disfruta.
+            animateMotion.setAttribute('dur', '2.5s');
             animateMotion.setAttribute('fill', 'freeze');
             animateMotion.setAttribute('rotate', 'auto');
-            animateMotion.setAttribute('begin', '0.3s');
+            animateMotion.setAttribute('begin', '0.2s');
             // keyPoints: 0 (Mexico) -> 0.22 (Brasil) -> 0.45 (Argentina) -> 0.65 (Chile) -> 0.65 (hover Chile) -> 1.0 (Patagonia)
             animateMotion.setAttribute('keyPoints', '0;0.22;0.45;0.65;0.65;1');
             animateMotion.setAttribute('keyTimes',  '0;0.22;0.45;0.65;0.78;1');
@@ -1621,16 +1638,22 @@ var UI = (function() {
             plane.appendChild(animateMotion);
         }
 
-        // [FASE 5] Al terminar el splash del avion, mostrar segunda pantalla con frase inspiradora rotativa.
-        // Tiempo total ampliado a 6.5s para que el avion (5.5s + 0.3s inicio) termine y se lea la ultima etiqueta.
-        setTimeout(function() {
-            splash.style.transition = 'opacity 0.5s ease';
+        // [UX] Splash del avion mas corto: 3.5s total (2.5s animacion + 1s lectura).
+        // Skipeable: tocar en cualquier lugar avanza directo al menu.
+        var splashAvionTransicionado = false;
+        function transicionarSplashAvion() {
+            if (splashAvionTransicionado) return;
+            splashAvionTransicionado = true;
+            splash.style.transition = 'opacity 0.4s ease';
             splash.style.opacity = '0';
             setTimeout(function() {
                 if (splash.parentNode) splash.parentNode.removeChild(splash);
                 showSplashFrase();
-            }, 500);
-        }, 6500);
+            }, 400);
+        }
+        splash.addEventListener('click', transicionarSplashAvion);
+        splash.addEventListener('touchend', function(e) { e.preventDefault(); transicionarSplashAvion(); });
+        setTimeout(transicionarSplashAvion, 3500);
     }
 
     // [FASE 5] Segunda pantalla splash: frase inspiradora grande rotativa (estilo hashtag).
@@ -1677,21 +1700,22 @@ var UI = (function() {
 
         document.body.appendChild(splash);
 
-        // Auto-transicion despues de 3.5s, o si el usuario toca la pantalla antes.
+        // [UX] Auto-transicion despues de 2.2s (antes 3.5s), o si el usuario toca antes.
+        // Skipeable: tocar en cualquier lugar avanza al menu al instante.
         var transicionada = false;
         function transicionar() {
             if (transicionada) return;
             transicionada = true;
-            splash.style.transition = 'opacity 0.6s ease';
+            splash.style.transition = 'opacity 0.4s ease';
             splash.style.opacity = '0';
             setTimeout(function() {
                 if (splash.parentNode) splash.parentNode.removeChild(splash);
                 showWorldMain();
-            }, 600);
+            }, 400);
         }
         splash.addEventListener('click', transicionar);
         splash.addEventListener('touchend', function(e) { e.preventDefault(); transicionar(); });
-        setTimeout(transicionar, 3500);
+        setTimeout(transicionar, 2200);
     }
 
     return Object.freeze({
