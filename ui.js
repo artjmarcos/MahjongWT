@@ -669,7 +669,27 @@ var UI = (function() {
         tutorialActive = false;
         // [FASE 2] Resetear stats de tracking para el nuevo nivel.
         gameStats = { usedPowerUps: false, usedUndo: false, currentDifficulty: difficulty };
-        startGame({ num: currentLevel.num, pairs: pairs, zoneId: currentLevel.zoneId, difficulty: difficulty, hintUses: hintUses, shuffleUses: shuffleUses, undoUses: undoUses });
+        var config = { num: currentLevel.num, pairs: pairs, zoneId: currentLevel.zoneId, difficulty: difficulty, hintUses: hintUses, shuffleUses: shuffleUses, undoUses: undoUses };
+
+        // [MAP INTRO] Mostrar animacion de mapa → satelite → tablero antes del juego.
+        // Solo si la libreria esta disponible y la zona tiene datos geograficos.
+        // El tutorial se muestra despues (cuando el tablero ya esta renderizado).
+        if (typeof MapIntro !== 'undefined' && typeof MapData !== 'undefined' && MapData.getZone(currentLevel.zoneId)) {
+            MapIntro.show(currentLevel.zoneId, function() {
+                startGame(config);
+            });
+        } else {
+            startGame(config);
+        }
+    }
+
+    // [MAP INTRO] Funcion auxiliar para mostrar el map intro desde otros lugares.
+    function showMapIntro(zoneId, onComplete) {
+        if (typeof MapIntro !== 'undefined' && typeof MapData !== 'undefined' && MapData.getZone(zoneId)) {
+            MapIntro.show(zoneId, onComplete);
+        } else if (onComplete) {
+            onComplete();
+        }
     }
 
     function startGame(config) {

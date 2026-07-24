@@ -1,10 +1,13 @@
-var CACHE_NAME = 'mahjong-tour-v19';
+var CACHE_NAME = 'mahjong-tour-v21';
 var urlsToCache = [
     './',
     'index.html',
     'juego.js',
     'datos.js',
     'i18n.js',
+    'ads-config.js',
+    'map-data.js',
+    'map-intro.js',
     'misiones.js',
     'logros.js',
     'musica.js',
@@ -14,6 +17,10 @@ var urlsToCache = [
     'icon-512.png',
     'apple-touch-icon.png',
     'favicon-32.png',
+    'privacy-policy.html',
+    'ads.txt',
+    'robots.txt',
+    'sitemap.xml',
     'Cumbres_bajo_el_Sol.mp3',
     'Cortes_de_Medianoche.mp3',
     'La_Senda_del_Honor.mp3',
