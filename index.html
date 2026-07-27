@@ -572,7 +572,9 @@
     <script src="musica.js"></script>
     <script src="ui.js"></script>
     <script>
-        if ("serviceWorker" in navigator) {
+        // [PWA + Capacitor] Registrar Service Worker solo si estamos en navegador web (no en Capacitor).
+        // En Capacitor (app nativa) no se necesita SW porque los archivos ya estan empaquetados.
+        if ("serviceWorker" in navigator && !window.Capacitor && !window.AndroidBridge) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker.register("./sw.js")
                     .then(reg => console.log("Service Worker registrado:", reg.scope))

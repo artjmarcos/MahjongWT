@@ -1,0 +1,41 @@
+{
+  "name": "mahjong-world-tour",
+  "version": "1.0.0",
+  "description": "Mahjong World Tour - Viaje por América Latina resolviendo puzzles de Mahjong",
+  "main": "index.html",
+  "scripts": {
+    "build:android": "bash build-apk.sh",
+    "build:release": "bash build-apk.sh release",
+    "install:device": "bash build-apk.sh install",
+    "sync": "npx cap sync android",
+    "open:android": "npx cap open android"
+  },
+  "keywords": [
+    "mahjong",
+    "puzzle",
+    "game",
+    "pwa",
+    "capacitor",
+    "android",
+    "chile",
+    "argentina",
+    "mexico",
+    "brasil"
+  ],
+  "author": "Artj Marcos",
+  "license": "MIT",
+  "homepage": "https://artjmarcos.github.io/MahjongWT/",
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0",
+    "@capacitor/status-bar": "^6.0.0",
+    "@capacitor/navigation-bar": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  },
+  "capacitor": {
+    "webDir": "."
+  }
+}

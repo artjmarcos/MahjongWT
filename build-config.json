@@ -1,0 +1,72 @@
+{
+  "app": {
+    "name": "Mahjong World Tour",
+    "shortName": "Mahjong Tour",
+    "appId": "com.artjmarcos.mahjongtour",
+    "versionName": "1.0.0",
+    "versionCode": 1,
+    "minSdkVersion": 23,
+    "targetSdkVersion": 34,
+    "compileSdkVersion": 34
+  },
+  "developer": {
+    "name": "Artj Marcos",
+    "email": "artjmarcos@example.com",
+    "website": "https://artjmarcos.github.io/MahjongWT/",
+    "country": "Chile"
+  },
+  "googlePlay": {
+    "category": "GAME_PUZZLE",
+    "contentRating": "Everyone",
+    "targetAudience": "all",
+    "containsAds": true,
+    "containsIAP": false,
+    "price": "0",
+    "currency": "USD"
+  },
+  "adMob": {
+    "appId": "ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX",
+    "testMode": true,
+    "units": {
+      "banner": "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX",
+      "interstitial": "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX",
+      "rewarded": "ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX"
+    },
+    "frequency": {
+      "interstitialEveryNLevels": 3,
+      "bannerInMenus": true,
+      "rewardedEnabled": true
+    }
+  },
+  "permissions": {
+    "android": [
+      "INTERNET",
+      "ACCESS_NETWORK_STATE",
+      "VIBRATE",
+      "WAKE_LOCK"
+    ]
+  },
+  "icons": {
+    "mdpi": "icon-48.png",
+    "hdpi": "icon-72.png",
+    "xhdpi": "icon-96.png",
+    "xxhdpi": "icon-144.png",
+    "xxxhdpi": "icon-192.png",
+    "playstore": "icon-512.png"
+  },
+  "screenshots": {
+    "phoneRequired": 2,
+    "tabletOptional": true,
+    "minDimensions": "320x480",
+    "maxDimensions": "3840x3840"
+  },
+  "release": {
+    "track": "internal",
+    "rolloutPercentage": "100",
+    "releaseNotes": {
+      "es": "¡Primera versión de Mahjong World Tour! Viaja por Chile, Argentina, México y Brasil resolviendo puzzles de Mahjong.",
+      "en": "First release of Mahjong World Tour! Travel through Chile, Argentina, Mexico and Brazil solving Mahjong puzzles.",
+      "pt": "Primeira versão do Mahjong World Tour! Viaje pelo Chile, Argentina, México e Brasil resolvendo puzzles de Mahjong."
+    }
+  }
+}
