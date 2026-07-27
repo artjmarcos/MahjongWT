@@ -557,4 +557,4 @@ Causas comunes:
 
 **¡Felicidades! Tu juego estará en Google Play Store pronto.** 🎉
 
-Hecho con cariño desde Chile 🇨🇱
+Mahjong World Tour

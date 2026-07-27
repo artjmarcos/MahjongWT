@@ -42,7 +42,7 @@ El clásico Mahjong Solitario: empareja fichas iguales para eliminarlas del tabl
 
 Comienza en México, viaja por Brasil y Argentina, y termina en la Patagonia chilena. En cada zona descubrirás paisajes, cultura y desafíos nuevos. Algunos niveles son relajantes; otros te pondrán a prueba.
 
-Hecho con cariño desde Chile 🇨🇱
+Mahjong World Tour
 ```
 
 ---
@@ -63,7 +63,7 @@ juego meditativo, cultura latinoamericana, paisajes, fotos reales
 ### Principales
 ```
 #MahjongWorldTour #DescubreAmerica #MahjongLatino #JuegoMahjong
-#PWA #JuegoOffline #HechoEnChile
+#PWA #JuegoOffline
 ```
 
 ### Por país
@@ -173,7 +173,7 @@ un nuevo destino. 🌎
 
 👉 Juega acá: https://artjmarcos.github.io/MahjongWT/
 
-#MahjongWorldTour #DescubreAmerica #HechoEnChile #JuegoMahjong 
+#MahjongWorldTour #DescubreAmerica #JuegoMahjong 
 #Chile #Argentina #Mexico #Brasil #PWA #JuegoOffline
 ```
 
@@ -186,7 +186,7 @@ Un viaje meditativo por América Latina: Chile, Argentina, México y Brasil.
 
 Juega: https://artjmarcos.github.io/MahjongWT/
 
-#MahjongWorldTour #HechoEnChile 🇨🇱🌎
+#MahjongWorldTour #DescubreAmerica 🎴🌎
 ```
 
 ### Post para grupos de latinos en USA
@@ -206,7 +206,7 @@ en el celular. Funciona offline también.
 Si lo prueban y les gusta, ¡compártanlo! Y si tienen feedback, 
 se los agradezco. 🙏
 
-¡Abrazo desde Chile! 🇨🇱
+¡Gracias por jugar! 🎴
 ```
 
 ---
@@ -233,4 +233,4 @@ se los agradezco. 🙏
 
 ---
 
-**Hecho con cariño desde Chile 🇨🇱**
+**Mahjong World Tour**

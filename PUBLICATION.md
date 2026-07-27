@@ -290,4 +290,4 @@ Edita `datos.js` y reemplaza el ID de Google Drive:
 
 **¡Felicidades! Tu juego está publicado y listo para el mundo.** 🌎
 
-Hecho con cariño desde Chile 🇨🇱
+Mahjong World Tour

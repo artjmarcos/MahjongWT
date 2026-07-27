@@ -134,4 +134,4 @@ Si quieres recompilar sin hacer cambios al código:
 
 **Plan recomendado para ti:** empieza con **PWABuilder** (5 min, fácil), y si quieres más control después, migra a GitHub Actions.
 
-Hecho con cariño desde Chile 🇨🇱
+Mahjong World Tour

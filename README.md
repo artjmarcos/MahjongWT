@@ -4,7 +4,7 @@
 
 Resuelve puzzles inspirados en paisajes reales mientras descubres los rincones más mágicos de Chile, Argentina, México y Brasil. Cada ficha cuenta una historia. Cada nivel, un nuevo destino.
 
-**Hecho con cariño desde Chile 🇨🇱**
+**Mahjong World Tour**
 
 ---
 

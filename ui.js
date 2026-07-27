@@ -1556,7 +1556,7 @@ var UI = (function() {
         }
     }
 
-    // [FASE 4] Splash animado: avion recorre America destacando Chile (cuna del proyecto).
+    // [FASE 4] Splash animado: avion recorre America.
     function showSplash() {
         var splash = document.createElement('div');
         splash.id = 'splashAnimado';
@@ -1574,8 +1574,7 @@ var UI = (function() {
         splash.innerHTML = '<div style="position:absolute;inset:0;pointer-events:none;">' + starsHTML + '</div>';
 
         // Mapa SVG: avion parte en Mexico, baja a Brasil (noreste), Argentina (este),
-        // cruza a Chile centro (cuna del proyecto, destacado) y termina en la Patagonia.
-        // La parada en Chile es mas larga para destacarlo como origen del juego.
+        // cruza a Chile centro y termina en la Patagonia.
         var svgMap = '' +
             '<svg viewBox="0 0 300 440" style="width:280px;height:auto;max-width:80vw;filter:drop-shadow(0 0 20px rgba(242,202,80,0.2));">' +
                 '<path d="M 80 30 Q 100 20 130 35 Q 160 25 180 45 Q 200 60 195 90 Q 210 110 200 140 Q 215 170 200 200 Q 210 230 195 260 Q 200 290 180 320 Q 170 360 150 400 Q 130 420 110 410 Q 90 390 85 360 Q 70 330 80 300 Q 65 270 75 240 Q 60 210 70 180 Q 55 150 70 120 Q 60 90 75 60 Q 70 40 80 30 Z" ' +
@@ -1616,12 +1615,10 @@ var UI = (function() {
                 '<circle cx="175" cy="210" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:2.9s;"/>' +
                 '<circle cx="175" cy="210" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:2.9s;"/>' +
                 '<text x="195" y="214" class="splash-label" style="animation-delay:3.1s;" text-anchor="start">Argentina</text>' +
-                // Chile (destacado, cuna del proyecto)
-                '<circle cx="95" cy="260" r="7" fill="url(#chileGlow)" class="splash-city-chile-pulse" style="animation-delay:4.0s;"/>' +
-                '<circle cx="95" cy="260" r="6" fill="#ffffff" class="splash-city-chile" style="animation-delay:4.0s;"/>' +
-                '<circle cx="95" cy="260" r="14" fill="url(#chileGlow)" class="splash-city-chile-aura" style="animation-delay:4.0s;"/>' +
-                '<text x="95" y="285" class="splash-label-chile" style="animation-delay:4.2s;" text-anchor="middle">CHILE</text>' +
-                '<text x="95" y="300" class="splash-label-sub" style="animation-delay:4.4s;" text-anchor="middle">' + I18n.t('splash.cuna') + '</text>' +
+                // Chile
+                '<circle cx="95" cy="260" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:4.0s;"/>' +
+                '<circle cx="95" cy="260" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:4.0s;"/>' +
+                '<text x="75" y="264" class="splash-label" style="animation-delay:4.2s;" text-anchor="end">Chile</text>' +
                 // Patagonia (final austral)
                 '<circle cx="130" cy="400" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:5.8s;"/>' +
                 '<circle cx="130" cy="400" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:5.8s;"/>' +

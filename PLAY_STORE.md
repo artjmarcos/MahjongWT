@@ -83,7 +83,7 @@ desde Ajustes.
 • Vibración háptica en eventos importantes
 • Funciona sin conexión a internet
 
-Hecho con cariño desde Chile 🇨🇱
+Mahjong World Tour
 ```
 
 ---
@@ -223,4 +223,4 @@ Viaje pelo Chile, Argentina, México e Brasil resolvendo puzzles de Mahjong.
 
 ---
 
-Hecho con cariño desde Chile 🇨🇱
+Mahjong World Tour

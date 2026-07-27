@@ -428,4 +428,4 @@ Causas comunes:
 
 **¡Tu juego estará en Google Play Store en menos de 1 semana!** 🎉
 
-Hecho con cariño desde Chile 🇨🇱
+Mahjong World Tour

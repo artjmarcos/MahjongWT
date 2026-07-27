@@ -25,17 +25,17 @@ var I18n = (function() {
         'splash.title':        { es: 'Descubre<br>America', en: 'Discover<br>America', pt: 'Descubra<br>America' },
         'splash.subtitle':     { es: 'WORLD TOUR',       en: 'WORLD TOUR',       pt: 'WORLD TOUR' },
         'splash.tagline':      { es: 'Viaje Meditativo', en: 'Meditative Journey', pt: 'Viagem Meditativa' },
-        'splash.made':         { es: 'Hecho con cariño desde Chile 🇨🇱', en: 'Made with love from Chile 🇨🇱', pt: 'Feito com carinho desde Chile 🇨🇱' },
-        'splash.cuna':         { es: 'Cuna del proyecto', en: 'Birthplace of the project', pt: 'Berço do projeto' },
+        'splash.made':         { es: 'Mahjong World Tour', en: 'Mahjong World Tour', pt: 'Mahjong World Tour' },
+        'splash.cuna':         { es: '', en: '', pt: '' },
 
         // ---- Splash frases ----
         'splash.frase.1': { es: '#Viaja por América y conviértete en Maestro Mahjong', en: '#Travel across America and become a Mahjong Master', pt: '#Viaje pela América e torne-se um Mestre Mahjong' },
         'splash.frase.2': { es: '#Descubre los rincones más mágicos del continente', en: '#Discover the most magical corners of the continent', pt: '#Descubra os cantos mais mágicos do continente' },
         'splash.frase.3': { es: '#Cada ficha cuenta una historia milenaria', en: '#Each tile tells a thousand-year-old story', pt: '#Cada peça conta uma história milenar' },
-        'splash.frase.4': { es: '#Conecta con la cultura de tres países', en: '#Connect with the culture of three countries', pt: '#Conecte-se com a cultura de três países' },
+        'splash.frase.4': { es: '#Conecta con la cultura de cuatro países', en: '#Connect with the culture of four countries', pt: '#Conecte-se com a cultura de quatro países' },
         'splash.frase.5': { es: '#Donde la calma se vuelve juego', en: '#Where calm becomes a game', pt: '#Onde a calma se torna jogo' },
         'splash.frase.6': { es: '#Mahjong: un viaje, mil destinos', en: '#Mahjong: one journey, a thousand destinations', pt: '#Mahjong: uma viagem, mil destinos' },
-        'splash.frase.7': { es: '#Tu aventura comienza en Chile 🇨🇱', en: '#Your adventure begins in Chile 🇨🇱', pt: '#Sua aventura começa no Chile 🇨🇱' },
+        'splash.frase.7': { es: '#Tu aventura comienza hoy', en: '#Your adventure begins today', pt: '#Sua aventura começa hoje' },
         'splash.frase.8': { es: '#Relaja tu mente, despierta tu espíritu viajero', en: '#Relax your mind, awaken your traveling spirit', pt: '#Relaxe a mente, desperte seu espírito viajante' },
 
         // ---- Menu principal ----
@@ -59,7 +59,7 @@ var I18n = (function() {
         'ajustes.acerca':      { es: 'ℹ️ Acerca de',  en: 'ℹ️ About',  pt: 'ℹ️ Sobre' },
         'ajustes.compartir':   { es: '📤 Compartir con amigos', en: '📤 Share with friends', pt: '📤 Compartilhar com amigos' },
         'ajustes.reset':       { es: '🗑️ Reiniciar progreso', en: '🗑️ Reset progress', pt: '🗑️ Reiniciar progresso' },
-        'ajustes.version':     { es: 'Hecho con cariño desde Chile 🇨🇱', en: 'Made with love from Chile 🇨🇱', pt: 'Feito com carinho desde Chile 🇨🇱' },
+        'ajustes.version':     { es: 'Mahjong World Tour', en: 'Mahjong World Tour', pt: 'Mahjong World Tour' },
 
         // ---- Selector de idioma ----
         'idioma.titulo':       { es: 'Selecciona un idioma', en: 'Select a language', pt: 'Selecione um idioma' },
