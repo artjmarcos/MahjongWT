@@ -1,4 +1,4 @@
-var CACHE_NAME = 'mahjong-tour-v28';
+var CACHE_NAME = 'mahjong-tour-v29';
 var urlsToCache = [
     './',
     'index.html',
@@ -16,6 +16,10 @@ var urlsToCache = [
     'icon-192.png',
     'icon-512.png',
     'icon-base.png',
+    'icon-192-square.png',
+    'icon-512-square.png',
+    'icon-192-maskable.png',
+    'icon-512-maskable.png',
     'apple-touch-icon.png',
     'favicon-32.png',
     'privacy-policy.html',
