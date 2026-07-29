@@ -730,6 +730,59 @@ var UI = (function() {
 
     function goBackFromGame() { GameEngine.stopTimer(); Musica.play(currentZone ? currentZone.country : 'menu'); showZone(currentZone.id); }
 
+    // [AUTOGUARDADO] Continua una partida guardada previamente.
+    function continueSavedGame() {
+        if (!GameEngine.hasSavedGame()) { showMessage('No hay partida guardada'); return; }
+        // Cargar la zona y nivel correctos desde el estado guardado.
+        try {
+            var raw = localStorage.getItem('mt_saved_game');
+            var parsed = JSON.parse(raw);
+            if (!parsed || !parsed.currentLevelConfig) { showMessage('Error al cargar'); return; }
+            var cfg = parsed.currentLevelConfig;
+            var zone = ZONES.find(function(z) { return z.id === cfg.zoneId; });
+            if (!zone) { showMessage('Zona no encontrada'); GameEngine.clearSavedGame(); return; }
+            currentZone = zone;
+            currentLevel = { num: cfg.num, pairs: cfg.pairs, zoneId: cfg.zoneId };
+            // Aplicar tema del pais.
+            if (zone.country) { applyTheme(zone.country); Musica.play(zone.country); }
+            // Renderizar la UI del juego (sin MapIntro, sin animacion de inicio).
+            var timeLeft = GameEngine.getTimeLeft(), pu = GameEngine.getPowerUps();
+            // Cargar el estado en el motor PRIMERO.
+            GameEngine.loadSavedState();
+            // Actualizar referencias tras cargar.
+            timeLeft = GameEngine.getTimeLeft(); pu = GameEngine.getPowerUps();
+            // Renderizar UI del juego.
+            var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:8px;">';
+            html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-shrink:0;">';
+            html += '<button onclick="UI.goBackFromGame()" style="color:white;background:none;border:none;font-size:1.4em;cursor:pointer;">←</button>';
+            html += '<span style="color:#f2ca50;font-weight:bold;font-size:0.95em;" id="pairsLeft">' + cfg.pairs + ' pares</span>';
+            if (timeLeft > 0) html += '<span style="color:white;font-weight:bold;font-size:0.95em;" id="timerDisplay">' + timeLeft + 's</span>';
+            html += '</div>';
+            html += '<div style="display:flex;gap:4px;margin-bottom:6px;justify-content:center;flex-shrink:0;" id="slotsContainer">';
+            for (var i = 0; i < 4; i++) html += '<div class="slot-empty" id="slot-' + i + '" style="width:52px;height:72px;font-size:1.2em;">+</div>';
+            html += '</div>';
+            html += '<div style="flex:1;background:rgba(0,0,0,0.2);border-radius:12px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;justify-content:center;min-height:120px;" id="boardContainer"></div>';
+            html += '<div style="display:flex;justify-content:center;gap:8px;margin-top:6px;flex-shrink:0;">';
+            html += '<button onclick="UI.useHint()" class="power-up-btn">💡<span class="power-up-badge" id="hintBadge">' + pu.hintUses + '</span></button>';
+            html += '<button onclick="UI.useShuffle()" class="power-up-btn">🔀<span class="power-up-badge" id="shuffleBadge">' + pu.shuffleUses + '</span></button>';
+            html += '<button onclick="UI.undoLastSelection()" class="power-up-btn">↩️<span class="power-up-badge" id="undoBadge">' + pu.undoUses + '</span></button>';
+            html += '<button onclick="UI.toggleHaptic()" class="power-up-btn" id="hapticToggleBtn" title="Vibracion: ' + (hapticEnabled ? 'ON' : 'OFF') + '" style="font-size:0.9em;opacity:' + (hapticEnabled ? '1' : '0.5') + ';">' + (hapticEnabled ? '📳' : '📴') + '</button>';
+            html += '<button onclick="UI.toggleMusica()" class="power-up-btn" id="musicaToggleBtn" title="Musica: ' + (Musica.isEnabled() ? 'ON' : 'OFF') + '" style="font-size:0.9em;opacity:' + (Musica.isEnabled() ? '1' : '0.5') + ';">' + (Musica.isEnabled() ? '🔊' : '🔇') + '</button>';
+            html += '</div>';
+            html += '<div style="text-align:center;margin-top:6px;height:16px;flex-shrink:0;"><span id="message" style="font-size:0.75em;color:rgba(242,202,80,0.8);transition:opacity 0.3s;"></span></div></div>';
+            document.getElementById('appContent').innerHTML = html;
+            boardFirstRender = true;
+            renderBoard();
+            updateSlotsUI();
+            showMessage('Partida restaurada ▶️');
+            haptic([20, 40, 20]);
+        } catch (e) {
+            console.error('Error al continuar partida:', e);
+            showMessage('Error al cargar partida');
+            GameEngine.clearSavedGame();
+        }
+    }
+
     // [FASE 5] Doble recompensa: ver rewarded video para duplicar las monedas ganadas en la victoria.
     function dobleRecompensaVictoria() {
         showRewardedVideo(function() {
@@ -809,11 +862,13 @@ var UI = (function() {
 
     function closeVictory() {
         document.getElementById('victoryModal').style.display = 'none';
+        GameEngine.clearSavedGame();  // [AUTOGUARDADO] Limpiar al completar nivel.
         showZone(currentZone.id);
     }
 
     function nextLevel() {
         document.getElementById('victoryModal').style.display = 'none';
+        GameEngine.clearSavedGame();  // [AUTOGUARDADO] Limpiar antes de siguiente nivel.
         var nextNum = currentLevel.num + 1;
         var zoneId = currentZone.id;
         if (nextNum <= 10) {
@@ -1142,6 +1197,25 @@ var UI = (function() {
         html += '<h1 class="text-glow" style="font-size:1.5em;font-weight:bold;color:#f2ca50;">WORLD TOUR</h1>';
         html += '<div style="background:rgba(242,202,80,0.1);padding:4px 12px;border-radius:16px;margin-top:8px;"><span style="color:#f2ca50;font-size:0.9em;font-weight:bold;">⭐ ' + ts + ' ' + I18n.t('menu.stars') + '</span></div>';
         html += '</div></div><div style="padding:16px;">';
+        // [AUTOGUARDADO] Boton para continuar partida guardada (si existe).
+        if (GameEngine.hasSavedGame()) {
+            var savedZone = null, savedLevelNum = '?';
+            try {
+                var raw = localStorage.getItem('mt_saved_game');
+                if (raw) {
+                    var parsed = JSON.parse(raw);
+                    if (parsed && parsed.currentLevelConfig) {
+                        savedZone = ZONES.find(function(z){ return z.id === parsed.currentLevelConfig.zoneId; });
+                        savedLevelNum = parsed.currentLevelConfig.num;
+                    }
+                }
+            } catch (e) {}
+            var savedLabel = savedZone ? (savedZone.icon + ' ' + savedZone.name + ' · Nivel ' + savedLevelNum) : 'Partida guardada';
+            html += '<button onclick="UI.continueSavedGame()" style="width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,rgba(74,222,128,0.2),rgba(74,222,128,0.05));border:2px solid rgba(74,222,128,0.5);color:#4ade80;font-weight:bold;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;animation:pulse 2s ease-in-out infinite;">' +
+                '<span style="display:flex;align-items:center;gap:8px;"><span style="font-size:1.3em;">▶️</span> <span>Continuar partida</span></span>' +
+                '<span style="font-size:0.75em;color:rgba(74,222,128,0.8);font-weight:normal;">' + savedLabel + '</span>' +
+                '</button>';
+        }
         // [UX Progressive Disclosure] Misiones y botones secundarios solo despues del primer nivel completado.
         var haJugado = ZONES.some(function(z) {
             return z.levels.some(function(l) { return getStars(z.id, l.num) > 0; });
@@ -1750,7 +1824,7 @@ var UI = (function() {
         showArgentineZones: showArgentineZones, showMexicanZones: showMexicanZones,
         showBrasilZones: showBrasilZones,
         showZone: showZone, selectLevel: selectLevel, startGameWithDifficulty: startGameWithDifficulty,
-        goBackFromGame: goBackFromGame, useShuffle: useShuffle, useHint: useHint, undoLastSelection: undoLastSelection,
+        goBackFromGame: goBackFromGame, continueSavedGame: continueSavedGame, useShuffle: useShuffle, useHint: useHint, undoLastSelection: undoLastSelection,
         showTienda: showTienda, showAlbum: showAlbum,
         showLogros: showLogros,
         showAjustes: showAjustes, showAcercaDe: showAcercaDe,
@@ -1774,6 +1848,28 @@ var UI = (function() {
 })();
 
 UI.showSplash();
+
+// [AUTOGUARDADO] Guardar estado del juego cuando el usuario cierra la app o cambia de pestana.
+// Esto asegura que el progreso de la partida actual no se pierda.
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') {
+        // La pestana/app se oculta (usuario cambio de app, minimizo, cerro)
+        if (typeof GameEngine !== 'undefined' && GameEngine.hasSavedGame !== undefined) {
+            GameEngine.saveNow();
+        }
+    }
+});
+window.addEventListener('beforeunload', function() {
+    if (typeof GameEngine !== 'undefined' && GameEngine.hasSavedGame !== undefined) {
+        GameEngine.saveNow();
+    }
+});
+// [AUTOGUARDADO] Guardar cuando la app entra a background en movil (Page Visibility API).
+window.addEventListener('pagehide', function() {
+    if (typeof GameEngine !== 'undefined' && GameEngine.hasSavedGame !== undefined) {
+        GameEngine.saveNow();
+    }
+});
 
 // [PWA Shortcuts] Si el usuario abrio la app desde un shortcut (?country=xxx),
 // navegar directamente a esa pantalla despues del splash.

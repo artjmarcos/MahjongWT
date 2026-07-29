@@ -372,6 +372,78 @@ var GameEngine = (function() {
         return null;
     }
 
+    // ====================================================================
+    // [AUTOGUARDADO] Persiste el estado actual del juego en localStorage.
+    // Se llama automaticamente tras cada accion del usuario y cada 30s.
+    // ====================================================================
+    var SAVE_KEY = 'mt_saved_game';
+    var autoSaveTimer = null;
+
+    function saveGameState() {
+        try {
+            // No guardar si no hay nivel configurado.
+            if (!currentLevelConfig) return;
+            // No guardar si el juego ya termino (todas matched).
+            var allMatched = tiles.length > 0 && tiles.every(function(t) { return t.matched; });
+            if (allMatched) { clearSavedGame(); return; }
+
+            var state = {
+                currentLevelConfig: currentLevelConfig,
+                difficulty: difficulty,
+                tiles: tiles,
+                slots: slots,
+                score: score,
+                combo: combo,
+                selectedTileIdx: selectedTileIdx,
+                hintUses: hintUses,
+                shuffleUses: shuffleUses,
+                undoUses: undoUses,
+                timeLeft: timeLeft,
+                savedAt: Date.now(),
+                gameOver: false
+            };
+            localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+        } catch (e) {
+            console.warn('No se pudo guardar el estado del juego:', e);
+        }
+    }
+
+    function loadGameState() {
+        try {
+            var raw = localStorage.getItem(SAVE_KEY);
+            if (!raw) return null;
+            var parsed = JSON.parse(raw);
+            // Validar que tenga lo minimo.
+            if (!parsed || !parsed.tiles || !parsed.currentLevelConfig) return null;
+            // Si el guardado es muy viejo (mas de 24h), considerarlo expirado.
+            if (parsed.savedAt && (Date.now() - parsed.savedAt > 24 * 60 * 60 * 1000)) {
+                clearSavedGame();
+                return null;
+            }
+            return parsed;
+        } catch (e) {
+            console.warn('No se pudo cargar el estado guardado:', e);
+            return null;
+        }
+    }
+
+    function clearSavedGame() {
+        localStorage.removeItem(SAVE_KEY);
+    }
+
+    // [AUTOGUARDADO] Iniciar timer periodico de guardado cada 30 segundos.
+    function startAutoSaveTimer() {
+        if (autoSaveTimer) clearInterval(autoSaveTimer);
+        autoSaveTimer = setInterval(function() {
+            saveGameState();
+        }, 30000);  // cada 30 segundos
+    }
+
+    // [AUTOGUARDADO] Detener el timer periodico.
+    function stopAutoSaveTimer() {
+        if (autoSaveTimer) { clearInterval(autoSaveTimer); autoSaveTimer = null; }
+    }
+
     return Object.freeze({
         init: function(config, zonePhotos, traditionalTilesList) {
             initAudio(); currentLevelConfig = config; difficulty = config.difficulty || 'normal';
@@ -381,7 +453,51 @@ var GameEngine = (function() {
             hintUses = config.hintUses || 3; shuffleUses = config.shuffleUses || 3; undoUses = config.undoUses || 3;
             createTiles(zonePhotos, traditionalTilesList);
             if (timeLeft > 0) startTimer();
+            // [AUTOGUARDADO] Guardar estado inicial recien creado + iniciar timer periodico.
+            saveGameState();
+            startAutoSaveTimer();
         },
+        // [AUTOGUARDADO] Carga un estado guardado previamente desde localStorage.
+        // Retorna true si cargo exitosamente, false si no hay guardado.
+        loadSavedState: function() {
+            var loaded = loadGameState();
+            if (!loaded) return false;
+            // Reconstruir variables internas desde el estado cargado.
+            currentLevelConfig = loaded.currentLevelConfig;
+            difficulty = loaded.difficulty;
+            tiles = loaded.tiles;
+            slots = loaded.slots;
+            score = loaded.score;
+            combo = loaded.combo;
+            selectedTileIdx = loaded.selectedTileIdx;
+            hintUses = loaded.hintUses;
+            shuffleUses = loaded.shuffleUses;
+            undoUses = loaded.undoUses;
+            timeLeft = loaded.timeLeft;
+            // Reiniciar timer si corresponde.
+            if (timerInterval) clearInterval(timerInterval);
+            if (timeLeft > 0) startTimer();
+            updateBlocked();
+            if (onStateChange) onStateChange('boardChanged');
+            // [AUTOGUARDADO] Reiniciar timer periodico.
+            startAutoSaveTimer();
+            return true;
+        },
+        // [AUTOGUARDADO] Verifica si existe una partida guardada.
+        hasSavedGame: function() {
+            try {
+                var raw = localStorage.getItem('mt_saved_game');
+                if (!raw) return false;
+                var parsed = JSON.parse(raw);
+                return parsed && parsed.tiles && parsed.tiles.length > 0 && !parsed.gameOver;
+            } catch (e) { return false; }
+        },
+        // [AUTOGUARDADO] Limpia el estado guardado (al completar nivel o rendirse).
+        clearSavedGame: function() {
+            localStorage.removeItem('mt_saved_game');
+        },
+        // [AUTOGUARDADO] Fuerza el guardado del estado actual.
+        saveNow: function() { saveGameState(); },
         getTiles: function() { return tiles; },
         getSlots: function() { return slots; },
         getScore: function() { return score; },
@@ -396,6 +512,7 @@ var GameEngine = (function() {
             // Retornar false para que la UI sepa que no se proceso, y revelar manualmente.
             if (t.faceDown && !t.revealed) {
                 t.revealed = true;
+                saveGameState();  // [AUTOGUARDADO]
                 return false;  // la UI debe manejar el volteo visual
             }
             sound.select(); t.inSlot = true;
@@ -403,7 +520,9 @@ var GameEngine = (function() {
             selectedTileIdx = index; updateBlocked(); checkForMatchInSlots();
             // [FEATURE #1] Tras cada click, verificar si el tablero quedo insoluble y auto-shuffle.
             autoUnstickIfNeeded();
-            if (onStateChange) onStateChange('boardChanged'); return true;
+            if (onStateChange) onStateChange('boardChanged');
+            saveGameState();  // [AUTOGUARDADO]
+            return true;
         },
         // [FIX BUG #2] useShuffle ahora reinicia inSlot, mezcla orden y re-layout sin superposiciones.
         // [FASE 1] Resetea combo al hacer shuffle.
@@ -434,7 +553,9 @@ var GameEngine = (function() {
                 updateBlocked();
                 tries++;
             }
-            if (onStateChange) onStateChange('boardChanged'); return true;
+            if (onStateChange) onStateChange('boardChanged');
+            saveGameState();  // [AUTOGUARDADO]
+            return true;
         },
         // [FEATURE #3] useHint ahora emite los indices de la pareja sugerida para resalte visual.
         useHint: function() {
@@ -444,20 +565,22 @@ var GameEngine = (function() {
                 // No hay pareja libre: disparar auto-shuffle gratuito.
                 autoUnstickIfNeeded();
                 if (onStateChange) onStateChange('hint', { name: 'Tablero mezclado', noPair: true });
+                saveGameState();  // [AUTOGUARDADO]
                 return true;
             }
             hintUses--; sound.hint();
             if (onStateChange) onStateChange('hint', { name: hint.name, idxA: hint.a, idxB: hint.b });
+            saveGameState();  // [AUTOGUARDADO]
             return true;
         },
         // [FASE 1] undoLastSelection resetea combo (rompe la racha).
-        undoLastSelection: function() { if (slots.length === 0) return false; sound.select(); combo = 1; var last = slots.pop(); if (tiles[last.idx]) tiles[last.idx].inSlot = false; selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null; updateBlocked(); if (onStateChange) onStateChange('boardChanged'); return true; },
+        undoLastSelection: function() { if (slots.length === 0) return false; sound.select(); combo = 1; var last = slots.pop(); if (tiles[last.idx]) tiles[last.idx].inSlot = false; selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null; updateBlocked(); if (onStateChange) onStateChange('boardChanged'); saveGameState(); return true; },
         setOnStateChange: function(callback) { onStateChange = callback; },
         isGameOver: function() { return tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0; },
         getCombo: function() { return combo; },
         // [FASE 6] Reproduce el sonido de revelar ficha (para fichas boca abajo).
         playRevealSound: function() { sound.reveal(); },
-        stopTimer: function() { if (timerInterval) clearInterval(timerInterval); },
+        stopTimer: function() { if (timerInterval) clearInterval(timerInterval); stopAutoSaveTimer(); saveGameState(); },
         // [FEATURE #1] Expuesto para que la UI pueda verificar y mostrar aviso.
         isBoardStuck: function() { return isBoardStuck(); },
         // [FEATURE #3] Expuesto para que la UI pueda pedir pareja hint sin consumir uso.
