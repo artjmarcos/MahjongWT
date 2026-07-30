@@ -22,17 +22,17 @@ var I18n = (function() {
     var DICT = {
         // ---- Splash ----
         'splash.outfit':       { es: 'OUTFIT',           en: 'OUTFIT',           pt: 'OUTFIT' },
-        'splash.title':        { es: 'Descubre<br>America', en: 'Discover<br>America', pt: 'Descubra<br>America' },
+        'splash.title':        { es: 'Mahjong<br>World Tour', en: 'Mahjong<br>World Tour', pt: 'Mahjong<br>World Tour' },
         'splash.subtitle':     { es: 'WORLD TOUR',       en: 'WORLD TOUR',       pt: 'WORLD TOUR' },
         'splash.tagline':      { es: 'Viaje Meditativo', en: 'Meditative Journey', pt: 'Viagem Meditativa' },
         'splash.made':         { es: 'Mahjong World Tour', en: 'Mahjong World Tour', pt: 'Mahjong World Tour' },
         'splash.cuna':         { es: '', en: '', pt: '' },
 
         // ---- Splash frases ----
-        'splash.frase.1': { es: '#Viaja por América y conviértete en Maestro Mahjong', en: '#Travel across America and become a Mahjong Master', pt: '#Viaje pela América e torne-se um Mestre Mahjong' },
-        'splash.frase.2': { es: '#Descubre los rincones más mágicos del continente', en: '#Discover the most magical corners of the continent', pt: '#Descubra os cantos mais mágicos do continente' },
+        'splash.frase.1': { es: '#Viaja por el mundo y conviértete en Maestro Mahjong', en: '#Travel the world and become a Mahjong Master', pt: '#Viaje pelo mundo e torne-se um Mestre Mahjong' },
+        'splash.frase.2': { es: '#Descubre los rincones más mágicos del planeta', en: '#Discover the most magical corners of the planet', pt: '#Descubra os cantos mais mágicos do planeta' },
         'splash.frase.3': { es: '#Cada ficha cuenta una historia milenaria', en: '#Each tile tells a thousand-year-old story', pt: '#Cada peça conta uma história milenar' },
-        'splash.frase.4': { es: '#Conecta con la cultura de cuatro países', en: '#Connect with the culture of four countries', pt: '#Conecte-se com a cultura de quatro países' },
+        'splash.frase.4': { es: '#Conecta con la cultura de cada continente', en: '#Connect with the culture of each continent', pt: '#Conecte-se com a cultura de cada continente' },
         'splash.frase.5': { es: '#Donde la calma se vuelve juego', en: '#Where calm becomes a game', pt: '#Onde a calma se torna jogo' },
         'splash.frase.6': { es: '#Mahjong: un viaje, mil destinos', en: '#Mahjong: one journey, a thousand destinations', pt: '#Mahjong: uma viagem, mil destinos' },
         'splash.frase.7': { es: '#Tu aventura comienza hoy', en: '#Your adventure begins today', pt: '#Sua aventura começa hoje' },
@@ -45,7 +45,7 @@ var I18n = (function() {
         'menu.tienda':         { es: 'TIENDA',        en: 'SHOP',      pt: 'LOJA' },
         'menu.ajustes':        { es: 'AJUSTES',       en: 'SETTINGS',  pt: 'AJUSTES' },
         'menu.salir':          { es: 'SALIR',         en: 'EXIT',      pt: 'SAIR' },
-        'menu.regiones_niveles': { es: '4 regiones - 40 niveles', en: '4 regions - 40 levels', pt: '4 regiões - 40 níveis' },
+        'menu.regiones_niveles': { es: '4 regiones · 40 niveles', en: '4 regions · 40 levels', pt: '4 regiões · 40 níveis' },
         'menu.completado':     { es: 'completado',    en: 'completed', pt: 'concluído' },
 
         // ---- Ajustes ----
@@ -102,8 +102,8 @@ var I18n = (function() {
         'msg.combo':           { es: 'COMBO', en: 'COMBO', pt: 'COMBO' },
 
         // ---- Acerca de ----
-        'acerca.titulo':       { es: 'Descubre América', en: 'Discover America', pt: 'Descubra a América' },
-        'acerca.desc':         { es: 'Un viaje meditativo por Chile, Argentina, México y Brasil a través del Mahjong. Descubre rincones mágicos, supera desafíos y conviértete en Maestro Mahjong.', en: 'A meditative journey through Chile, Argentina, Mexico and Brazil via Mahjong. Discover magical places, overcome challenges and become a Mahjong Master.', pt: 'Uma viagem meditativa pelo Chile, Argentina, México e Brasil através do Mahjong. Descubra lugares mágicos, supere desafios e torne-se um Mestre Mahjong.' },
+        'acerca.titulo':       { es: 'Mahjong World Tour', en: 'Mahjong World Tour', pt: 'Mahjong World Tour' },
+        'acerca.desc':         { es: 'Un viaje meditativo por el mundo a través del Mahjong. Descubre paisajes reales de América Latina, y pronto Europa, Asia y África. Supera desafíos y conviértete en Maestro Mahjong.', en: 'A meditative journey around the world through Mahjong. Discover real landscapes of Latin America, and soon Europe, Asia and Africa. Overcome challenges and become a Mahjong Master.', pt: 'Uma viagem meditativa pelo mundo através do Mahjong. Descubra paisagens reais da América Latina, e em breve Europa, Ásia e África. Supere desafios e torne-se um Mestre Mahjong.' },
         'acerca.version':      { es: 'Versión', en: 'Version', pt: 'Versão' },
         'acerca.cerrar':       { es: 'Cerrar', en: 'Close', pt: 'Fechar' },
 

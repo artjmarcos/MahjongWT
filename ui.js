@@ -1,6 +1,17 @@
 // ========== INTERFAZ DE USUARIO (UI) ==========
 var UI = (function() {
-    var currentZone = null, currentLevel = null, coins = parseInt(localStorage.getItem('coins') || '0');
+    // [MONEDAS] Usuario nuevo empieza con 50 monedas de bienvenida.
+    var coins = (function() {
+        var stored = parseInt(localStorage.getItem('coins') || 'null');
+        if (isNaN(stored)) {
+            // Primera vez: dar 50 monedas de bienvenida
+            localStorage.setItem('coins', '50');
+            localStorage.setItem('welcome_bonus_claimed', '1');
+            return 50;
+        }
+        return stored;
+    })();
+    var currentZone = null, currentLevel = null;
     var tutorialActive = false, tutorialStep = 0, tutorialZoneId = null;
     var rewardCallback = null, adCount = 0;
     var AD_EVERY = 3;  // [FASE 5] Interstitial cada 3 niveles (era 5).
@@ -1231,12 +1242,17 @@ var UI = (function() {
                 '<p style="color:rgba(255,255,255,0.6);font-size:0.75em;line-height:1.3;">Elige un país y descubre sus paisajes resolviendo puzzles de Mahjong.</p>' +
                 '</div>';
         }
-        html += countryCard('🇨🇱','Chile',cpChile,'UI.showChileZones()');
-        html += countryCard('🇦🇷','Argentina',cpArgentina,'UI.showArgentineZones()');
-        html += countryCard('🇲🇽','Mexico',cpMexico,'UI.showMexicanZones()');
-        var cpBrasil = Math.round((getTotalStarsForCountry('brasil') / 120) * 100);
-        html += countryCard('🇧🇷','Brasil',cpBrasil,'UI.showBrasilZones()');
-        // [UX Progressive Disclosure] Botones secundarios solo si el jugador ya completo algun nivel.
+        // [GLOBAL] Menu de continentes. America disponible, los demas proximamente.
+        html += continentCard('🌎', 'América Latina', '4 países · 160 niveles', cpChile + cpArgentina + cpMexico + (Math.round((getTotalStarsForCountry('brasil') / 120) * 100)) > 0 ? Math.round(((getTotalStarsForCountry('chile') + getTotalStarsForCountry('argentina') + getTotalStarsForCountry('mexico') + getTotalStarsForCountry('brasil')) / 480) * 100) + '%' : '0%', 'disponible', 'UI.showAmericaZones()');
+        html += continentCard('🌍', 'Europa', 'Próximamente', null, 'proximamente', null);
+        html += continentCard('🏯', 'Asia', 'Próximamente', null, 'proximamente', null);
+        html += continentCard('🦁', 'África', 'Próximamente', null, 'proximamente', null);
+        // [MONEDAS] Tienda SIEMPRE visible (no requiere haber jugado), para que el usuario sepa que existe.
+        html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(74,222,128,0.15),rgba(74,222,128,0.05));border:1px solid rgba(74,222,128,0.4);color:#4ade80;font-weight:bold;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">' +
+            '<span>🛒 ' + I18n.t('menu.tienda') + '</span>' +
+            '<span style="font-size:0.85em;color:rgba(74,222,128,0.9);">💰 ' + coins + ' 🪙</span>' +
+            '</button>';
+        // [UX Progressive Disclosure] Album y Logros solo si el jugador ya completo algun nivel.
         if (haJugado) {
             html += '<button onclick="UI.showAlbum()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">📸 ' + I18n.t('menu.album') + '</button>';
             // [FASE 4] Boton de logros con contador.
@@ -1245,7 +1261,6 @@ var UI = (function() {
                 '<span>🏆 ' + I18n.t('menu.logros') + '</span>' +
                 '<span style="font-size:0.8em;color:rgba(242,202,80,0.7);">' + logrosResumen.desbloqueados + '/' + logrosResumen.total + '</span>' +
                 '</button>';
-            html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">🛒 ' + I18n.t('menu.tienda') + '</button>';
         }
         html += '<button onclick="UI.showAjustes()" style="width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;font-weight:bold;margin-bottom:8px;">⚙️ ' + I18n.t('menu.ajustes') + '</button>';
         html += '<button onclick="UI.despedida()" style="width:100%;padding:12px;border-radius:12px;background:rgba(242,202,80,0.1);border:1px solid rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;">👋 ' + I18n.t('menu.salir') + '</button>';
@@ -1256,6 +1271,49 @@ var UI = (function() {
     function countryCard(flag, name, progress, onclick) {
         return '<div onclick="' + onclick + '" style="border-radius:16px;overflow:hidden;border:2px solid rgba(242,202,80,0.3);background:linear-gradient(135deg, rgba(242,202,80,0.1), rgba(11,21,18,0.9));margin-bottom:12px;cursor:pointer;">' +
             '<div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;">' + flag + '</span><div style="flex:1;"><h3 style="color:white;font-weight:bold;font-size:1.1em;">' + name + '</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.7);">' + I18n.t('menu.regiones_niveles') + '</p><div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden;"><div style="height:100%;background:linear-gradient(to right, #f2ca50, #ff9f43);border-radius:2px;width:' + progress + '%;"></div></div><p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-top:4px;">' + progress + '% ' + I18n.t('menu.completado') + '</p></div><span style="color:rgba(255,255,255,0.3);font-size:1.5em;">→</span></div></div>';
+    }
+
+    // [GLOBAL] Tarjeta de continente. Soporta estados "disponible" y "proximamente".
+    function continentCard(flag, name, subtitle, progress, status, onclick) {
+        if (status === 'proximamente') {
+            return '<div onclick="UI.showComingSoon(\'' + name + '\')" style="border-radius:16px;overflow:hidden;border:2px dashed rgba(255,255,255,0.15);background:linear-gradient(135deg, rgba(255,255,255,0.03), rgba(11,21,18,0.9));margin-bottom:12px;cursor:pointer;opacity:0.7;">' +
+                '<div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;filter:grayscale(0.7);">' + flag + '</span><div style="flex:1;"><h3 style="color:rgba(255,255,255,0.5);font-weight:bold;font-size:1.1em;">' + name + '</h3><p style="font-size:0.75em;color:rgba(255,255,255,0.3);margin-top:2px;">' + subtitle + '</p><div style="margin-top:8px;display:inline-block;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:8px;"><span style="font-size:0.6em;color:rgba(255,255,255,0.5);letter-spacing:0.1em;">🔒 PRÓXIMAMENTE</span></div></div></div></div>';
+        } else {
+            return '<div onclick="' + onclick + '" style="border-radius:16px;overflow:hidden;border:2px solid rgba(242,202,80,0.3);background:linear-gradient(135deg, rgba(242,202,80,0.1), rgba(11,21,18,0.9));margin-bottom:12px;cursor:pointer;">' +
+                '<div style="padding:16px;display:flex;align-items:center;gap:16px;"><span style="font-size:2.5em;">' + flag + '</span><div style="flex:1;"><h3 style="color:white;font-weight:bold;font-size:1.1em;">' + name + '</h3><p style="font-size:0.75em;color:rgba(242,202,80,0.7);">' + subtitle + '</p><div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden;"><div style="height:100%;background:linear-gradient(to right, #f2ca50, #ff9f43);border-radius:2px;width:' + progress + ';"></div></div><p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-top:4px;">' + progress + ' completado</p></div><span style="color:rgba(255,255,255,0.3);font-size:1.5em;">→</span></div></div>';
+        }
+    }
+
+    // [GLOBAL] Pantalla de países de America (reemplaza a mostrar paises individuales desde el menu).
+    function showAmericaZones() {
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">';
+        html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">🌎 América Latina</span><button onclick="UI.showWorldMain()" style="margin-left:auto;color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>';
+        html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
+        var cpChile = Math.round((getTotalStarsForCountry('chile') / 120) * 100);
+        var cpArgentina = Math.round((getTotalStarsForCountry('argentina') / 120) * 100);
+        var cpMexico = Math.round((getTotalStarsForCountry('mexico') / 120) * 100);
+        var cpBrasil = Math.round((getTotalStarsForCountry('brasil') / 120) * 100);
+        html += '<div onclick="UI.showChileZones()" style="height:128px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(135deg, rgba(255,255,255,0.05), transparent);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;"><span style="font-size:2em;">🇨🇱</span><span style="color:white;font-weight:bold;font-size:0.9em;">Chile</span><span style="font-size:0.65em;color:rgba(242,202,80,0.7);">' + cpChile + '%</span></div>';
+        html += '<div onclick="UI.showArgentineZones()" style="height:128px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(135deg, rgba(255,255,255,0.05), transparent);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;"><span style="font-size:2em;">🇦🇷</span><span style="color:white;font-weight:bold;font-size:0.9em;">Argentina</span><span style="font-size:0.65em;color:rgba(242,202,80,0.7);">' + cpArgentina + '%</span></div>';
+        html += '<div onclick="UI.showMexicanZones()" style="height:128px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(135deg, rgba(255,255,255,0.05), transparent);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;"><span style="font-size:2em;">🇲🇽</span><span style="color:white;font-weight:bold;font-size:0.9em;">México</span><span style="font-size:0.65em;color:rgba(242,202,80,0.7);">' + cpMexico + '%</span></div>';
+        html += '<div onclick="UI.showBrasilZones()" style="height:128px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);background:linear-gradient(135deg, rgba(255,255,255,0.05), transparent);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;"><span style="font-size:2em;">🇧🇷</span><span style="color:white;font-weight:bold;font-size:0.9em;">Brasil</span><span style="font-size:0.65em;color:rgba(242,202,80,0.7);">' + cpBrasil + '%</span></div>';
+        html += '</div></div>';
+        document.getElementById('appContent').innerHTML = html;
+    }
+
+    // [GLOBAL] Modal "Próximamente" para continentes no disponibles aun.
+    function showComingSoon(continentName) {
+        var modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;';
+        modal.innerHTML = '<div style="background:linear-gradient(145deg,rgba(23,34,30,0.95),rgba(11,21,18,0.95));padding:32px;border-radius:24px;text-align:center;border:2px dashed rgba(242,202,80,0.4);max-width:320px;">' +
+            '<div style="font-size:3em;margin-bottom:12px;">✈️</div>' +
+            '<h2 style="color:#f2ca50;font-size:1.3em;font-weight:bold;margin-bottom:8px;">Próximamente</h2>' +
+            '<p style="color:white;font-size:0.9em;line-height:1.5;margin-bottom:8px;">Estamos preparando <strong>' + continentName + '</strong> para ti.</p>' +
+            '<p style="color:rgba(255,255,255,0.5);font-size:0.8em;margin-bottom:20px;">¡Muy pronto podrás seguir tu viaje por el mundo!</p>' +
+            '<button onclick="this.parentElement.parentElement.remove()" class="btn-primary" style="width:100%;padding:10px;border-radius:12px;font-size:1em;">Entendido</button>' +
+            '</div>';
+        document.body.appendChild(modal);
+        haptic([20, 40, 20]);
     }
 
     function showChileZones() { showCountryZones('chile','🇨🇱 CHILE'); }
@@ -1307,12 +1365,76 @@ var UI = (function() {
     }
 
     function showTienda() {
-        document.getElementById('appContent').innerHTML = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
+        // [BONUS DIARIO] Verificar si el usuario puede reclamar su bonus diario de monedas.
+        var bonusDisponible = false;
+        var today = new Date().toDateString();
+        var lastBonus = localStorage.getItem('last_daily_bonus');
+        if (lastBonus !== today) {
+            bonusDisponible = true;
+        }
+
+        var html = '<div style="height:100%;display:flex;flex-direction:column;background:transparent;padding:16px;overflow-y:auto;padding-bottom:70px;">' +
             '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;"><button onclick="UI.showWorldMain()" style="color:white;background:none;border:none;font-size:1.5em;cursor:pointer;">←</button><span style="font-size:1.2em;font-weight:bold;color:#f2ca50;">' + I18n.t('tienda.titulo') + '</span><span style="margin-left:auto;font-size:0.9em;color:rgba(242,202,80,0.8);">💰 ' + coins + ' ' + I18n.t('tienda.monedas') + '</span><button onclick="UI.showWorldMain()" style="color:#f2ca50;background:none;border:none;font-size:1.5em;cursor:pointer;" title="Volver al inicio">🏠</button></div>' +
-            '<p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">' + I18n.t('tienda.ayuda') + '</p>' +
+            '<p style="font-size:0.75em;color:rgba(255,255,255,0.5);margin-bottom:16px;">' + I18n.t('tienda.ayuda') + '</p>';
+
+        // [BONUS DIARIO] Seccion destacada arriba de todo.
+        if (bonusDisponible) {
+            html += '<div style="padding:18px;border-radius:14px;background:linear-gradient(135deg,rgba(74,222,128,0.2),rgba(74,222,128,0.05));border:2px solid rgba(74,222,128,0.5);display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;animation:pulse 2s ease-in-out infinite;">' +
+                '<div><div style="color:#4ade80;font-weight:bold;font-size:1.05em;">🎁 Bonus Diario</div><div style="font-size:0.75em;color:rgba(255,255,255,0.7);margin-top:2px;">+5 monedas gratis (cada día)</div></div>' +
+                '<button onclick="UI.reclamarBonusDiario()" style="padding:10px 18px;border-radius:10px;background:#4ade80;color:#052e16;font-weight:bold;border:none;cursor:pointer;">RECLAMAR</button>' +
+                '</div>';
+        } else {
+            html += '<div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;opacity:0.6;">' +
+                '<div><div style="color:rgba(255,255,255,0.6);font-weight:bold;">🎁 Bonus Diario</div><div style="font-size:0.7em;color:rgba(255,255,255,0.4);margin-top:2px;">Ya reclamado hoy. Vuelve mañana.</div></div>' +
+                '<span style="font-size:1.5em;">✓</span>' +
+                '</div>';
+        }
+
+        // [REWARDED VIDEO] Boton para ver video y ganar monedas (cuando AdMob este activo).
+        html += '<div style="padding:16px;border-radius:12px;background:linear-gradient(135deg,rgba(168,85,247,0.15),rgba(168,85,247,0.05));border:1px solid rgba(168,85,247,0.4);display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+            '<div><div style="color:#c084fc;font-weight:bold;">🎬 Ver Video</div><div style="font-size:0.75em;color:rgba(255,255,255,0.7);margin-top:2px;">+10 monedas por ver un video</div></div>' +
+            '<button onclick="UI.verVideoMonedas()" style="padding:10px 18px;border-radius:10px;background:#c084fc;color:#1a0033;font-weight:bold;border:none;cursor:pointer;">VER +10</button>' +
+            '</div>';
+
+        html += '<h3 style="color:rgba(242,202,80,0.7);font-size:0.75em;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;margin:12px 0;">Power-ups</h3>' +
             '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">' + I18n.t('tienda.pista') + '</span></div><button onclick="UI.comprarPowerUp(\'hint\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
             '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div><span style="color:white;font-weight:bold;">' + I18n.t('tienda.mezclar') + '</span></div><button onclick="UI.comprarPowerUp(\'shuffle\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>' +
-            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;"><div><span style="color:white;font-weight:bold;">' + I18n.t('tienda.deshacer') + '</span></div><button onclick="UI.comprarPowerUp(\'undo\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div></div>';
+            '<div style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;"><div><span style="color:white;font-weight:bold;">' + I18n.t('tienda.deshacer') + '</span></div><button onclick="UI.comprarPowerUp(\'undo\')" style="padding:8px 16px;border-radius:8px;background:rgba(242,202,80,0.2);color:#f2ca50;font-weight:bold;border:none;cursor:pointer;">10 🪙</button></div>';
+
+        html += '<div style="margin-top:24px;padding:14px;background:rgba(0,0,0,0.25);border-radius:10px;border:1px solid rgba(242,202,80,0.15);">' +
+            '<p style="font-size:0.7em;color:rgba(255,255,255,0.5);line-height:1.4;text-align:center;">💡 Gana más monedas completando niveles, reclamando misiones diarias, desbloqueando logros y viendo videos.</p>' +
+            '</div>';
+
+        html += '</div>';
+        document.getElementById('appContent').innerHTML = html;
+    }
+
+    // [BONUS DIARIO] Reclamar 5 monedas gratis una vez al dia.
+    function reclamarBonusDiario() {
+        var today = new Date().toDateString();
+        var lastBonus = localStorage.getItem('last_daily_bonus');
+        if (lastBonus === today) {
+            showMessage('Ya reclamaste tu bonus hoy. Vuelve mañana.');
+            return;
+        }
+        coins += 5;
+        localStorage.setItem('coins', coins);
+        localStorage.setItem('last_daily_bonus', today);
+        showMessage('🎁 +5 monedas! Vuelve mañana.');
+        haptic([20, 40, 20]);
+        showTienda();
+    }
+
+    // [REWARDED VIDEO] Ver video para ganar 10 monedas.
+    // Si AdMob no esta configurado, simula el video (modo demo).
+    function verVideoMonedas() {
+        showRewardedVideo(function() {
+            coins += 10;
+            localStorage.setItem('coins', coins);
+            showMessage('🎬 +10 monedas!');
+            haptic([30, 50, 30]);
+            showTienda();
+        }, 'Mira el video para ganar 10 monedas');
     }
 
     function comprarPowerUp(tipo) { if (coins < 10) { showMessage(I18n.t('msg.monedas_insuf')); return; } coins -= 10; localStorage.setItem('coins', coins); GameEngine.addPowerUp(tipo, 1); showTienda(); }
@@ -1542,7 +1664,7 @@ var UI = (function() {
     // [FASE 6] Compartir juego (Web Share API).
     function compartirJuego() {
         if (navigator.share) {
-            navigator.share({ title: 'Descubre América · Mahjong World Tour', text: '¡Juega Mahjong viajando por Chile, Argentina, México y Brasil!', url: window.location.href })
+            navigator.share({ title: 'Mahjong World Tour', text: '¡Juega Mahjong viajando por el mundo! Paisajes reales, trivia y música original.', url: window.location.href })
                 .catch(function() { showMessage(I18n.t('msg.compartir_no')); });
         } else {
             // Fallback: copiar URL
@@ -1647,15 +1769,22 @@ var UI = (function() {
         }
         splash.innerHTML = '<div style="position:absolute;inset:0;pointer-events:none;">' + starsHTML + '</div>';
 
-        // Mapa SVG: avion parte en Mexico, baja a Brasil (noreste), Argentina (este),
-        // cruza a Chile centro y termina en la Patagonia.
+        // [GLOBAL] Mapa SVG: avion parte en America, cruza a Europa, Asia y termina en Africa.
         var svgMap = '' +
             '<svg viewBox="0 0 300 440" style="width:280px;height:auto;max-width:80vw;filter:drop-shadow(0 0 20px rgba(242,202,80,0.2));">' +
-                '<path d="M 80 30 Q 100 20 130 35 Q 160 25 180 45 Q 200 60 195 90 Q 210 110 200 140 Q 215 170 200 200 Q 210 230 195 260 Q 200 290 180 320 Q 170 360 150 400 Q 130 420 110 410 Q 90 390 85 360 Q 70 330 80 300 Q 65 270 75 240 Q 60 210 70 180 Q 55 150 70 120 Q 60 90 75 60 Q 70 40 80 30 Z" ' +
-                    'fill="none" stroke="rgba(242,202,80,0.15)" stroke-width="1.5" stroke-dasharray="2 4"/>' +
-                '<path id="flightPath" d="M 130 55 Q 200 80 220 130 Q 200 170 175 210 Q 140 240 95 260 Q 100 330 130 400" ' +
+                // Path aproximado del mundo (continentes simplificados)
+                '<path d="M 40 120 Q 60 100 80 110 Q 100 90 120 100 Q 140 110 130 140 Q 150 160 140 200 Q 130 240 110 260 Q 90 280 70 270 Q 50 250 40 220 Q 30 180 40 120 Z" ' +
+                    'fill="none" stroke="rgba(242,202,80,0.1)" stroke-width="1.2" stroke-dasharray="2 4"/>' +  // America
+                '<path d="M 140 100 Q 160 80 180 90 Q 200 100 190 130 Q 170 150 150 140 Q 130 120 140 100 Z" ' +
+                    'fill="none" stroke="rgba(242,202,80,0.1)" stroke-width="1.2" stroke-dasharray="2 4"/>' +  // Europa
+                '<path d="M 190 120 Q 220 100 250 110 Q 270 130 260 170 Q 240 200 210 190 Q 180 160 190 120 Z" ' +
+                    'fill="none" stroke="rgba(242,202,80,0.1)" stroke-width="1.2" stroke-dasharray="2 4"/>' +  // Asia
+                '<path d="M 160 200 Q 180 190 200 210 Q 210 240 190 260 Q 170 270 150 250 Q 140 220 160 200 Z" ' +
+                    'fill="none" stroke="rgba(242,202,80,0.1)" stroke-width="1.2" stroke-dasharray="2 4"/>' +  // Africa
+                // Ruta del avion: America (Chile) -> Europa (Espana) -> Asia (Japon) -> Africa (Egipto)
+                '<path id="flightPath" d="M 80 220 Q 130 80 170 110 Q 230 130 250 150 Q 200 220 180 230" ' +
                     'fill="none" stroke="url(#trailGrad)" stroke-width="2.5" stroke-linecap="round" ' +
-                    'stroke-dasharray="900" stroke-dashoffset="900" class="splash-trail"/>' +
+                    'stroke-dasharray="1200" stroke-dashoffset="1200" class="splash-trail"/>' +
                 '<defs>' +
                     '<linearGradient id="trailGrad" x1="0%" y1="0%" x2="0%" y2="100%">' +
                         '<stop offset="0%" stop-color="#f2ca50" stop-opacity="0.15"/>' +
@@ -1667,36 +1796,23 @@ var UI = (function() {
                         '<stop offset="0%" stop-color="#f2ca50" stop-opacity="1"/>' +
                         '<stop offset="100%" stop-color="#f2ca50" stop-opacity="0"/>' +
                     '</radialGradient>' +
-                    '<radialGradient id="brasilGlow">' +
-                        '<stop offset="0%" stop-color="#7fd957" stop-opacity="1"/>' +
-                        '<stop offset="100%" stop-color="#7fd957" stop-opacity="0"/>' +
-                    '</radialGradient>' +
-                    '<radialGradient id="chileGlow">' +
-                        '<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>' +
-                        '<stop offset="40%" stop-color="#f2ca50" stop-opacity="0.95"/>' +
-                        '<stop offset="100%" stop-color="#f2ca50" stop-opacity="0"/>' +
-                    '</radialGradient>' +
                 '</defs>' +
-                // Mexico (inicio)
-                '<circle cx="130" cy="55" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:0.3s;"/>' +
-                '<circle cx="130" cy="55" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:0.3s;"/>' +
-                '<text x="130" y="42" class="splash-label" style="animation-delay:0.5s;" text-anchor="middle">Mexico</text>' +
-                // Brasil (noreste) - verde caracteristico
-                '<circle cx="220" cy="130" r="4" fill="#7fd957" class="splash-city" style="animation-delay:1.6s;"/>' +
-                '<circle cx="220" cy="130" r="10" fill="url(#brasilGlow)" class="splash-city-pulse" style="animation-delay:1.6s;"/>' +
-                '<text x="240" y="134" class="splash-label" style="animation-delay:1.8s;" text-anchor="start">Brasil</text>' +
-                // Argentina
-                '<circle cx="175" cy="210" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:2.9s;"/>' +
-                '<circle cx="175" cy="210" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:2.9s;"/>' +
-                '<text x="195" y="214" class="splash-label" style="animation-delay:3.1s;" text-anchor="start">Argentina</text>' +
-                // Chile
-                '<circle cx="95" cy="260" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:4.0s;"/>' +
-                '<circle cx="95" cy="260" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:4.0s;"/>' +
-                '<text x="75" y="264" class="splash-label" style="animation-delay:4.2s;" text-anchor="end">Chile</text>' +
-                // Patagonia (final austral)
-                '<circle cx="130" cy="400" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:5.8s;"/>' +
-                '<circle cx="130" cy="400" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:5.8s;"/>' +
-                '<text x="130" y="420" class="splash-label" style="animation-delay:6.0s;" text-anchor="middle">Patagonia</text>' +
+                // America (Chile - inicio)
+                '<circle cx="80" cy="220" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:0.3s;"/>' +
+                '<circle cx="80" cy="220" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:0.3s;"/>' +
+                '<text x="60" y="224" class="splash-label" style="animation-delay:0.5s;" text-anchor="end">America</text>' +
+                // Europa (Espana)
+                '<circle cx="150" cy="120" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:1.6s;"/>' +
+                '<circle cx="150" cy="120" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:1.6s;"/>' +
+                '<text x="150" y="108" class="splash-label" style="animation-delay:1.8s;" text-anchor="middle">Europa</text>' +
+                // Asia (Japon)
+                '<circle cx="250" cy="150" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:2.9s;"/>' +
+                '<circle cx="250" cy="150" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:2.9s;"/>' +
+                '<text x="250" y="138" class="splash-label" style="animation-delay:3.1s;" text-anchor="middle">Asia</text>' +
+                // Africa (Egipto - final)
+                '<circle cx="180" cy="230" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:4.0s;"/>' +
+                '<circle cx="180" cy="230" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:4.0s;"/>' +
+                '<text x="200" y="234" class="splash-label" style="animation-delay:4.2s;" text-anchor="start">Africa</text>' +
                 '<g class="splash-plane">' +
                     '<g transform="translate(-8,-8)">' +
                         '<path d="M 8 0 L 14 6 L 14 10 L 9 8 L 7 14 L 5 14 L 6 8 L 1 10 L 1 7 L 6 4 Z" ' +
@@ -1727,12 +1843,11 @@ var UI = (function() {
             animateMotion.setAttribute('fill', 'freeze');
             animateMotion.setAttribute('rotate', 'auto');
             animateMotion.setAttribute('begin', '0.2s');
-            // keyPoints: 0 (Mexico) -> 0.22 (Brasil) -> 0.45 (Argentina) -> 0.65 (Chile) -> 0.65 (hover Chile) -> 1.0 (Patagonia)
-            animateMotion.setAttribute('keyPoints', '0;0.22;0.45;0.65;0.65;1');
-            animateMotion.setAttribute('keyTimes',  '0;0.22;0.45;0.65;0.78;1');
+            // keyPoints: 0 (America) -> 0.30 (Europa) -> 0.65 (Asia) -> 1.0 (Africa)
+            animateMotion.setAttribute('keyPoints', '0;0.30;0.65;1');
+            animateMotion.setAttribute('keyTimes',  '0;0.30;0.65;1');
             animateMotion.setAttribute('calcMode', 'spline');
-            // 5 splines para 6 puntos (el 4to es "0 0 1 1" = lineal para el hover en Chile).
-            animateMotion.setAttribute('keySplines', '0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0 0 1 1; 0.4 0 0.6 1');
+            animateMotion.setAttribute('keySplines', '0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1');
             var mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
             mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#flightPath');
             animateMotion.appendChild(mpath);
@@ -1820,12 +1935,14 @@ var UI = (function() {
     }
 
     return Object.freeze({
-        showSplash: showSplash, showWorldMain: showWorldMain, showChileZones: showChileZones,
-        showArgentineZones: showArgentineZones, showMexicanZones: showMexicanZones,
-        showBrasilZones: showBrasilZones,
+        showSplash: showSplash, showWorldMain: showWorldMain, showAmericaZones: showAmericaZones,
+        showChileZones: showChileZones, showArgentineZones: showArgentineZones, showMexicanZones: showMexicanZones,
+        showBrasilZones: showBrasilZones, showComingSoon: showComingSoon,
         showZone: showZone, selectLevel: selectLevel, startGameWithDifficulty: startGameWithDifficulty,
         goBackFromGame: goBackFromGame, continueSavedGame: continueSavedGame, useShuffle: useShuffle, useHint: useHint, undoLastSelection: undoLastSelection,
         showTienda: showTienda, showAlbum: showAlbum,
+        reclamarBonusDiario: reclamarBonusDiario,
+        verVideoMonedas: verVideoMonedas,
         showLogros: showLogros,
         showAjustes: showAjustes, showAcercaDe: showAcercaDe,
         showIdiomas: showIdiomas, seleccionarIdioma: seleccionarIdioma,

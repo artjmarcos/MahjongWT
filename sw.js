@@ -1,4 +1,4 @@
-var CACHE_NAME = 'mahjong-tour-v30';
+var CACHE_NAME = 'mahjong-tour-v32';
 var urlsToCache = [
     './',
     'index.html',
