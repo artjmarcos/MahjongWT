@@ -574,13 +574,39 @@ var GameEngine = (function() {
             return true;
         },
         // [FASE 1] undoLastSelection resetea combo (rompe la racha).
-        undoLastSelection: function() { if (slots.length === 0) return false; sound.select(); combo = 1; var last = slots.pop(); if (tiles[last.idx]) tiles[last.idx].inSlot = false; selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null; updateBlocked(); if (onStateChange) onStateChange('boardChanged'); saveGameState(); return true; },
+        // [FIX BUG] Decrementar undoUses al usar (antes no se restaba, siempre quedaba en 3).
+        undoLastSelection: function() {
+            if (slots.length === 0) return false;
+            if (undoUses <= 0) return false;
+            undoUses--;
+            sound.select();
+            combo = 1;
+            var last = slots.pop();
+            if (tiles[last.idx]) tiles[last.idx].inSlot = false;
+            selectedTileIdx = slots.length > 0 ? slots[slots.length - 1].idx : null;
+            updateBlocked();
+            if (onStateChange) onStateChange('boardChanged');
+            saveGameState();
+            return true;
+        },
         setOnStateChange: function(callback) { onStateChange = callback; },
         isGameOver: function() { return tiles.filter(function(t) { return !t.matched && !t.inSlot; }).length === 0; },
         getCombo: function() { return combo; },
         // [FASE 6] Reproduce el sonido de revelar ficha (para fichas boca abajo).
         playRevealSound: function() { sound.reveal(); },
         stopTimer: function() { if (timerInterval) clearInterval(timerInterval); stopAutoSaveTimer(); saveGameState(); },
+        // [GAME OVER] Agregar tiempo extra (tras ver video recompensa).
+        addExtraTime: function(seconds) {
+            if (timeLeft <= 0) {
+                // Si el tiempo ya expiro, reiniciar con los segundos extra.
+                timeLeft = seconds;
+                startTimer();
+            } else {
+                timeLeft += seconds;
+            }
+            if (onStateChange) onStateChange('timer', { timeLeft: timeLeft });
+            saveGameState();
+        },
         // [FEATURE #1] Expuesto para que la UI pueda verificar y mostrar aviso.
         isBoardStuck: function() { return isBoardStuck(); },
         // [FEATURE #3] Expuesto para que la UI pueda pedir pareja hint sin consumir uso.

@@ -93,9 +93,9 @@ var UI = (function() {
             }
             updateSlotsUI();
         }
-        else if (event === 'slotsfull') showMessage('Slots llenos: usa ↩️ Deshacer o 🔀 Mezclar');  // [FIX BUG #6]
+        else if (event === 'slotsfull') { showGameOverModal('slotsfull'); }
         else if (event === 'timer') { var el = document.getElementById('timerDisplay'); if (el) el.textContent = data.timeLeft + 's'; }
-        else if (event === 'timeout') { showMessage(I18n.t('msg.tiempo')); setTimeout(function() { showZone(currentZone.id); }, 1500); }
+        else if (event === 'timeout') { showGameOverModal('timeout'); }
         else if (event === 'victory') {
             var stars = data.score >= 2000 ? 3 : data.score >= 1000 ? 2 : 1;
             setStars(currentZone.id, currentLevel.num, stars);
@@ -869,6 +869,103 @@ var UI = (function() {
         googletag.cmd.push(function() {
             try { if (interstitialSlot) googletag.display(interstitialSlot); } catch (e) { console.warn('Ad display failed:', e); }
         });
+    }
+
+    // [GAME OVER] Modal expresivo cuando el usuario pierde (timeout o slots llenos).
+    function showGameOverModal(reason) {
+        GameEngine.stopTimer();
+
+        // Mensajes aleatorios expresivos (diferentes segun la razon).
+        var mensajes;
+        if (reason === 'timeout') {
+            mensajes = [
+                { emoji: '😵', text: '¡Se acabó el tiempo!' },
+                { emoji: '😪', text: '¡Casi lo logras!' },
+                { emoji: '😢', text: '¡No te rindas!' },
+                { emoji: '😤', text: '¡Vuelve a intentarlo!' },
+                { emoji: '🤔', text: '¡Una más y la tienes!' },
+                { emoji: '💪', text: '¡Tú puedes hacerlo!' },
+                { emoji: '😰', text: '¡Uy, se nos escapó!' },
+                { emoji: '🙄', text: '¡Casi, casi, casi!' }
+            ];
+        } else {
+            // Slots llenos sin match
+            mensajes = [
+                { emoji: '😳', text: '¡Sin espacio!' },
+                { emoji: '🙈', text: '¡Slots llenos!' },
+                { emoji: '😵', text: '¡Atascado!' },
+                { emoji: '🤯', text: '¡Sin salida!' },
+                { emoji: '😬', text: '¡Ups, lleno!' },
+                { emoji: '😱', text: '¡No hay match!' },
+                { emoji: '😵‍💫', text: '¡Bloqueado!' },
+                { emoji: '🫠', text: '¡Sin opciones!' }
+            ];
+        }
+        var msg = mensajes[Math.floor(Math.random() * mensajes.length)];
+
+        // Verificar si el usuario tiene power-ups para ofrecer "continuar" gratis.
+        var pu = GameEngine.getPowerUps();
+        var puedeContinuar = (pu.shuffleUses > 0) || (pu.undoUses > 0);
+
+        var modal = document.createElement('div');
+        modal.id = 'gameOverModal';
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:550;display:flex;align-items:center;justify-content:center;padding:20px;';
+        modal.innerHTML = '<div style="background:linear-gradient(145deg,rgba(40,15,15,0.95),rgba(20,8,8,0.95));padding:32px 24px;border-radius:24px;text-align:center;border:2px solid rgba(239,68,68,0.4);max-width:340px;width:100%;box-shadow:0 8px 40px rgba(239,68,68,0.3);">' +
+            '<div style="font-size:5em;margin-bottom:12px;animation:shakeBlocked 0.6s ease-out;">' + msg.emoji + '</div>' +
+            '<h2 style="color:#ef4444;font-size:1.6em;font-weight:bold;margin-bottom:6px;">' + msg.text + '</h2>' +
+            '<p style="color:rgba(255,255,255,0.5);font-size:0.8em;margin-bottom:24px;">' + (currentZone ? currentZone.name : '') + ' · Nivel ' + (currentLevel ? currentLevel.num : '') + '</p>' +
+            // Boton ver video (continuar)
+            '<button onclick="UI.continueAfterVideo()" class="btn-reward" style="width:100%;padding:14px;border-radius:14px;font-size:1em;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;">' +
+                '<span style="font-size:1.3em;">🎬</span> <span>Ver video y seguir jugando</span>' +
+            '</button>' +
+            // Boton reintentar
+            '<button onclick="UI.retryLevel()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(180deg,#f2ca50,#d4af37);color:#241a00;font-weight:bold;font-size:1em;margin-bottom:10px;border:none;cursor:pointer;">🔄 Reintentar nivel</button>' +
+            // Boton volver
+            '<button onclick="UI.closeGameOver()" style="width:100%;padding:12px;border-radius:14px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);font-weight:bold;font-size:0.9em;border:none;cursor:pointer;">← Volver a la zona</button>' +
+            '</div>';
+        document.body.appendChild(modal);
+        haptic([50, 80, 50, 80, 100]);
+    }
+
+    // [GAME OVER] Continuar tras ver video (da +30 segundos extra o mezcla gratis segun el caso).
+    function continueAfterVideo() {
+        var modal = document.getElementById('gameOverModal');
+        if (modal) modal.remove();
+        showRewardedVideo(function() {
+            // Verificar si el juego termino por timeout o slots llenos.
+            var timeLeft = GameEngine.getTimeLeft();
+            if (timeLeft <= 0) {
+                // Era timeout: dar +30 segundos extra.
+                GameEngine.addExtraTime(30);
+                showMessage('🎬 ¡+30 segundos extra!');
+            } else {
+                // Era slots llenos: dar mezcla gratis.
+                GameEngine.addPowerUp('shuffle', 1);
+                GameEngine.useShuffle();
+                showMessage('🎬 ¡Tablero mezclado!');
+            }
+            haptic([20, 40, 20]);
+        }, 'Mira el video para seguir jugando');
+    }
+
+    // [GAME OVER] Reintentar el nivel.
+    function retryLevel() {
+        var modal = document.getElementById('gameOverModal');
+        if (modal) modal.remove();
+        GameEngine.clearSavedGame();
+        if (currentLevel) {
+            startGameWithDifficulty(gameStats.currentDifficulty || 'normal');
+        } else {
+            showWorldMain();
+        }
+    }
+
+    // [GAME OVER] Cerrar y volver a la zona.
+    function closeGameOver() {
+        var modal = document.getElementById('gameOverModal');
+        if (modal) modal.remove();
+        GameEngine.clearSavedGame();
+        showZone(currentZone ? currentZone.id : 'norte');
     }
 
     function closeVictory() {
@@ -1962,6 +2059,7 @@ var UI = (function() {
         showRewardedVideo: showRewardedVideo, closeRewardModal: closeRewardModal,
         simulateRewardedVideo: simulateRewardedVideo,
         closeVictory: closeVictory, nextLevel: nextLevel,
+        continueAfterVideo: continueAfterVideo, retryLevel: retryLevel, closeGameOver: closeGameOver,
         startMemoriceMinigame: startMemoriceMinigame, closeMemorice: closeMemorice,
         startMinigame: startMinigame,
         startTriviaMinigame: startTriviaMinigame, closeTrivia: closeTrivia,
