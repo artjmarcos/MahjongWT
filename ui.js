@@ -1247,6 +1247,7 @@ var UI = (function() {
         html += continentCard('🌍', 'Europa', 'Próximamente', null, 'proximamente', null);
         html += continentCard('🏯', 'Asia', 'Próximamente', null, 'proximamente', null);
         html += continentCard('🦁', 'África', 'Próximamente', null, 'proximamente', null);
+        html += continentCard('🏝️', 'Oceanía', 'Próximamente', null, 'proximamente', null);
         // [MONEDAS] Tienda SIEMPRE visible (no requiere haber jugado), para que el usuario sepa que existe.
         html += '<button onclick="UI.showTienda()" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,rgba(74,222,128,0.15),rgba(74,222,128,0.05));border:1px solid rgba(74,222,128,0.4);color:#4ade80;font-weight:bold;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">' +
             '<span>🛒 ' + I18n.t('menu.tienda') + '</span>' +
@@ -1781,10 +1782,13 @@ var UI = (function() {
                     'fill="none" stroke="rgba(242,202,80,0.1)" stroke-width="1.2" stroke-dasharray="2 4"/>' +  // Asia
                 '<path d="M 160 200 Q 180 190 200 210 Q 210 240 190 260 Q 170 270 150 250 Q 140 220 160 200 Z" ' +
                     'fill="none" stroke="rgba(242,202,80,0.1)" stroke-width="1.2" stroke-dasharray="2 4"/>' +  // Africa
-                // Ruta del avion: America (Chile) -> Europa (Espana) -> Asia (Japon) -> Africa (Egipto)
-                '<path id="flightPath" d="M 80 220 Q 130 80 170 110 Q 230 130 250 150 Q 200 220 180 230" ' +
+                // Oceania (Australia + islas)
+                '<path d="M 250 220 Q 270 210 285 225 Q 290 245 275 255 Q 255 250 245 235 Q 240 220 250 220 Z" ' +
+                    'fill="none" stroke="rgba(242,202,80,0.1)" stroke-width="1.2" stroke-dasharray="2 4"/>' +
+                // Ruta del avion: America (Chile) -> Europa (Espana) -> Asia (Japon) -> Africa (Egipto) -> Oceania (Australia)
+                '<path id="flightPath" d="M 80 220 Q 130 80 170 110 Q 230 130 250 150 Q 200 220 180 230 Q 220 240 265 235" ' +
                     'fill="none" stroke="url(#trailGrad)" stroke-width="2.5" stroke-linecap="round" ' +
-                    'stroke-dasharray="1200" stroke-dashoffset="1200" class="splash-trail"/>' +
+                    'stroke-dasharray="1400" stroke-dashoffset="1400" class="splash-trail"/>' +
                 '<defs>' +
                     '<linearGradient id="trailGrad" x1="0%" y1="0%" x2="0%" y2="100%">' +
                         '<stop offset="0%" stop-color="#f2ca50" stop-opacity="0.15"/>' +
@@ -1813,11 +1817,18 @@ var UI = (function() {
                 '<circle cx="180" cy="230" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:4.0s;"/>' +
                 '<circle cx="180" cy="230" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:4.0s;"/>' +
                 '<text x="200" y="234" class="splash-label" style="animation-delay:4.2s;" text-anchor="start">Africa</text>' +
+                // Oceania (Australia - final)
+                '<circle cx="265" cy="235" r="4" fill="#f2ca50" class="splash-city" style="animation-delay:5.0s;"/>' +
+                '<circle cx="265" cy="235" r="10" fill="url(#cityGlow)" class="splash-city-pulse" style="animation-delay:5.0s;"/>' +
+                '<text x="265" y="258" class="splash-label" style="animation-delay:5.2s;" text-anchor="middle">Oceania</text>' +
                 '<g class="splash-plane">' +
-                    '<g transform="translate(-8,-8)">' +
-                        '<path d="M 8 0 L 14 6 L 14 10 L 9 8 L 7 14 L 5 14 L 6 8 L 1 10 L 1 7 L 6 4 Z" ' +
-                            'fill="#f2ca50" stroke="#d4af37" stroke-width="0.4"/>' +
-                    '</g>' +
+                    // Estela de humo (trail detras del avion) - larga y visible
+                    '<path d="M -80 0 L 0 0" stroke="rgba(242,202,80,0.6)" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 5"/>' +
+                    '<path d="M -160 1 L -80 0" stroke="rgba(242,202,80,0.35)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 6"/>' +
+                    '<path d="M -240 2 L -160 1" stroke="rgba(242,202,80,0.18)" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 7"/>' +
+                    // Avion real del usuario (imagen PNG con transparencia)
+                    '<image href="plane.png" xlink:href="plane.png" x="-30" y="-24" width="60" height="60" ' +
+                        'style="filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(242,202,80,0.4));"/>' +
                 '</g>' +
             '</svg>';
         splash.innerHTML += '<div style="position:relative;z-index:2;">' + svgMap + '</div>';
@@ -1843,11 +1854,11 @@ var UI = (function() {
             animateMotion.setAttribute('fill', 'freeze');
             animateMotion.setAttribute('rotate', 'auto');
             animateMotion.setAttribute('begin', '0.2s');
-            // keyPoints: 0 (America) -> 0.30 (Europa) -> 0.65 (Asia) -> 1.0 (Africa)
-            animateMotion.setAttribute('keyPoints', '0;0.30;0.65;1');
-            animateMotion.setAttribute('keyTimes',  '0;0.30;0.65;1');
+            // keyPoints: 0 (America) -> 0.25 (Europa) -> 0.50 (Asia) -> 0.75 (Africa) -> 1.0 (Oceania)
+            animateMotion.setAttribute('keyPoints', '0;0.25;0.50;0.75;1');
+            animateMotion.setAttribute('keyTimes',  '0;0.25;0.50;0.75;1');
             animateMotion.setAttribute('calcMode', 'spline');
-            animateMotion.setAttribute('keySplines', '0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1');
+            animateMotion.setAttribute('keySplines', '0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1');
             var mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
             mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#flightPath');
             animateMotion.appendChild(mpath);
@@ -2016,9 +2027,9 @@ window.addEventListener('pagehide', function() {
 var DESPEDIDA_FRASES = [
     '¡Hasta pronto, viajero! 🌎',
     '¡Te esperamos de vuelta! 🎴',
-    '¡Vuelve a descubrir América! 🗺️',
+    '¡Vuelve a viajar por el mundo! 🗺️',
     '¡Tu aventura Mahjong continúa mañana! ⭐',
-    '¡Gracias por jugar! Nos vemos pronto 🇨🇱',
+    '¡Gracias por jugar! Nos vemos pronto 🎴',
     '¡El mundo te espera! Regresa cuando quieras 🌄',
     '¡Buen viaje! Tu Mahjong estará aquí esperándote ✨',
     '¡Descansa, maestro! Las fichas te esperan 🧘',

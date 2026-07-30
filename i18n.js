@@ -110,9 +110,9 @@ var I18n = (function() {
         // ---- Despedida ----
         'despedida.1': { es: '¡Hasta pronto, viajero! 🌎', en: 'See you soon, traveler! 🌎', pt: 'Até logo, viajante! 🌎' },
         'despedida.2': { es: '¡Te esperamos de vuelta! 🎴', en: 'We hope to see you back! 🎴', pt: 'Esperamos você de volta! 🎴' },
-        'despedida.3': { es: '¡Vuelve a descubrir América! 🗺️', en: 'Come back to discover America! 🗺️', pt: 'Volte a descobrir a América! 🗺️' },
+        'despedida.3': { es: '¡Vuelve a viajar por el mundo! 🗺️', en: 'Come back to travel the world! 🗺️', pt: 'Volte a viajar pelo mundo! 🗺️' },
         'despedida.4': { es: '¡Tu aventura Mahjong continúa mañana! ⭐', en: 'Your Mahjong adventure continues tomorrow! ⭐', pt: 'Sua aventura Mahjong continua amanhã! ⭐' },
-        'despedida.footer': { es: 'DESCUBRE AMÉRICA · WORLD TOUR', en: 'DISCOVER AMERICA · WORLD TOUR', pt: 'DESCUBRA A AMÉRICA · WORLD TOUR' },
+        'despedida.footer': { es: 'MAHJONG WORLD TOUR', en: 'MAHJONG WORLD TOUR', pt: 'MAHJONG WORLD TOUR' },
 
         // ---- Tutorial / UI intra-juego ----
         'game.nivel':          { es: 'Nivel', en: 'Level', pt: 'Nível' },
