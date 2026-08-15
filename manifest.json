@@ -69,5 +69,10 @@
             "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
         }
     ],
-    "prefer_related_applications": false
+    "prefer_related_applications": false,
+    "android": {
+        "edge_to_edge": true,
+        "target_sdk_version": 35,
+        "min_sdk_version": 23
+    }
 }
