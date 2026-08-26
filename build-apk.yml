@@ -1,0 +1,120 @@
+# ============================================================================
+# GitHub Actions: Build APK con SDK 35 (Android 15) para Mahjong World Tour
+# ----------------------------------------------------------------------------
+# Este workflow compila el APK usando Capacitor con targetSdkVersion = 35.
+# Soluciona el aviso de Google Play Console sobre Android 15.
+#
+# USO: Ve a la pestana "Actions" de tu repo en GitHub.
+# Click "Run workflow" → selecciona branch "main" → Click "Run workflow".
+# Espera 10-15 min → descarga el APK desde "Artifacts".
+# ============================================================================
+
+name: Build APK (SDK 35)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 📥 Checkout codigo
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: ☕ Setup Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 📱 Setup Android SDK (API 35)
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 35
+          build-tools-version: '35.0.0'
+
+      - name: 📚 Instalar dependencias Capacitor
+        run: npm install
+
+      - name: 🔧 Inicializar Capacitor
+        run: |
+          npx cap init "Mahjong World Tour" "com.artjmarcos.mahjongtour" --web-dir=.
+          npx cap add android
+
+      - name: 📝 Copiar variables.gradle con SDK 35
+        run: |
+          cp variables.gradle android/variables.gradle
+
+      - name: 🔄 Sync Capacitor
+        run: npx cap sync android
+
+      - name: ⚙️ Forzar targetSdkVersion 35 en build.gradle
+        run: |
+          sed -i 's/targetSdkVersion [0-9]*/targetSdkVersion 35/g' android/app/build.gradle
+          sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 35/g' android/app/build.gradle
+          sed -i 's/minSdkVersion [0-9]*/minSdkVersion 23/g' android/app/build.gradle
+          cat android/app/build.gradle
+
+      - name: 🔑 Generar keystore de release
+        run: |
+          if [ ! -f android/app/release.keystore ]; then
+            keytool -genkeypair \
+              -v \
+              -keystore android/app/release.keystore \
+              -alias mahjongtour \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass mahjongtour \
+              -keypass mahjongtour \
+              -dname "CN=Mahjong World Tour, OU=Dev, O=MahjongTour, L=Santiago, ST=Santiago, C=CL"
+          fi
+
+      - name: ⚙️ Configurar Gradle signing
+        run: |
+          cat >> android/app/build.gradle << 'EOF'
+
+          android {
+              signingConfigs {
+                  release {
+                      storeFile file('release.keystore')
+                      storePassword 'mahjongtour'
+                      keyAlias 'mahjongtour'
+                      keyPassword 'mahjongtour'
+                  }
+              }
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.release
+                      minifyEnabled false
+                  }
+              }
+          }
+          EOF
+
+      - name: 🏗️ Compilar APK release con SDK 35
+        working-directory: android
+        run: ./gradlew assembleRelease
+
+      - name: 📤 Subir APK release
+        uses: actions/upload-artifact@v4
+        with:
+          name: mahjong-world-tour-sdk35
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
+
+      - name: 🔐 Subir keystore
+        uses: actions/upload-artifact@v4
+        with:
+          name: mahjong-keystore
+          path: android/app/release.keystore
+          retention-days: 90
