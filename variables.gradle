@@ -1,0 +1,10 @@
+// variables.gradle - Configuracion de SDK para Capacitor / Android
+// Este archivo es leido por Gradle al compilar el APK.
+// Define el targetSdkVersion que Google Play Console requiere.
+
+ext {
+    minSdkVersion = 23
+    targetSdkVersion = 35
+    compileSdkVersion = 35
+    buildToolsVersion = "35.0.0"
+}

@@ -1,0 +1,45 @@
+{
+  "packageId": "com.artjmarcos.mahjongtour",
+  "host": "https://artjmarcos.github.io",
+  "name": "Mahjong World Tour",
+  "themeColor": "#f2ca50",
+  "navigationColor": "#0b1512",
+  "backgroundColor": "#0b1512",
+  "enableNotifications": false,
+  "startUrl": "/MahjongWT/",
+  "iconUrl": "https://artjmarcos.github.io/MahjongWT/icon-512-square.png",
+  "maskableIconUrl": "https://artjmarcos.github.io/MahjongWT/icon-512-maskable.png",
+  "splashScreenFadeOutDuration": 300,
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "minSdkVersion": 23,
+  "targetSdkVersion": 35,
+  "shortcuts": [
+    {
+      "name": "Chile",
+      "shortName": "Chile",
+      "url": "/MahjongWT/?country=chile",
+      "iconUrl": "https://artjmarcos.github.io/MahjongWT/icon-192.png"
+    },
+    {
+      "name": "Argentina",
+      "shortName": "Argentina",
+      "url": "/MahjongWT/?country=argentina",
+      "iconUrl": "https://artjmarcos.github.io/MahjongWT/icon-192.png"
+    },
+    {
+      "name": "Brasil",
+      "shortName": "Brasil",
+      "url": "/MahjongWT/?country=brasil",
+      "iconUrl": "https://artjmarcos.github.io/MahjongWT/icon-192.png"
+    },
+    {
+      "name": "Mexico",
+      "shortName": "Mexico",
+      "url": "/MahjongWT/?country=mexico",
+      "iconUrl": "https://artjmarcos.github.io/MahjongWT/icon-192.png"
+    }
+  ],
+  "generator": "PWABuilder",
+  "edgeToEdgeEnabled": true
+}
