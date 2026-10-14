@@ -29,7 +29,7 @@ jobs:
         run: |
           export ANDROID_HOME=$ANDROID_SDK_ROOT
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35" "build-tools;35.0.0"
-          
+
       - name: 📚 Instalar dependencias Capacitor
         run: npm install
 
@@ -44,34 +44,58 @@ jobs:
           sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 35/g' android/app/build.gradle
           sed -i 's/minSdkVersion [0-9]*/minSdkVersion 23/g' android/app/build.gradle
 
-      - name: 🔑 Generar keystore de release
+      - name: 🔐 Usar keystore existente si existe
+        run: |
+          if [ -f signing.keystore ]; then
+            cp signing.keystore android/app/release.keystore
+            echo "Se usará el keystore existente del repositorio."
+          else
+            echo "No existe signing.keystore en la raíz; se generará uno nuevo."
+          fi
+
+      - name: 🔑 Generar keystore de release solo si no existe
         run: |
           if [ ! -f android/app/release.keystore ]; then
             keytool -genkeypair \
               -v \
               -keystore android/app/release.keystore \
-              -alias mahjongtour \
+              -alias my-key-alias \
               -keyalg RSA \
               -keysize 2048 \
               -validity 10000 \
-              -storepass mahjongtour \
-              -keypass mahjongtour \
-              -dname "CN=Mahjong World Tour, OU=Dev, O=MahjongTour, L=Santiago, ST=Santiago, C=CL"
+              -storepass kAH0EIZmWrh_ \
+              -keypass kAH0EIZmWrh_ \
+              -dname "CN=Mahjong Tour Admin, OU=Engineering, O=Mahjong World Tour · Viaja por el mundo, L=Santiago, ST=Santiago, C=US"
           fi
 
       - name: ⚙️ Configurar Gradle signing
         run: |
-          cat >> android/app/build.gradle << 'EOF'
+          cat > android/app/build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application'
+          }
 
           android {
+              namespace 'com.artjmarcos.mahjongtour'
+              compileSdk 35
+
+              defaultConfig {
+                  applicationId 'com.artjmarcos.mahjongtour'
+                  minSdk 23
+                  targetSdk 35
+                  versionCode 1
+                  versionName "1.0.0"
+              }
+
               signingConfigs {
                   release {
                       storeFile file('release.keystore')
-                      storePassword 'mahjongtour'
-                      keyAlias 'mahjongtour'
-                      keyPassword 'mahjongtour'
+                      storePassword 'kAH0EIZmWrh_'
+                      keyAlias 'my-key-alias'
+                      keyPassword 'kAH0EIZmWrh_'
                   }
               }
+
               buildTypes {
                   release {
                       signingConfig signingConfigs.release
