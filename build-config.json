@@ -6,8 +6,8 @@
     "versionName": "1.0.0",
     "versionCode": 1,
     "minSdkVersion": 23,
-    "targetSdkVersion": 34,
-    "compileSdkVersion": 34
+    "targetSdkVersion": 35,
+    "compileSdkVersion": 35
   },
   "developer": {
     "name": "Artj Marcos",
