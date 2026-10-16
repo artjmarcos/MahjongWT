@@ -36,13 +36,13 @@ jobs:
       - name: 🔧 Inicializar Capacitor
         run: |
           npx cap init "Mahjong World Tour" "com.artjmarcos.mahjongtour" --web-dir=.
-          npx cap add android
+          npx cap add android || true
 
       - name: ⚙️ Forzar targetSdkVersion 35 en build.gradle
         run: |
-          sed -i 's/targetSdkVersion [0-9]*/targetSdkVersion 35/g' android/app/build.gradle
-          sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 35/g' android/app/build.gradle
-          sed -i 's/minSdkVersion [0-9]*/minSdkVersion 23/g' android/app/build.gradle
+          sed -i 's/targetSdkVersion [0-9]*/targetSdkVersion 35/g' android/app/build.gradle || true
+          sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 35/g' android/app/build.gradle || true
+          sed -i 's/minSdkVersion [0-9]*/minSdkVersion 23/g' android/app/build.gradle || true
 
       - name: 🔐 Usar keystore existente si existe
         run: |
@@ -68,8 +68,9 @@ jobs:
               -dname "CN=Mahjong Tour Admin, OU=Engineering, O=Mahjong World Tour · Viaja por el mundo, L=Santiago, ST=Santiago, C=US"
           fi
 
-      - name: ⚙️ Configurar Gradle signing
+      - name: ⚙️ Configurar Gradle signing (asegurar valores mínimos)
         run: |
+          mkdir -p android/app
           cat > android/app/build.gradle <<'EOF'
           plugins {
               id 'com.android.application'
