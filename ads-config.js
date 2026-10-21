@@ -1,31 +1,28 @@
-// ============================================================================
-// ads-config.js - Configuracion centralizada de Google AdSense / GPT
-// ----------------------------------------------------------------------------
-// IMPORTANTE: Para activar anuncios reales, sigue la guia en ADSENSE.md.
-// Por defecto, el juego funciona en MODO TEST (sin anuncios reales).
-// ============================================================================
-
 var AdsConfig = (function() {
     'use strict';
 
+    // Revisión / publicación: desactivado por defecto para evitar bloqueos de políticas.
+    // Cuando tengas el Publisher ID real de AdMob y la política aprobada, puedes activar los anuncios aquí.
     var config = {
         publisherId: '',
         units: {
-            banner: '/XXXXXXXXXX/mahjong-banner-320x50',
-            interstitial: '/XXXXXXXXXX/mahjong-interstitial',
-            rewarded: '/XXXXXXXXXX/mahjong-rewarded'
+            banner: '/XXXXXXXXXXXX/banner',
+            interstitial: '/XXXXXXXXXXXX/interstitial',
+            rewarded: '/XXXXXXXXXXXX/rewarded'
         },
         frequency: {
-            interstitialEveryNLevels: 3,
-            bannerInMenus: true,
-            rewardedEnabled: true
+            interstitialEveryNLevels: 999,
+            bannerInMenus: false,
+            rewardedEnabled: false
         },
-        testMode: true
+        testMode: true,
+        reviewMode: true
     };
 
     function isConfigured() {
-        return config.publisherId && config.publisherId.length > 0 && !config.testMode;
+        return false;
     }
+
     function getPublisherId() { return config.publisherId; }
     function getUnit(type) { return config.units[type] || null; }
     function shouldShowInterstitial(levelsCompleted) {
@@ -34,12 +31,10 @@ var AdsConfig = (function() {
         return (levelsCompleted % config.frequency.interstitialEveryNLevels) === 0;
     }
     function shouldShowBanner() {
-        if (!isConfigured()) return false;
-        return config.frequency.bannerInMenus;
+        return false;
     }
     function isRewardedEnabled() {
-        if (!isConfigured()) return false;
-        return config.frequency.rewardedEnabled;
+        return false;
     }
     function update(newConfig) {
         for (var key in newConfig) {
