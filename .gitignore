@@ -17,3 +17,8 @@ npm-debug.log*
 # Temp
 /tmp/
 *.tmp
+*.keystore
+*.jks
+*.aab
+*.apk
+signing-key-info.txt
